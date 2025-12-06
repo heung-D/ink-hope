@@ -59,6 +59,8 @@ const Index = () => {
           onSelectMail={setSelectedMail}
           activeFolder={activeFolder}
           onReply={() => setIsComposeOpen(true)}
+          selectedMember={selectedMemberId ? familyMembers.find(m => m.id === selectedMemberId) : null}
+          allMails={mockMails}
         />
 
         {/* Floating Compose Button */}
