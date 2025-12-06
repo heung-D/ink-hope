@@ -85,14 +85,14 @@ export function MailContent({
                 </div>
               </div>
 
-              {/* Mail Grid */}
-              <div className="flex-1 overflow-y-auto scrollbar-thin px-6 pb-6">
-                <div className="grid gap-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+              {/* Mail List */}
+              <div className="flex-1 overflow-y-auto scrollbar-thin">
+                <div className="divide-y divide-border">
                   {filteredMails.map((mail) => (
                     <button
                       key={mail.id}
                       onClick={() => onSelectMail(mail)}
-                      className="text-left p-4 bg-card border border-border rounded-xl transition-all duration-150 hover:shadow-xl shadow-md"
+                      className="w-full text-left px-6 py-4 bg-card hover:bg-secondary/50 transition-all duration-150"
                     >
                       <div className="flex items-start gap-3">
                         <div
