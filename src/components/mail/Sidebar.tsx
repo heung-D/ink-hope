@@ -1,7 +1,8 @@
-import { Mail, Send, FileText, Settings, Plus, PenLine } from "lucide-react";
+import { Mail, Send, FileText, Settings, Plus, PenLine, PanelLeftClose, PanelLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { FamilyMember, FolderType } from "@/types/mail";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 interface SidebarProps {
   familyMembers: FamilyMember[];
@@ -10,6 +11,8 @@ interface SidebarProps {
   unreadCount: number;
   draftCount: number;
   onCompose: () => void;
+  isCollapsed: boolean;
+  onToggleCollapse: () => void;
 }
 
 const folders = [
@@ -25,30 +28,64 @@ export function Sidebar({
   unreadCount,
   draftCount,
   onCompose,
+  isCollapsed,
+  onToggleCollapse,
 }: SidebarProps) {
   return (
-    <aside className="w-64 bg-card border-r border-border flex flex-col h-full">
+    <motion.aside
+      initial={false}
+      animate={{ width: isCollapsed ? 72 : 256 }}
+      transition={{ duration: 0.2, ease: "easeInOut" }}
+      className="bg-card border-r border-border flex flex-col h-full overflow-hidden"
+    >
       {/* Logo */}
-      <div className="h-16 flex items-center px-5 border-b border-border/50">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-sm">
+      <div className="h-16 flex items-center px-4 border-b border-border/50 justify-between">
+        <div className="flex items-center gap-2.5 overflow-hidden">
+          <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
             <Mail className="w-5 h-5 text-primary-foreground" />
           </div>
-          <span className="text-lg font-bold text-foreground tracking-tight">
-            Orange Mail
-          </span>
+          {!isCollapsed && (
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-lg font-bold text-foreground tracking-tight whitespace-nowrap"
+            >
+              Orange Mail
+            </motion.span>
+          )}
         </div>
+        <button
+          onClick={onToggleCollapse}
+          className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors flex-shrink-0"
+        >
+          {isCollapsed ? (
+            <PanelLeft className="w-4 h-4" />
+          ) : (
+            <PanelLeftClose className="w-4 h-4" />
+          )}
+        </button>
       </div>
 
       {/* Compose Button */}
-      <div className="p-4">
-        <Button
-          onClick={onCompose}
-          className="w-full h-12 rounded-xl text-[15px] font-semibold shadow-card hover:shadow-card-hover transition-all duration-200"
-        >
-          <PenLine className="w-4 h-4 mr-2" />
-          편지 쓰기
-        </Button>
+      <div className="p-3">
+        {isCollapsed ? (
+          <Button
+            onClick={onCompose}
+            size="icon"
+            className="w-full h-11 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-200"
+          >
+            <PenLine className="w-5 h-5" />
+          </Button>
+        ) : (
+          <Button
+            onClick={onCompose}
+            className="w-full h-11 rounded-xl text-[15px] font-semibold shadow-card hover:shadow-card-hover transition-all duration-200"
+          >
+            <PenLine className="w-4 h-4 mr-2" />
+            편지 쓰기
+          </Button>
+        )}
       </div>
 
       {/* Folders */}
@@ -63,24 +100,35 @@ export function Sidebar({
               <li key={folder.id}>
                 <button
                   onClick={() => onFolderChange(folder.id)}
+                  title={isCollapsed ? folder.label : undefined}
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[15px] transition-all duration-150",
+                    isCollapsed && "justify-center px-0",
                     isActive
                       ? "bg-accent text-accent-foreground font-medium"
                       : "text-muted-foreground hover:bg-secondary hover:text-secondary-foreground"
                   )}
                 >
-                  <Icon className="w-[18px] h-[18px]" />
-                  <span>{folder.label}</span>
-                  {count > 0 && (
-                    <span
-                      className={cn(
-                        "ml-auto text-xs font-semibold px-2 py-0.5 rounded-full",
-                        isActive
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted text-muted-foreground"
+                  <Icon className="w-[18px] h-[18px] flex-shrink-0" />
+                  {!isCollapsed && (
+                    <>
+                      <span className="flex-1 text-left">{folder.label}</span>
+                      {count > 0 && (
+                        <span
+                          className={cn(
+                            "text-xs font-semibold px-2 py-0.5 rounded-full",
+                            isActive
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-muted text-muted-foreground"
+                          )}
+                        >
+                          {count}
+                        </span>
                       )}
-                    >
+                    </>
+                  )}
+                  {isCollapsed && count > 0 && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-primary-foreground text-[10px] rounded-full flex items-center justify-center">
                       {count}
                     </span>
                   )}
@@ -94,55 +142,86 @@ export function Sidebar({
         <div className="my-4 border-t border-border" />
 
         {/* Family Members */}
-        <div className="mb-2 px-3 flex items-center justify-between">
-          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            내 가족
-          </span>
-          <button className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
-            <Plus className="w-4 h-4" />
-          </button>
-        </div>
-        <ul className="space-y-0.5">
-          {familyMembers.map((member) => (
-            <li key={member.id}>
-              <button className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-muted-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors">
-                <div
-                  className={cn(
-                    "w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium",
-                    member.color
-                  )}
-                >
-                  {member.avatar}
-                </div>
-                <span className="text-sm flex-1 text-left">{member.name}</span>
-                <span className="text-xs text-muted-foreground/60">
-                  {member.relation}
-                </span>
+        {!isCollapsed && (
+          <>
+            <div className="mb-2 px-3 flex items-center justify-between">
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                내 가족
+              </span>
+              <button className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
+                <Plus className="w-4 h-4" />
               </button>
-            </li>
-          ))}
-        </ul>
+            </div>
+            <ul className="space-y-0.5">
+              {familyMembers.map((member) => (
+                <li key={member.id}>
+                  <button className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-muted-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors">
+                    <div
+                      className={cn(
+                        "w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0",
+                        member.color
+                      )}
+                    >
+                      {member.avatar}
+                    </div>
+                    <span className="text-sm flex-1 text-left truncate">{member.name}</span>
+                    <span className="text-xs text-muted-foreground/60">
+                      {member.relation}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        {/* Collapsed Family Avatars */}
+        {isCollapsed && (
+          <ul className="space-y-2">
+            {familyMembers.map((member) => (
+              <li key={member.id} className="flex justify-center">
+                <button
+                  title={`${member.name} (${member.relation})`}
+                  className="p-1.5 rounded-xl text-muted-foreground hover:bg-secondary transition-colors"
+                >
+                  <div
+                    className={cn(
+                      "w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium",
+                      member.color
+                    )}
+                  >
+                    {member.avatar}
+                  </div>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </nav>
 
       {/* Profile */}
-      <div className="p-4 border-t border-border">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-sm">
+      <div className="p-3 border-t border-border">
+        <div className={cn("flex items-center gap-3", isCollapsed && "justify-center")}>
+          <div className="w-9 h-9 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-sm flex-shrink-0">
             B
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground truncate">
-              Bang Kyung
-            </p>
-            <p className="text-xs text-muted-foreground truncate">
-              webbreak@kakao...
-            </p>
-          </div>
-          <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
-            <Settings className="w-4 h-4" />
-          </button>
+          {!isCollapsed && (
+            <>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground truncate">
+                  Bang Kyung
+                </p>
+                <p className="text-xs text-muted-foreground truncate">
+                  webbreak@kakao...
+                </p>
+              </div>
+              <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
+                <Settings className="w-4 h-4" />
+              </button>
+            </>
+          )}
         </div>
       </div>
-    </aside>
+    </motion.aside>
   );
 }

@@ -10,6 +10,7 @@ const Index = () => {
   const [activeFolder, setActiveFolder] = useState<FolderType>("inbox");
   const [selectedMail, setSelectedMail] = useState<Mail | null>(null);
   const [isComposeOpen, setIsComposeOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const unreadCount = mockMails.filter((m) => !m.isRead).length;
   const draftCount = 1;
@@ -33,6 +34,8 @@ const Index = () => {
           unreadCount={unreadCount}
           draftCount={draftCount}
           onCompose={() => setIsComposeOpen(true)}
+          isCollapsed={isSidebarCollapsed}
+          onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         />
 
         {/* Main Content - 2단 구조 */}
