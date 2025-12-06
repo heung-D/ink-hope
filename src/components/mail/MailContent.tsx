@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Image, Reply, Bookmark, ChevronLeft, Printer, Download, Star, Trash2 } from "lucide-react";
+import { Image, Reply, Bookmark, ChevronLeft, Printer, Download, Star, Trash2, Mail as MailIcon, Send, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import type { Mail, FolderType } from "@/types/mail";
+import type { Mail, FolderType, FamilyMember } from "@/types/mail";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface MailContentProps {
@@ -11,6 +11,8 @@ interface MailContentProps {
   onSelectMail: (mail: Mail | null) => void;
   activeFolder: FolderType;
   onReply: () => void;
+  selectedMember?: FamilyMember | null;
+  allMails?: Mail[];
 }
 
 const folderTitles: Record<FolderType, string> = {
@@ -27,11 +29,20 @@ export function MailContent({
   onSelectMail,
   activeFolder,
   onReply,
+  selectedMember,
+  allMails = [],
 }: MailContentProps) {
   const [activeTab, setActiveTab] = useState<TabType>("all");
 
   const unreadCount = mails.filter((mail) => !mail.isRead).length;
   const importantCount = mails.filter((mail) => mail.isImportant).length;
+
+  // 선택된 멤버와의 통계 계산
+  const memberStats = selectedMember ? {
+    receivedCount: allMails.filter((mail) => mail.sender.id === selectedMember.id).length,
+    sentCount: 0, // 보낸 편지 데이터가 있으면 여기서 계산
+    lastMailDate: mails.length > 0 ? mails[0].date : "없음",
+  } : null;
 
   const filteredMails = mails.filter((mail) => {
     if (activeTab === "unread") return !mail.isRead;
@@ -53,7 +64,11 @@ export function MailContent({
             </button>
           )}
           <h1 className="text-lg font-semibold text-foreground">
-            {selectedMail ? selectedMail.subject : folderTitles[activeFolder]}
+            {selectedMail 
+              ? selectedMail.subject 
+              : selectedMember 
+                ? `${selectedMember.name}님과의 편지` 
+                : folderTitles[activeFolder]}
           </h1>
           {!selectedMail && (
             <span className="text-sm text-muted-foreground">
@@ -75,6 +90,49 @@ export function MailContent({
               transition={{ duration: 0.2 }}
               className="h-full flex flex-col"
             >
+              {/* 선택된 멤버 통계 */}
+              {selectedMember && memberStats && (
+                <div className="px-6 py-4 bg-accent/30 border-b border-border">
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={cn(
+                        "w-12 h-12 rounded-full flex items-center justify-center font-medium text-lg flex-shrink-0",
+                        selectedMember.color
+                      )}
+                    >
+                      {selectedMember.avatar}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-foreground">{selectedMember.name}</h3>
+                      <p className="text-sm text-muted-foreground">{selectedMember.relation} · {selectedMember.facility}</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 grid grid-cols-3 gap-4">
+                    <div className="flex items-center gap-2 bg-background rounded-lg p-3">
+                      <MailIcon className="w-4 h-4 text-primary" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">받은 편지</p>
+                        <p className="font-semibold text-foreground">{memberStats.receivedCount}통</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 bg-background rounded-lg p-3">
+                      <Send className="w-4 h-4 text-primary" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">보낸 편지</p>
+                        <p className="font-semibold text-foreground">{memberStats.sentCount}통</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 bg-background rounded-lg p-3">
+                      <Calendar className="w-4 h-4 text-primary" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">마지막 편지</p>
+                        <p className="font-semibold text-foreground">{memberStats.lastMailDate}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Tabs */}
               <div className="px-6 py-3 border-b border-border flex items-center gap-6">
                 <button
