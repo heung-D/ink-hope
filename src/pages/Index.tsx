@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Sidebar } from "@/components/mail/Sidebar";
-import { MailList } from "@/components/mail/MailList";
-import { MailDetail } from "@/components/mail/MailDetail";
+import { MailContent } from "@/components/mail/MailContent";
 import { ComposeModal } from "@/components/mail/ComposeModal";
 import { familyMembers, mockMails } from "@/data/mockData";
 import type { Mail, FolderType } from "@/types/mail";
 
 const Index = () => {
   const [activeFolder, setActiveFolder] = useState<FolderType>("inbox");
-  const [selectedMail, setSelectedMail] = useState<Mail | null>(mockMails[0]);
+  const [selectedMail, setSelectedMail] = useState<Mail | null>(null);
   const [isComposeOpen, setIsComposeOpen] = useState(false);
 
   const unreadCount = mockMails.filter((m) => !m.isRead).length;
@@ -36,22 +35,14 @@ const Index = () => {
           onCompose={() => setIsComposeOpen(true)}
         />
 
-        {/* Main Content */}
-        <main className="flex-1 flex overflow-hidden">
-          {/* Mail List */}
-          <MailList
-            mails={mockMails}
-            selectedMailId={selectedMail?.id || null}
-            onSelectMail={setSelectedMail}
-            activeFolder={activeFolder}
-          />
-
-          {/* Mail Detail */}
-          <MailDetail
-            mail={selectedMail}
-            onReply={() => setIsComposeOpen(true)}
-          />
-        </main>
+        {/* Main Content - 2단 구조 */}
+        <MailContent
+          mails={mockMails}
+          selectedMail={selectedMail}
+          onSelectMail={setSelectedMail}
+          activeFolder={activeFolder}
+          onReply={() => setIsComposeOpen(true)}
+        />
 
         {/* Compose Modal */}
         <ComposeModal
