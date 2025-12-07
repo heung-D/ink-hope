@@ -104,6 +104,7 @@ const Index = () => {
         <FloatingComposeButton 
           onCompose={() => setIsComposeOpen(true)}
           daysSinceLastLetter={daysSinceLastLetter}
+          draftCount={draftCount}
         />
 
         {/* Compose Modal */}

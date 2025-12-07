@@ -75,6 +75,71 @@ export const mockMails: Mail[] = [
     attachmentCount: 2,
     folder: "inbox",
   },
+  // 보낸편지함 (sent)
+  {
+    id: "4",
+    sender: familyMembers[0],
+    subject: "재원아, 잘 지내고 있지?",
+    preview: "요즘 날씨가 많이 추워졌는데, 감기 조심해...",
+    content: `재원아, 잘 지내고 있지?
+
+요즘 날씨가 많이 추워졌는데, 감기 조심해. 아빠도 건강하시고, 동생도 학교 잘 다니고 있어.
+
+다음 면회 때 좋아하는 과자 가져갈게. 그때 보자.
+
+- 엄마가`,
+    date: "2일 전",
+    isRead: true,
+    isNew: false,
+    folder: "sent",
+    status: "우체국 발송완료",
+  },
+  // 임시저장함 (draft)
+  {
+    id: "5",
+    sender: familyMembers[1],
+    subject: "여보, 오늘 면회 다녀왔어요",
+    preview: "오늘 면회 다녀와서 너무 기뻤어요...",
+    content: `여보, 오늘 면회 다녀왔어요.
+
+아이들이 아빠 만나서 너무 좋아했어요.`,
+    date: "1일 전",
+    isRead: true,
+    isNew: false,
+    folder: "draft",
+  },
+  // 중요편지함 (archive)
+  {
+    id: "6",
+    sender: familyMembers[0],
+    subject: "엄마 생일 축하해요!",
+    preview: "엄마, 생일 축하드려요! 여기서 직접 축하드리지 못해서...",
+    content: `엄마, 생일 축하드려요!
+
+여기서 직접 축하드리지 못해서 너무 죄송해요.
+다음에 만나면 직접 축하해 드릴게요.
+
+사랑해요, 엄마.`,
+    date: "2주 전",
+    isRead: true,
+    isNew: false,
+    isImportant: true,
+    folder: "archive",
+  },
+  // 휴지통 (trash)
+  {
+    id: "7",
+    sender: familyMembers[1],
+    subject: "지난주 면회 일정",
+    preview: "다음 주 면회 일정 확인해주세요...",
+    content: `다음 주 면회 일정 확인해주세요.
+
+일정이 변경될 수 있으니 미리 확인 부탁드려요.`,
+    date: "3주 전",
+    isRead: true,
+    isNew: false,
+    folder: "trash",
+  },
 ];
 
 export const mailOptions: MailOption[] = [

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, Reply, Bookmark, ChevronLeft, Printer, Download, Star, Trash2, Mail as MailIcon, Send, Calendar, Pencil } from "lucide-react";
+import { Image, Reply, Bookmark, ChevronLeft, Printer, Download, Star, Trash2, Mail as MailIcon, Send, Calendar, Pencil, Truck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import type { Mail, FolderType, FamilyMember } from "@/types/mail";
@@ -263,6 +263,15 @@ export function MailContent({
                           <p className="text-xs text-muted-foreground/80 line-clamp-1">
                             {mail.preview}
                           </p>
+                          {/* 보낸편지함 진행상태 */}
+                          {activeFolder === "sent" && mail.status && (
+                            <div className="mt-2 flex items-center gap-1.5">
+                              <Truck className="w-3.5 h-3.5 text-primary" />
+                              <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                                {mail.status}
+                              </span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </button>

@@ -22,7 +22,10 @@ export interface Mail {
   hasAttachments?: boolean;
   attachmentCount?: number;
   folder: FolderType;
+  status?: MailStatus;
 }
+
+export type MailStatus = "편지발송완료" | "접수완료" | "동봉시작" | "우체국 접수" | "우체국 발송완료";
 
 export type FolderType = "inbox" | "sent" | "draft" | "archive" | "trash";
 
