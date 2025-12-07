@@ -5,6 +5,7 @@ import { PenLine, Heart, Sparkles } from "lucide-react";
 interface FloatingComposeButtonProps {
   onCompose: () => void;
   daysSinceLastLetter: number;
+  draftCount?: number;
 }
 
 const motivationalMessages = [
@@ -18,6 +19,7 @@ const motivationalMessages = [
 export const FloatingComposeButton = ({
   onCompose,
   daysSinceLastLetter,
+  draftCount = 0,
 }: FloatingComposeButtonProps) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [messageIndex, setMessageIndex] = useState(0);
@@ -65,9 +67,31 @@ export const FloatingComposeButton = ({
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+      {/* 임시저장 알림 */}
+      {draftCount > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 shadow-lg max-w-[220px]"
+        >
+          <div className="flex items-start gap-2">
+            <span className="text-amber-500 text-lg">📝</span>
+            <div className="space-y-0.5">
+              <p className="text-sm font-medium text-amber-800">
+                임시저장된 편지가 {draftCount}개 있습니다.
+              </p>
+              <p className="text-xs text-amber-600">
+                이어서 계속 작성하세요!
+              </p>
+            </div>
+          </div>
+          <div className="absolute -bottom-2 right-8 w-4 h-4 bg-amber-50 border-r border-b border-amber-200 rotate-45" />
+        </motion.div>
+      )}
+
       {/* 동기부여 메시지 툴팁 */}
       <AnimatePresence>
-        {(showTooltip || isHovered) && (
+        {(showTooltip || isHovered) && draftCount === 0 && (
           <motion.div
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
