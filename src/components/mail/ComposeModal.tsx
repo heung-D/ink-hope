@@ -12,7 +12,7 @@ interface ComposeModalProps {
   familyMembers: FamilyMember[];
 }
 
-type SectionType = "intro" | "closing";
+type SectionType = "intro" | "body" | "closing";
 
 interface SectionConfig {
   id: SectionType;
@@ -37,6 +37,15 @@ const sectionConfigs: SectionConfig[] = [
       "보고싶다는 말",
       "날씨/계절 이야기",
       "건강 걱정",
+    ],
+  },
+  {
+    id: "body",
+    label: "중간 작성",
+    emoji: "💬",
+    subtitle: "전하고 싶은 본문 내용을 작성해요",
+    placeholder: "일상 이야기, 가족 소식 전하기",
+    quickTags: [
       "일상 이야기",
       "가족 소식 전하기",
       "응원의 말",
@@ -58,10 +67,6 @@ const sectionConfigs: SectionConfig[] = [
       "힘내라는 응원",
       "곧 보자는 약속",
       "항상 생각한다는 말",
-      "기다리겠다는 말",
-      "잊지 않겠다는 다짐",
-      "미래에 대한 희망",
-      "약속하기",
     ],
   },
 ];
@@ -153,10 +158,12 @@ export function ComposeModal({
       if (promptText.includes("건강")) {
         generatedText += "건강은 괜찮은 거지? 많이 걱정돼.\n";
       }
+      generatedText += "\n";
+    } else if (activeSection === "body") {
       if (promptText.includes("일상")) {
         generatedText += "요즘 집에서는 별일 없이 지내고 있어. ";
       }
-      if (promptText.includes("가족") || promptText.includes("근황")) {
+      if (promptText.includes("가족") || promptText.includes("소식")) {
         generatedText += "가족들 모두 건강하게 잘 지내고 있으니 걱정하지 마. ";
       }
       if (promptText.includes("응원")) {
@@ -187,15 +194,6 @@ export function ComposeModal({
       }
       if (promptText.includes("생각") || promptText.includes("잊지")) {
         generatedText += "항상 네 생각하고 있어. 절대 잊지 않을게.\n";
-      }
-      if (promptText.includes("기다리")) {
-        generatedText += "여기서 기다리고 있을게.\n";
-      }
-      if (promptText.includes("희망") || promptText.includes("미래")) {
-        generatedText += "곧 좋은 날이 올 거야. 희망을 잃지 마. ";
-      }
-      if (promptText.includes("약속")) {
-        generatedText += "다음에 만나면 꼭 함께 하고 싶은 것들이 많아. ";
       }
       generatedText += "\n그럼, 또 연락할게.\n\n- 보내는 사람 올림";
     }
@@ -272,7 +270,7 @@ export function ComposeModal({
                         )}
                       >
                         <span>{section.emoji}</span>
-                        <span>{section.id === "intro" ? "시작" : "마무리"}</span>
+                        <span>{section.id === "intro" ? "시작" : section.id === "body" ? "중간" : "마무리"}</span>
                       </button>
                     ))}
                   </div>
