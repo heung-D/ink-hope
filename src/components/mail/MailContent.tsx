@@ -211,6 +211,23 @@ export function MailContent({
                       className="w-full text-left px-6 py-4 bg-card hover:bg-secondary/50 transition-all duration-150"
                     >
                       <div className="flex items-start gap-3">
+                        {/* 중요편지함 별표 표시 */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onMoveToFolder?.(mail.id, mail.isImportant ? mail.folder : "archive");
+                          }}
+                          className="p-1 -ml-1 rounded-full hover:bg-secondary transition-colors flex-shrink-0"
+                        >
+                          <Star
+                            className={cn(
+                              "w-4 h-4 transition-colors",
+                              mail.isImportant || mail.folder === "archive"
+                                ? "text-amber-500 fill-amber-500"
+                                : "text-muted-foreground/40 hover:text-amber-500"
+                            )}
+                          />
+                        </button>
                         <div
                           className={cn(
                             "w-10 h-10 rounded-full flex items-center justify-center font-medium flex-shrink-0 text-sm",
