@@ -4,8 +4,8 @@ import { Sidebar } from "@/components/mail/Sidebar";
 import { MailContent } from "@/components/mail/MailContent";
 import { ComposeModal } from "@/components/mail/ComposeModal";
 import { FloatingComposeButton } from "@/components/mail/FloatingComposeButton";
-import { familyMembers, mockMails } from "@/data/mockData";
-import type { Mail, FolderType } from "@/types/mail";
+import { familyMembers as initialFamilyMembers, mockMails } from "@/data/mockData";
+import type { Mail, FolderType, FamilyMember } from "@/types/mail";
 import { toast } from "sonner";
 
 const Index = () => {
@@ -15,6 +15,7 @@ const Index = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
   const [mails, setMails] = useState<Mail[]>(mockMails);
+  const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>(initialFamilyMembers);
 
   // 메일 폴더 이동 함수
   const moveMailToFolder = (mailId: string, targetFolder: FolderType) => {
@@ -81,6 +82,7 @@ const Index = () => {
           onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           selectedMemberId={selectedMemberId}
           onSelectMember={setSelectedMemberId}
+          onUpdateFamilyMembers={setFamilyMembers}
         />
 
         {/* Main Content - 2단 구조 */}

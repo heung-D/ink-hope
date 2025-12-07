@@ -1,9 +1,10 @@
-import { Mail, Send, FileText, Settings, PenLine, Inbox, ChevronDown, ChevronRight, Star, Trash2, Menu, X } from "lucide-react";
+import { Mail, Send, FileText, Settings, PenLine, Inbox, ChevronDown, ChevronRight, Star, Trash2, Menu, X, Pencil } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { FamilyMember, FolderType } from "@/types/mail";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { AddressBookModal } from "./AddressBookModal";
 
 interface SidebarProps {
   familyMembers: FamilyMember[];
@@ -18,6 +19,7 @@ interface SidebarProps {
   onToggleCollapse: () => void;
   selectedMemberId: string | null;
   onSelectMember: (memberId: string | null) => void;
+  onUpdateFamilyMembers: (members: FamilyMember[]) => void;
 }
 
 const folders = [
@@ -41,8 +43,10 @@ export function Sidebar({
   onToggleCollapse,
   selectedMemberId,
   onSelectMember,
+  onUpdateFamilyMembers,
 }: SidebarProps) {
   const [isTreeExpanded, setIsTreeExpanded] = useState(true);
+  const [isAddressBookOpen, setIsAddressBookOpen] = useState(false);
   return (
     <motion.aside
       initial={false}
@@ -168,18 +172,27 @@ export function Sidebar({
         {/* 내 편지함 - 사용자 분류 */}
         {!isCollapsed && (
           <>
-            <button
-              onClick={() => setIsTreeExpanded(!isTreeExpanded)}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-foreground hover:bg-secondary transition-colors"
-            >
-              {isTreeExpanded ? (
-                <ChevronDown className="w-4 h-4 text-muted-foreground" />
-              ) : (
-                <ChevronRight className="w-4 h-4 text-muted-foreground" />
-              )}
-              <Inbox className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium">내 편지함</span>
-            </button>
+            <div className="flex items-center justify-between px-3 py-2">
+              <button
+                onClick={() => setIsTreeExpanded(!isTreeExpanded)}
+                className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
+              >
+                {isTreeExpanded ? (
+                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                ) : (
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                )}
+                <Inbox className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium">내 편지함</span>
+              </button>
+              <button
+                onClick={() => setIsAddressBookOpen(true)}
+                className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                title="주소록 관리"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+              </button>
+            </div>
             
             {isTreeExpanded && (
               <ul className="ml-4 border-l border-border/50 space-y-0.5">
@@ -270,6 +283,14 @@ export function Sidebar({
           )}
         </div>
       </div>
+
+      {/* Address Book Modal */}
+      <AddressBookModal
+        isOpen={isAddressBookOpen}
+        onClose={() => setIsAddressBookOpen(false)}
+        familyMembers={familyMembers}
+        onUpdateMembers={onUpdateFamilyMembers}
+      />
     </motion.aside>
   );
 }
