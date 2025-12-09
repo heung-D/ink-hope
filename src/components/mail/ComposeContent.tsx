@@ -361,6 +361,10 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                       <Send className="w-5 h-5 text-primary" />
                       <h2 className="font-semibold text-foreground text-lg">보내는 사람</h2>
                     </div>
+                    <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors">
+                      <Pencil className="w-4 h-4" />
+                      수정
+                    </button>
                   </div>
                   
                   <div className="space-y-3">
@@ -391,16 +395,6 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                             <p className="font-medium text-foreground">{sender.name}</p>
                             <p className="text-sm text-muted-foreground">{sender.address}</p>
                           </div>
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // TODO: 수정 모달 열기
-                            }}
-                            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors"
-                          >
-                            <Pencil className="w-4 h-4" />
-                            수정
-                          </button>
                         </div>
                       </div>
                     ))}
