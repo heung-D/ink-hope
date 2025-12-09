@@ -5,6 +5,7 @@ import type { FamilyMember, FolderType } from "@/types/mail";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { AddressBookModal } from "./AddressBookModal";
+import { DeadlineTimer } from "./DeadlineTimer";
 
 interface SidebarProps {
   familyMembers: FamilyMember[];
@@ -282,6 +283,11 @@ export function Sidebar({
           </ul>
         )}
       </nav>
+
+      {/* Deadline Timer */}
+      <div className="px-3 pb-3">
+        <DeadlineTimer deadlineHour={17} isCollapsed={isCollapsed} />
+      </div>
 
       {/* Profile */}
       <div className="p-3 border-t border-border">
