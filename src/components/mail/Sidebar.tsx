@@ -17,6 +17,7 @@ interface SidebarProps {
   archiveCount: number;
   trashCount: number;
   onCompose: () => void;
+  isComposeOpen?: boolean;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
   selectedMemberId: string | null;
@@ -48,6 +49,7 @@ export function Sidebar({
   archiveCount,
   trashCount,
   onCompose,
+  isComposeOpen = false,
   isCollapsed,
   onToggleCollapse,
   selectedMemberId,
@@ -119,10 +121,13 @@ export function Sidebar({
         ) : (
           <Button
             onClick={onCompose}
-            className="w-full h-11 rounded-xl text-[15px] font-medium shadow-card hover:shadow-card-hover transition-all duration-200"
+            className="w-full h-11 rounded-xl text-[15px] font-medium shadow-card hover:shadow-card-hover transition-all duration-200 justify-start px-4"
           >
-            <PenLine className="w-4 h-4 mr-2" />
-            편지 쓰기
+            <PenLine className="w-4 h-4 mr-1 flex-shrink-0" />
+            <span className="flex-1 text-left">편지 쓰기</span>
+            {isComposeOpen && (
+              <span className="text-[11px] text-primary-foreground/80">(쓰는중)</span>
+            )}
           </Button>
         )}
 

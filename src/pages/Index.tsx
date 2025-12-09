@@ -103,6 +103,7 @@ const Index = () => {
           archiveCount={archiveCount}
           trashCount={trashCount}
           onCompose={() => setIsComposeOpen(true)}
+          isComposeOpen={isComposeOpen}
           isCollapsed={isSidebarCollapsed}
           onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           selectedMemberId={selectedMemberId}
