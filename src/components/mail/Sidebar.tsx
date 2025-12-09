@@ -177,7 +177,7 @@ export function Sidebar({
                   variant="outline"
                   size="icon"
                   onClick={() => onFolderChange("inbox")}
-                  className="w-full h-11 rounded-xl border-orange-400 text-orange-500 hover:bg-orange-50 hover:text-orange-600"
+                  className="w-full h-11 rounded-xl text-orange-500 hover:bg-orange-50 hover:text-orange-600"
                 >
                   <Bell className="w-5 h-5" />
                 </Button>
@@ -185,7 +185,7 @@ export function Sidebar({
                 <Button
                   variant="outline"
                   onClick={() => onFolderChange("inbox")}
-                  className="w-full h-11 rounded-xl text-[15px] font-medium border-orange-400 text-orange-500 hover:bg-orange-50 hover:text-orange-600 justify-start px-4"
+                  className="w-full h-11 rounded-xl text-[15px] font-medium text-orange-500 hover:bg-orange-50 hover:text-orange-600 justify-start px-4"
                 >
                   <Bell className="w-4 h-4 mr-1 flex-shrink-0" />
                   <span className="flex-1 text-left">새로 들어온 편지</span>
@@ -209,7 +209,7 @@ export function Sidebar({
                 variant="outline"
                 size="icon"
                 onClick={onHandwrittenUpload}
-                className="w-full h-11 rounded-xl border-orange-400 text-orange-500 hover:bg-orange-50 hover:text-orange-600"
+                className="w-full h-11 rounded-xl text-orange-500 hover:bg-orange-50 hover:text-orange-600"
               >
                 <Inbox className="w-5 h-5" />
               </Button>
@@ -217,7 +217,7 @@ export function Sidebar({
               <Button
                 variant="outline"
                 onClick={onHandwrittenUpload}
-                className="w-full h-11 rounded-xl text-[15px] font-medium border-orange-400 text-orange-500 hover:bg-orange-50 hover:text-orange-600 justify-start px-4"
+                className="w-full h-11 rounded-xl text-[15px] font-medium text-orange-500 hover:bg-orange-50 hover:text-orange-600 justify-start px-4"
               >
                 <Inbox className="w-4 h-4 mr-1 flex-shrink-0" />
                 <span>손편지 자동등록</span>
