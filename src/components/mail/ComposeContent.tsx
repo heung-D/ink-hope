@@ -111,50 +111,33 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
           </div>
         </div>
 
-        {/* Step Progress */}
-        <div className="flex items-center justify-between">
-          {steps.map((step, index) => (
-            <div key={step.id} className="flex items-center">
-              <div className="flex flex-col items-center">
-                <div
-                  className={`
-                    w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm
-                    transition-all duration-300
-                    ${currentStep === step.id 
-                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30" 
-                      : currentStep > step.id 
-                        ? "bg-primary/20 text-primary" 
-                        : "bg-muted text-muted-foreground border-2 border-border"
-                    }
-                  `}
-                >
-                  {currentStep > step.id ? (
-                    <Check className="w-4 h-4" />
-                  ) : (
-                    step.id
-                  )}
-                </div>
-                <span 
-                  className={`
-                    text-xs mt-1.5 max-w-[60px] text-center
-                    ${currentStep === step.id 
-                      ? "text-primary font-medium" 
-                      : "text-muted-foreground"
-                    }
-                  `}
-                >
-                  {step.label}
+        {/* Step Progress - Chips */}
+        <div className="flex items-center gap-2 flex-wrap">
+          {steps.map((step) => (
+            <button
+              key={step.id}
+              onClick={() => currentStep > step.id && setCurrentStep(step.id)}
+              disabled={currentStep < step.id}
+              className={`
+                flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium
+                transition-all duration-200 whitespace-nowrap
+                ${currentStep === step.id 
+                  ? "bg-primary text-primary-foreground shadow-md" 
+                  : currentStep > step.id 
+                    ? "bg-primary/15 text-primary hover:bg-primary/25 cursor-pointer" 
+                    : "bg-muted text-muted-foreground cursor-not-allowed"
+                }
+              `}
+            >
+              {currentStep > step.id ? (
+                <Check className="w-3.5 h-3.5" />
+              ) : (
+                <span className="w-5 h-5 rounded-full bg-current/20 flex items-center justify-center text-xs">
+                  {step.id}
                 </span>
-              </div>
-              {index < steps.length - 1 && (
-                <div 
-                  className={`
-                    w-12 h-0.5 mx-1 mt-[-20px]
-                    ${currentStep > step.id ? "bg-primary/40" : "bg-border"}
-                  `}
-                />
               )}
-            </div>
+              {step.label}
+            </button>
           ))}
         </div>
       </header>
