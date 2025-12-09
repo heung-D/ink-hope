@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { AddressBookModal } from "./AddressBookModal";
 import { DeadlineTimer } from "./DeadlineTimer";
+import orangeRipe from "@/assets/emoticons/orange-ripe.png";
 interface SidebarProps {
   familyMembers: FamilyMember[];
   activeFolder: FolderType | null;
@@ -109,12 +110,14 @@ export function Sidebar({
       </div>
 
       {/* Profile - 편지 쓰기 버튼 위에 배치 */}
-      <div className="px-3 pt-3 pb-2">
+      <div className="px-3 pt-3 pb-6">
         <div className={cn("flex items-center gap-3", isCollapsed && "justify-center")}>
           <div className="relative flex-shrink-0">
-            <div className="w-9 h-9 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-sm">
-              B
-            </div>
+            <img 
+              src={orangeRipe} 
+              alt="프로필" 
+              className="w-9 h-9 rounded-full object-cover"
+            />
             {/* Social Login Provider Badge */}
             <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#FEE500] flex items-center justify-center shadow-sm border border-white">
               {/* Kakao Icon */}
