@@ -243,7 +243,7 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                 <section>
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-primary" />
+                      <User className="w-5 h-5 text-primary" />
                       <h2 className="font-semibold text-foreground text-base">받는 사람 선택</h2>
                     </div>
                     <button 
@@ -373,7 +373,7 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                 <section className="border-t border-border/40 pt-5">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <Send className="w-4 h-4 text-primary" />
+                      <Send className="w-5 h-5 text-primary" />
                       <h2 className="font-semibold text-foreground text-base">보내는 사람</h2>
                     </div>
                     <button 
