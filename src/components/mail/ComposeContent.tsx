@@ -248,7 +248,7 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                             <div className="mb-3">
                               <p className="text-sm font-medium text-foreground mb-1">우편 종류</p>
                               <p className="text-xs text-muted-foreground">
-                                교정시설 우편은 내부 검수 절차로 인해 모든 방식의 실제 전달 속도는 비슷합니다.<br/>
+                                <span className="font-semibold text-foreground">교정시설 우편은 내부 검수 절차로 인해</span> 모든 방식의 실제 전달 속도는 비슷합니다.<br/>
                                 안전성과 가격을 기준으로 선택해 주세요.
                               </p>
                             </div>
