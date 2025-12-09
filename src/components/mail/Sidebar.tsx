@@ -141,14 +141,18 @@ export function Sidebar({
                 onClick={() => onFolderChange("inbox")}
                 className="flex-1 bg-gray-100 rounded-xl py-3 px-2 hover:bg-gray-200 transition-colors"
               >
-                <p className="text-xl font-bold text-foreground">{unreadCount}</p>
+                <svg viewBox="0 0 24 24" className="w-6 h-6 mx-auto mb-1 fill-orange-500">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
                 <p className="text-xs text-muted-foreground">새로운편지</p>
               </button>
               <button 
                 onClick={onHandwrittenUpload}
                 className="flex-1 bg-gray-100 rounded-xl py-3 px-2 hover:bg-gray-200 transition-colors"
               >
-                <p className="text-xl font-bold text-foreground">+</p>
+                <svg viewBox="0 0 24 24" className="w-6 h-6 mx-auto mb-1 fill-orange-500">
+                  <path d="M9.5 6.5v3h-3v-3h3M11 5H5v6h6V5zm-1.5 9.5v3h-3v-3h3M11 13H5v6h6v-6zm6.5-6.5v3h-3v-3h3M19 5h-6v6h6V5zm-6 8h1.5v1.5H13V13zm1.5 1.5H16V16h-1.5v-1.5zM16 13h1.5v1.5H16V13zm-3 3h1.5v1.5H13V16zm1.5 1.5H16V19h-1.5v-1.5zM16 16h1.5v1.5H16V16zm1.5-1.5H19V16h-1.5v-1.5zm0 3H19V19h-1.5v-1.5zM19 13h-1.5v1.5H19V13z"/>
+                </svg>
                 <p className="text-xs text-muted-foreground">손편지 스캔</p>
               </button>
             </div>
