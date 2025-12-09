@@ -63,7 +63,7 @@ export function DeadlineTimer({ deadlineHour = 17, isCollapsed = false }: Deadli
   return (
     <div className="flex items-end gap-2 px-3 py-2">
       {/* 오렌지 이모티콘 */}
-      <div className="flex-shrink-0">
+      <div className="flex-shrink-0 animate-bounce-gentle">
         <img src={orangeRipe} alt="오렌지" className="w-10 h-10 object-contain" />
       </div>
       
