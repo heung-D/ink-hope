@@ -220,30 +220,30 @@ export function PaymentSummary({
           </div>
         </div>
 
-        {/* 결제 금액 요약 - 다크 스타일 */}
-        <div className="bg-gray-900 rounded-2xl p-6 space-y-3">
+        {/* 결제 금액 요약 - 오렌지 스타일 */}
+        <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl p-6 space-y-3 border border-orange-200/50 dark:border-orange-700/30">
           {/* 기본 요금 */}
           <div className="flex items-center justify-between">
-            <span className="text-gray-300">기본 요금</span>
-            <span className="text-gray-100">{photoPrice.toLocaleString()}원</span>
+            <span className="text-orange-700 dark:text-orange-300">기본 요금</span>
+            <span className="text-orange-900 dark:text-orange-100">{photoPrice.toLocaleString()}원</span>
           </div>
 
           {/* 우편료 */}
           <div className="flex items-center justify-between">
-            <span className="text-gray-300">우편료 ({mailType})</span>
-            <span className="text-gray-100">{mailPrice.toLocaleString()}원</span>
+            <span className="text-orange-700 dark:text-orange-300">우편료 ({mailType})</span>
+            <span className="text-orange-900 dark:text-orange-100">{mailPrice.toLocaleString()}원</span>
           </div>
 
           {/* 구분선 */}
-          <div className="border-t border-gray-700 my-3" />
+          <div className="border-t border-orange-200 dark:border-orange-700/50 my-3" />
 
           {/* 최종 결제 금액 */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white font-medium">최종 결제 금액</p>
-              <p className="text-xs text-primary">* 수익금의 일부는 교정 교화 활동에 기부됩니다</p>
+              <p className="text-orange-900 dark:text-orange-100 font-medium">최종 결제 금액</p>
+              <p className="text-xs text-orange-600 dark:text-orange-400">* 수익금의 일부는 교정 교화 활동에 기부됩니다</p>
             </div>
-            <span className="text-3xl font-bold text-white">{totalPrice.toLocaleString()}원</span>
+            <span className="text-3xl font-bold text-orange-600 dark:text-orange-400">{totalPrice.toLocaleString()}원</span>
           </div>
         </div>
 
@@ -278,28 +278,28 @@ export function PaymentSummary({
             </div>
 
             {/* 포인트 계산 */}
-            <div className="bg-gray-900 rounded-2xl p-5 space-y-4">
+            <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl p-5 space-y-4 border border-orange-200/50 dark:border-orange-700/30">
               {/* 현재 보유 포인트 */}
               <div className="flex items-center justify-between">
-                <span className="text-gray-300">현재 보유 포인트</span>
-                <span className="text-xl font-bold text-white">{userPoints.toLocaleString()}P</span>
+                <span className="text-orange-700 dark:text-orange-300">현재 보유 포인트</span>
+                <span className="text-xl font-bold text-orange-900 dark:text-orange-100">{userPoints.toLocaleString()}P</span>
               </div>
 
               {/* 차감 포인트 */}
               <div className="flex items-center justify-between">
-                <span className="text-gray-300">차감 포인트</span>
-                <span className="text-xl font-bold text-red-400">-{totalPrice.toLocaleString()}P</span>
+                <span className="text-orange-700 dark:text-orange-300">차감 포인트</span>
+                <span className="text-xl font-bold text-red-500">-{totalPrice.toLocaleString()}P</span>
               </div>
 
               {/* 구분선 */}
-              <div className="border-t border-gray-700" />
+              <div className="border-t border-orange-200 dark:border-orange-700/50" />
 
               {/* 결제 후 잔여 포인트 */}
               <div className="flex items-center justify-between">
-                <span className="text-white font-medium">결제 후 잔여 포인트</span>
+                <span className="text-orange-900 dark:text-orange-100 font-medium">결제 후 잔여 포인트</span>
                 <span className={cn(
                   "text-2xl font-bold",
-                  hasEnoughPoints ? "text-green-400" : "text-red-400"
+                  hasEnoughPoints ? "text-orange-600 dark:text-orange-400" : "text-red-500"
                 )}>
                   {remainingPoints.toLocaleString()}P
                 </span>
