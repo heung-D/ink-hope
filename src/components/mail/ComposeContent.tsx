@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { AddRecipientModal } from "./AddRecipientModal";
 import { AddSenderModal } from "./AddSenderModal";
 import { AddressBookModal } from "./AddressBookModal";
+import { StationerySelector } from "./StationerySelector";
 import type { FamilyMember } from "@/types/mail";
 import { type FacilityType, type Region, type RelationType } from "@/data/facilities";
 
@@ -107,6 +108,9 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
   
   // 보내는 사람 선택 상태
   const [selectedSenderId, setSelectedSenderId] = useState<string | null>("1");
+  
+  // 편지지 선택 상태
+  const [selectedStationeryId, setSelectedStationeryId] = useState<string | null>("white");
   
   // 모달 상태
   const [isAddRecipientModalOpen, setIsAddRecipientModalOpen] = useState(false);
@@ -428,11 +432,10 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
             )}
 
             {currentStep === 2 && (
-              <div className="bg-card rounded-xl border border-border p-8 text-center">
-                <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <h2 className="text-lg font-semibold text-foreground mb-2">편지지 선택</h2>
-                <p className="text-muted-foreground">편지지 선택 기능이 곧 추가됩니다</p>
-              </div>
+              <StationerySelector
+                selectedId={selectedStationeryId}
+                onSelect={setSelectedStationeryId}
+              />
             )}
 
             {currentStep === 3 && (
