@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Sidebar } from "@/components/mail/Sidebar";
 import { MailContent } from "@/components/mail/MailContent";
-import { ComposeModal } from "@/components/mail/ComposeModal";
+import { ComposeContent } from "@/components/mail/ComposeContent";
 import { FloatingComposeButton } from "@/components/mail/FloatingComposeButton";
 import { AddressBookModal } from "@/components/mail/AddressBookModal";
 import { familyMembers as initialFamilyMembers, mockMails } from "@/data/mockData";
@@ -110,32 +110,34 @@ const Index = () => {
           onUpdateFamilyMembers={setFamilyMembers}
         />
 
-        {/* Main Content - 2단 구조 */}
-        <MailContent
-          mails={filteredMails}
-          selectedMail={selectedMail}
-          onSelectMail={setSelectedMail}
-          activeFolder={activeFolder}
-          onReply={() => setIsComposeOpen(true)}
-          selectedMember={selectedMemberId ? familyMembers.find(m => m.id === selectedMemberId) : null}
-          allMails={mails}
-          onMoveToFolder={moveMailToFolder}
-          onEditAddressBook={() => setIsAddressBookOpen(true)}
-        />
+        {/* Main Content - 편지쓰기 모드 또는 메일 목록 */}
+        {isComposeOpen ? (
+          <ComposeContent
+            familyMembers={familyMembers}
+            onClose={() => setIsComposeOpen(false)}
+          />
+        ) : (
+          <MailContent
+            mails={filteredMails}
+            selectedMail={selectedMail}
+            onSelectMail={setSelectedMail}
+            activeFolder={activeFolder}
+            onReply={() => setIsComposeOpen(true)}
+            selectedMember={selectedMemberId ? familyMembers.find(m => m.id === selectedMemberId) : null}
+            allMails={mails}
+            onMoveToFolder={moveMailToFolder}
+            onEditAddressBook={() => setIsAddressBookOpen(true)}
+          />
+        )}
 
         {/* Floating Compose Button */}
-        <FloatingComposeButton 
-          onCompose={() => setIsComposeOpen(true)}
-          daysSinceLastLetter={daysSinceLastLetter}
-          draftCount={draftCount}
-        />
-
-        {/* Compose Modal */}
-        <ComposeModal
-          isOpen={isComposeOpen}
-          onClose={() => setIsComposeOpen(false)}
-          familyMembers={familyMembers}
-        />
+        {!isComposeOpen && (
+          <FloatingComposeButton 
+            onCompose={() => setIsComposeOpen(true)}
+            daysSinceLastLetter={daysSinceLastLetter}
+            draftCount={draftCount}
+          />
+        )}
 
         {/* Address Book Modal */}
         <AddressBookModal
