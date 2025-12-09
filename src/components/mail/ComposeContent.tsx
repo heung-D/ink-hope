@@ -275,8 +275,8 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                         
                         <div className="flex gap-3">
                           {/* 아바타 */}
-                          <div className="w-10 h-10 rounded-full bg-orange-50 ring-1 ring-orange-200/50 flex items-center justify-center shrink-0">
-                            <img src={orangeEmoticons[recipients.indexOf(recipient) % orangeEmoticons.length]} alt="프로필" className="w-7 h-7 object-contain" />
+                          <div className="w-10 h-10 rounded-full bg-orange-50 ring-1 ring-orange-200/50 flex items-center justify-center shrink-0 overflow-hidden">
+                            <img src={orangeEmoticons[recipients.indexOf(recipient) % orangeEmoticons.length]} alt="프로필" className="w-7 h-7 object-contain rounded-full" />
                           </div>
                           
                           {/* 정보 */}
@@ -344,13 +344,7 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                                     <p className="text-xs font-bold text-primary">{option.price.toLocaleString()}원</p>
                                   </div>
                                   
-                                  {/* 가장 많이 선택하는 방식 노트 */}
-                                  {index === 0 && (
-                                    <div className="mt-1 flex items-center gap-1 text-primary text-[9px] font-medium">
-                                      <span>🔥</span>
-                                      가장 많이 선택
-                                    </div>
-                                  )}
+                                  {/* 가장 많이 선택하는 방식 노트 - 삭제됨 */}
                                 </button>
                               ))}
                             </div>
@@ -410,8 +404,8 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                         </div>
                         
                         <div className="flex items-center gap-2.5">
-                          <div className="w-9 h-9 rounded-full bg-orange-50 ring-1 ring-orange-200/50 flex items-center justify-center">
-                            <img src={orangeEmoticons[(senders.indexOf(sender) + 2) % orangeEmoticons.length]} alt="프로필" className="w-5 h-5 object-contain" />
+                          <div className="w-9 h-9 rounded-full bg-orange-50 ring-1 ring-orange-200/50 flex items-center justify-center overflow-hidden">
+                            <img src={orangeEmoticons[(senders.indexOf(sender) + 2) % orangeEmoticons.length]} alt="프로필" className="w-5 h-5 object-contain rounded-full" />
                           </div>
                           <div className="flex-1 min-w-0 pr-6">
                             <p className="font-medium text-foreground text-sm">{sender.name}</p>

@@ -93,13 +93,11 @@ export function AdditionalOptions({ selectedItems, onSelectedItemsChange }: Addi
   return (
     <div className="space-y-4">
       {/* 헤더 */}
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 flex items-center justify-center">
-          <Gift className="w-7 h-7 text-amber-600" />
-        </div>
+      <div className="flex items-center gap-2.5">
+        <Gift className="w-5 h-5 text-primary" />
         <div>
-          <h2 className="text-xl font-semibold text-foreground">편지와 함께 작은 바깥의 하루를 전하세요</h2>
-          <p className="text-muted-foreground text-sm">
+          <h2 className="text-sm font-semibold text-foreground">편지와 함께 작은 바깥의 하루를 전하세요</h2>
+          <p className="text-muted-foreground text-xs">
             안에서는 알기 어려운 소식과 정보, 그들에게 힘이 되는 것들만 골라 전달됩니다.
           </p>
         </div>
