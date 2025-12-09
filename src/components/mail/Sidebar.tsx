@@ -158,12 +158,11 @@ export function Sidebar({
         ) : (
           <Button
             onClick={onCompose}
-            className="w-full h-14 rounded-2xl text-base font-semibold bg-gradient-to-r from-[#FFB347] to-[#FF7F24] hover:bg-[#FF9500] hover:from-[#FF9500] hover:to-[#FF9500] shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 justify-center gap-2"
+            className="w-full h-14 rounded-2xl text-base font-semibold bg-gradient-to-r from-[#FFB347] to-[#FF7F24] hover:bg-[#FF9500] hover:from-[#FF9500] hover:to-[#FF9500] shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 justify-center"
           >
-            <Send className="w-5 h-5 flex-shrink-0" />
             <span>편지 쓰기</span>
             {isComposeOpen && (
-              <span className="bg-white/20 text-primary-foreground text-[11px] font-medium px-2 py-0.5 rounded-full">작성중</span>
+              <span className="bg-white/20 text-primary-foreground text-[11px] font-medium px-2 py-0.5 rounded-full ml-2">작성중</span>
             )}
           </Button>
         )}
