@@ -68,7 +68,7 @@ export function DeadlineTimer({ deadlineHour = 17, isCollapsed = false }: Deadli
       </div>
       
       {/* 말풍선 */}
-      <div className="flex-1 relative">
+      <div className="flex-1 relative animate-wiggle">
         {/* 말풍선 꼬리 */}
         <div className="absolute left-0 bottom-2 w-0 h-0 border-t-[6px] border-t-transparent border-r-[8px] border-r-orange-100 border-b-[6px] border-b-transparent -ml-2" />
         
