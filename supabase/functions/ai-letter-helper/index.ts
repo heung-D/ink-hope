@@ -141,12 +141,26 @@ JSON 형식으로 응답하세요: {"suggestions": ["문장1", "문장2", "문�
       const jsonMatch = aiContent.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         result = JSON.parse(jsonMatch[0]);
+        
+        // 문장별 줄바꿈 적용 (content 필드가 있는 경우)
+        if (result.content) {
+          result.content = formatWithLineBreaks(result.content);
+        }
       } else {
         result = { error: "Could not parse AI response" };
       }
     } catch (e) {
       console.error("JSON parse error:", e);
       result = { raw: aiContent };
+    }
+
+    // 문장별 줄바꿈을 적용하는 함수
+    function formatWithLineBreaks(text: string): string {
+      // 마침표, 물음표, 느낌표 뒤에 줄바꿈 추가 (단, 이미 줄바꿈이 있는 경우 제외)
+      return text
+        .replace(/([.?!。])\s*(?=[가-힣A-Za-z])/g, "$1\n")
+        .replace(/\n{3,}/g, "\n\n") // 연속 줄바꿈 정리
+        .trim();
     }
 
     return new Response(JSON.stringify(result), {
