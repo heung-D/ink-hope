@@ -9,7 +9,6 @@ interface AdditionalItem {
   icon: string;
   title: string;
   description: string;
-  price: number;
   isNew?: boolean;
   previewContent?: string;
 }
@@ -20,7 +19,6 @@ const additionalItems: AdditionalItem[] = [
     icon: "🍽️",
     title: "월간 식단표",
     description: "달력형, 2개월치 식단 정보",
-    price: 500,
     previewContent: "이달의 식단표와 다음달 예정 식단을 한눈에 볼 수 있는 달력형 정보입니다.",
   },
   {
@@ -28,7 +26,6 @@ const additionalItems: AdditionalItem[] = [
     icon: "🎬",
     title: "보라미 영화",
     description: "TV 시청 편성표",
-    price: 500,
     previewContent: "이번 주 TV 영화 편성표와 추천 프로그램 정보입니다.",
   },
   {
@@ -36,7 +33,6 @@ const additionalItems: AdditionalItem[] = [
     icon: "📊",
     title: "가석방+급수 계산기",
     description: "형기/점수 관리 시뮬레이션",
-    price: 1000,
     isNew: true,
     previewContent: "가석방 요건과 급수 계산을 위한 시뮬레이션 정보입니다. 현재 상황을 입력하면 예상 결과를 확인할 수 있습니다.",
   },
@@ -45,7 +41,6 @@ const additionalItems: AdditionalItem[] = [
     icon: "🔮",
     title: "AI 운세/타로",
     description: "오늘의 운세와 타로 점",
-    price: 500,
     previewContent: "AI가 분석한 오늘의 운세와 타로 카드 해석 결과입니다.",
   },
   {
@@ -53,7 +48,6 @@ const additionalItems: AdditionalItem[] = [
     icon: "🧩",
     title: "스도쿠/퍼즐",
     description: "재미있는 두뇌 게임",
-    price: 300,
     previewContent: "난이도별 스도쿠 퍼즐과 다양한 두뇌 게임이 포함되어 있습니다.",
   },
   {
@@ -61,7 +55,6 @@ const additionalItems: AdditionalItem[] = [
     icon: "😂",
     title: "최신 유머",
     description: "웃음을 선물하세요",
-    price: 300,
     previewContent: "엄선된 최신 유머와 재미있는 이야기 모음입니다.",
   },
   {
@@ -69,7 +62,6 @@ const additionalItems: AdditionalItem[] = [
     icon: "📚",
     title: "직업훈련 안내",
     description: "자격증 취득 정보",
-    price: 500,
     previewContent: "교정시설 내 직업훈련 프로그램과 자격증 취득 방법 안내입니다.",
   },
   {
@@ -77,7 +69,6 @@ const additionalItems: AdditionalItem[] = [
     icon: "💬",
     title: "100가지 질문",
     description: "10가지 테마별 질문",
-    price: 500,
     previewContent: "서로를 더 깊이 알아갈 수 있는 100가지 질문 카드입니다. 가족, 추억, 미래 등 다양한 테마로 구성되어 있습니다.",
   },
 ];
@@ -98,10 +89,6 @@ export function AdditionalOptions({ selectedItems, onSelectedItemsChange }: Addi
     }
   };
 
-  const totalPrice = selectedItems.reduce((sum, itemId) => {
-    const item = additionalItems.find((i) => i.id === itemId);
-    return sum + (item?.price || 0);
-  }, 0);
 
   return (
     <div className="space-y-6">
@@ -202,30 +189,24 @@ export function AdditionalOptions({ selectedItems, onSelectedItemsChange }: Addi
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-primary/5 rounded-2xl p-5"
+          className="bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 rounded-2xl p-4 border border-orange-200/50 dark:border-orange-800/30"
         >
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-medium text-foreground">선택한 추가 콘텐츠</p>
-              <p className="text-sm text-muted-foreground">{selectedItems.length}개 선택됨</p>
-            </div>
-            <div className="text-right">
-              <p className="text-2xl font-bold text-primary">+{totalPrice.toLocaleString()}원</p>
-            </div>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="font-medium text-foreground">선택됨:</span>
           </div>
 
           {/* 선택된 아이템 목록 */}
-          <div className="flex flex-wrap gap-2 mt-4">
+          <div className="flex flex-wrap gap-2">
             {selectedItems.map((itemId) => {
               const item = additionalItems.find((i) => i.id === itemId);
               if (!item) return null;
               return (
                 <div
                   key={itemId}
-                  className="flex items-center gap-2 bg-card px-3 py-1.5 rounded-full text-sm"
+                  className="flex items-center gap-2 bg-white dark:bg-card px-3 py-1.5 rounded-full text-sm border border-orange-200 dark:border-orange-800/50"
                 >
                   <span>{item.icon}</span>
-                  <span className="font-medium">{item.title}</span>
+                  <span className="font-medium text-orange-600 dark:text-orange-400">{item.title}</span>
                   <button
                     onClick={() => toggleItem(itemId)}
                     className="text-muted-foreground hover:text-foreground"
@@ -257,10 +238,6 @@ export function AdditionalOptions({ selectedItems, onSelectedItemsChange }: Addi
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-muted-foreground">{previewItem?.previewContent}</p>
-            <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl">
-              <span className="font-medium">가격</span>
-              <span className="text-primary font-bold">{previewItem?.price?.toLocaleString()}원</span>
-            </div>
             <button
               onClick={() => {
                 if (previewItem) {
