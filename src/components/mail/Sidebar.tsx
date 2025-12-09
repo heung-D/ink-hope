@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { AddressBookModal } from "./AddressBookModal";
 import { DeadlineTimer } from "./DeadlineTimer";
+import { HandwrittenUploadModal } from "./HandwrittenUploadModal";
 
 interface SidebarProps {
   familyMembers: FamilyMember[];
@@ -59,6 +60,7 @@ export function Sidebar({
   const [isTreeExpanded, setIsTreeExpanded] = useState(true);
   const [isFolderExpanded, setIsFolderExpanded] = useState(true);
   const [isAddressBookOpen, setIsAddressBookOpen] = useState(false);
+  const [isHandwrittenModalOpen, setIsHandwrittenModalOpen] = useState(false);
   return (
     <motion.aside
       initial={false}
@@ -167,6 +169,7 @@ export function Sidebar({
               <Button
                 variant="outline"
                 size="icon"
+                onClick={() => setIsHandwrittenModalOpen(true)}
                 className="w-full h-11 rounded-xl border-orange-400 text-orange-500 hover:bg-orange-50 hover:text-orange-600"
               >
                 <Inbox className="w-5 h-5" />
@@ -174,6 +177,7 @@ export function Sidebar({
             ) : (
               <Button
                 variant="outline"
+                onClick={() => setIsHandwrittenModalOpen(true)}
                 className="w-full h-11 rounded-xl text-[15px] font-medium border-orange-400 text-orange-500 hover:bg-orange-50 hover:text-orange-600 justify-start px-4"
               >
                 <Inbox className="w-4 h-4 mr-1 flex-shrink-0" />
@@ -401,6 +405,12 @@ export function Sidebar({
         onClose={() => setIsAddressBookOpen(false)}
         familyMembers={familyMembers}
         onUpdateMembers={onUpdateFamilyMembers}
+      />
+
+      {/* Handwritten Upload Modal */}
+      <HandwrittenUploadModal
+        isOpen={isHandwrittenModalOpen}
+        onClose={() => setIsHandwrittenModalOpen(false)}
       />
     </motion.aside>
   );
