@@ -25,7 +25,6 @@ import { LetterEditor } from "./LetterEditor";
 import { LetterPreview } from "./LetterPreview";
 import { PhotoUpload } from "./PhotoUpload";
 import { AdditionalOptions } from "./AdditionalOptions";
-import { DeadlineTimer } from "./DeadlineTimer";
 import { PaymentSummary } from "./PaymentSummary";
 import type { FamilyMember } from "@/types/mail";
 import { type FacilityType, type Region, type RelationType } from "@/data/facilities";
@@ -578,9 +577,6 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
         familyMembers={familyMembers}
         onUpdateMembers={() => {}}
       />
-
-      {/* 마감 타이머 */}
-      <DeadlineTimer deadlineHour={17} />
     </div>
   );
 }

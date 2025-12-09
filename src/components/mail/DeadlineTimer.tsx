@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface DeadlineTimerProps {
-  deadlineHour?: number; // 우체국 마감 시간 (기본값: 17시)
+  deadlineHour?: number;
+  isCollapsed?: boolean;
 }
 
-export function DeadlineTimer({ deadlineHour = 17 }: DeadlineTimerProps) {
+export function DeadlineTimer({ deadlineHour = 17, isCollapsed = false }: DeadlineTimerProps) {
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
   const [isExpired, setIsExpired] = useState(false);
 
@@ -16,7 +17,6 @@ export function DeadlineTimer({ deadlineHour = 17 }: DeadlineTimerProps) {
       const deadline = new Date();
       deadline.setHours(deadlineHour, 0, 0, 0);
 
-      // 이미 마감 시간이 지났으면 다음 날로 설정
       if (now >= deadline) {
         setIsExpired(true);
         return { hours: 0, minutes: 0, seconds: 0 };
@@ -31,10 +31,8 @@ export function DeadlineTimer({ deadlineHour = 17 }: DeadlineTimerProps) {
       return { hours, minutes, seconds };
     };
 
-    // 초기 계산
     setTimeLeft(calculateTimeLeft());
 
-    // 1초마다 업데이트
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
@@ -44,33 +42,34 @@ export function DeadlineTimer({ deadlineHour = 17 }: DeadlineTimerProps) {
 
   const formatNumber = (num: number) => num.toString().padStart(2, "0");
 
+  if (isCollapsed) {
+    return (
+      <div className="flex justify-center">
+        <div className={cn(
+          "w-11 h-11 rounded-xl flex items-center justify-center",
+          isExpired ? "bg-gray-400" : "bg-gray-600"
+        )}>
+          <Clock className="w-5 h-5 text-white" />
+        </div>
+      </div>
+    );
+  }
+
   if (isExpired) {
     return (
-      <motion.div
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
-      >
-        <div className="bg-gray-600 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-3">
-          <Clock className="w-5 h-5" />
-          <span className="font-semibold">오늘 마감이 종료되었습니다</span>
-        </div>
-      </motion.div>
+      <div className="bg-gray-500 text-white px-4 py-3 rounded-xl text-center">
+        <p className="text-xs text-gray-300 mb-1">편지 마감 시간까지</p>
+        <p className="font-semibold text-sm">오늘 마감 종료</p>
+      </div>
     );
   }
 
   return (
-    <motion.div
-      initial={{ y: 100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
-    >
-      <div className="bg-gray-900 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-3">
-        <Clock className="w-5 h-5" />
-        <span className="font-semibold">
-          편지 마감 시간까지 : {timeLeft.hours}시 {formatNumber(timeLeft.minutes)}분 {formatNumber(timeLeft.seconds)}초
-        </span>
-      </div>
-    </motion.div>
+    <div className="bg-gray-600 text-white px-4 py-3 rounded-xl text-center">
+      <p className="text-xs text-gray-300 mb-1">편지 마감 시간까지</p>
+      <p className="font-bold text-lg tracking-wide">
+        {formatNumber(timeLeft.hours)}시 {formatNumber(timeLeft.minutes)}분 {formatNumber(timeLeft.seconds)}초
+      </p>
+    </div>
   );
 }
