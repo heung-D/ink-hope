@@ -507,6 +507,9 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                 selectedAdditionalItems={selectedAdditionalItems}
                 mailType={selectedMailType}
                 mailPrice={mailTypeOptions.find(m => m.id === selectedMailType)?.price || 0}
+                onMailTypeChange={(newMailType, price) => {
+                  setSelectedMailType(newMailType as MailType);
+                }}
                 onPayment={() => {
                   // TODO: 결제 처리
                   console.log("결제 진행");

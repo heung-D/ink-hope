@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { CreditCard, Check, Mail, FileText, Image, Gift, Truck } from "lucide-react";
+import { CreditCard, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -10,6 +11,21 @@ interface PhotoFile {
   rotation: number;
 }
 
+interface MailTypeOption {
+  id: string;
+  label: string;
+  deliveryTime: string;
+  price: number;
+  hasTracking: boolean;
+}
+
+const mailTypeOptions: MailTypeOption[] = [
+  { id: "준등기우편", label: "준등기", deliveryTime: "3~5일", price: 1800, hasTracking: true },
+  { id: "등기우편", label: "일반등기", deliveryTime: "3~5일", price: 2830, hasTracking: true },
+  { id: "일반우편", label: "일반우편", deliveryTime: "3~5일", price: 430, hasTracking: false },
+  { id: "익일특급", label: "익일특급", deliveryTime: "3~5일", price: 3530, hasTracking: false },
+];
+
 interface PaymentSummaryProps {
   recipientName?: string;
   recipientFacility?: string;
@@ -19,6 +35,7 @@ interface PaymentSummaryProps {
   selectedAdditionalItems: string[];
   mailType: string;
   mailPrice: number;
+  onMailTypeChange: (mailType: string, price: number) => void;
   onPayment: () => void;
 }
 
@@ -43,6 +60,7 @@ export function PaymentSummary({
   selectedAdditionalItems,
   mailType,
   mailPrice,
+  onMailTypeChange,
   onPayment,
 }: PaymentSummaryProps) {
   // 편지 분량 계산
@@ -78,10 +96,7 @@ export function PaymentSummary({
       <div className="bg-card rounded-3xl p-6 shadow-lg border border-border/50 space-y-6">
         {/* 받는 분 */}
         <div className="bg-muted/30 rounded-2xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Mail className="w-4 h-4 text-primary" />
-            <span className="font-medium text-foreground">받는 분</span>
-          </div>
+          <p className="font-medium text-muted-foreground text-sm mb-1">받는 분</p>
           <p className="text-foreground font-semibold">
             {recipientName || "선택되지 않음"} 
             {recipientFacility && <span className="text-muted-foreground font-normal"> ({recipientFacility})</span>}
@@ -90,14 +105,11 @@ export function PaymentSummary({
 
         {/* 선택 내역 */}
         <div>
-          <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-            <FileText className="w-4 h-4 text-primary" />
-            선택 내역
-          </h3>
+          <h3 className="font-semibold text-foreground mb-4">선택 내역</h3>
 
-          <div className="space-y-3">
+          <div className="space-y-0">
             {/* 편지 분량 */}
-            <div className="flex items-center justify-between py-3 border-b border-border/50">
+            <div className="flex items-center justify-between py-4 border-b border-border">
               <div>
                 <p className="font-medium text-foreground">편지 분량</p>
                 <p className="text-sm text-muted-foreground">
@@ -108,7 +120,7 @@ export function PaymentSummary({
             </div>
 
             {/* 편지지 */}
-            <div className="flex items-center justify-between py-3 border-b border-border/50">
+            <div className="flex items-center justify-between py-4 border-b border-border">
               <div>
                 <p className="font-medium text-foreground">편지지</p>
                 <p className="text-sm text-muted-foreground">{stationeryName || "기본"}</p>
@@ -117,15 +129,12 @@ export function PaymentSummary({
             </div>
 
             {/* 사진 인화 */}
-            <div className="flex items-center justify-between py-3 border-b border-border/50">
-              <div className="flex items-center gap-2">
-                <Image className="w-4 h-4 text-muted-foreground" />
-                <div>
-                  <p className="font-medium text-foreground">사진 인화</p>
-                  {photos.length > 0 && (
-                    <p className="text-sm text-muted-foreground">{photos.length}장 x 500원</p>
-                  )}
-                </div>
+            <div className="flex items-center justify-between py-4 border-b border-border">
+              <div>
+                <p className="font-medium text-foreground">사진 인화</p>
+                {photos.length > 0 && (
+                  <p className="text-sm text-muted-foreground">{photos.length}장 x 500원</p>
+                )}
               </div>
               <span className={cn(
                 "font-medium",
@@ -136,32 +145,52 @@ export function PaymentSummary({
             </div>
 
             {/* 동봉 자료 */}
-            <div className="flex items-center justify-between py-3 border-b border-border/50">
-              <div className="flex items-center gap-2">
-                <Gift className="w-4 h-4 text-muted-foreground" />
-                <div>
-                  <p className="font-medium text-foreground">동봉 자료</p>
-                  {selectedItemNames.length > 0 && (
-                    <p className="text-sm text-muted-foreground">{selectedItemNames.join(", ")}</p>
-                  )}
-                </div>
+            <div className="flex items-center justify-between py-4 border-b border-border">
+              <div>
+                <p className="font-medium text-foreground">동봉 자료</p>
+                {selectedItemNames.length > 0 && (
+                  <p className="text-sm text-muted-foreground">{selectedItemNames.join(", ")}</p>
+                )}
               </div>
               <span className="text-foreground font-medium">
                 {selectedItemNames.length > 0 ? "무료" : "없음"}
               </span>
             </div>
+          </div>
+        </div>
 
-            {/* 우편 방법 */}
-            <div className="flex items-center justify-between py-3">
-              <div className="flex items-center gap-2">
-                <Truck className="w-4 h-4 text-muted-foreground" />
-                <div>
-                  <p className="font-medium text-foreground">우편 방법</p>
-                  <p className="text-sm text-muted-foreground">{mailType}</p>
-                </div>
-              </div>
-              <span className="text-primary font-medium">{mailPrice.toLocaleString()}원</span>
-            </div>
+        {/* 우편 방법 선택 */}
+        <div>
+          <h3 className="font-semibold text-foreground mb-4">우편 방법 선택</h3>
+          <div className="grid grid-cols-2 gap-3">
+            {mailTypeOptions.map((option) => (
+              <button
+                key={option.id}
+                onClick={() => onMailTypeChange(option.id, option.price)}
+                className={cn(
+                  "relative p-4 rounded-xl border-2 transition-all text-left",
+                  mailType === option.id
+                    ? "border-primary bg-primary/5"
+                    : "border-border hover:border-primary/30"
+                )}
+              >
+                {/* 선택 체크 */}
+                {mailType === option.id && (
+                  <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                    <Check className="w-3 h-3 text-primary-foreground" />
+                  </div>
+                )}
+
+                <p className="font-semibold text-foreground">{option.label}</p>
+                <p className="text-sm text-muted-foreground">{option.deliveryTime}</p>
+                <p className="text-primary font-bold mt-2">{option.price.toLocaleString()}원</p>
+                {option.hasTracking && (
+                  <span className="inline-block mt-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">
+                    추적 가능
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
         </div>
 
