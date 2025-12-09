@@ -12,7 +12,7 @@ import { toast } from "sonner";
 const Index = () => {
   const [activeFolder, setActiveFolder] = useState<FolderType>("inbox");
   const [selectedMail, setSelectedMail] = useState<Mail | null>(null);
-  const [isComposeOpen, setIsComposeOpen] = useState(false);
+  const [isComposeOpen, setIsComposeOpen] = useState(true);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
   const [mails, setMails] = useState<Mail[]>(mockMails);
