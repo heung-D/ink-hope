@@ -260,10 +260,10 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                         key={recipient.id}
                         onClick={() => setSelectedRecipientId(selectedRecipientId === recipient.id ? null : recipient.id)}
                         className={`
-                          relative rounded-xl p-3.5 cursor-pointer transition-all bg-white
+                          relative rounded-xl p-3.5 cursor-pointer transition-all
                           ${selectedRecipientId === recipient.id 
-                            ? "shadow-[0_2px_8px_rgba(0,0,0,0.08)] border border-primary/30" 
-                            : "border border-border/40 hover:shadow-[0_2px_6px_rgba(0,0,0,0.05)]"
+                            ? "shadow-[0_2px_8px_rgba(0,0,0,0.08)] border-2 border-primary bg-orange-50/50" 
+                            : "border border-border/40 hover:shadow-[0_2px_6px_rgba(0,0,0,0.05)] bg-white"
                           }
                         `}
                       >
@@ -301,7 +301,7 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                         {/* 우편 종류 - 선택된 수신자만 표시 */}
                         {selectedRecipientId === recipient.id && (
                           <div className="mt-3 pt-3 border-t border-border/50">
-                            <div className="bg-muted/60 rounded-xl p-3">
+                            <div className="bg-amber-50 rounded-xl p-3">
                               <div className="mb-3">
                                 <p className="text-xs font-medium text-foreground mb-0.5">우편 종류</p>
                                 <p className="text-[11px] text-muted-foreground leading-relaxed">
