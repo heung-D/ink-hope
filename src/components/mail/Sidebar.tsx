@@ -227,21 +227,21 @@ export function Sidebar({
                       isCollapsed && "justify-center px-0",
                       !isCollapsed && "ml-2",
                       isActive
-                        ? "bg-accent text-accent-foreground font-medium"
-                        : "text-muted-foreground hover:bg-secondary hover:text-secondary-foreground"
+                        ? "bg-[#FFF5EB] text-orange-600 font-medium"
+                        : "text-muted-foreground hover:bg-gray-100 hover:text-foreground"
                     )}
                   >
-                    <Icon className="w-[18px] h-[18px] flex-shrink-0" />
+                    <Icon className={cn("w-[18px] h-[18px] flex-shrink-0", isActive && "text-orange-500")} />
                     {!isCollapsed && (
                       <>
                         <span className="flex-1 text-left">{folder.label}</span>
                         {count > 0 && (
                           <span
                             className={cn(
-                              "text-xs font-semibold px-2 py-0.5 rounded-full",
+                              "text-xs font-bold px-2.5 py-0.5 rounded-full",
                               isActive
-                                ? "bg-primary text-primary-foreground"
-                                : "bg-muted text-muted-foreground"
+                                ? "bg-orange-500 text-white"
+                                : "bg-gray-200 text-muted-foreground"
                             )}
                           >
                             {count}
