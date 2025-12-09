@@ -177,14 +177,14 @@ export function Sidebar({
           <Button
             onClick={onCompose}
             size="icon"
-            className="w-full h-12 rounded-xl bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all duration-200"
+            className="w-full h-12 rounded-xl bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-[0_4px_14px_rgba(251,146,60,0.4)] hover:shadow-[0_6px_20px_rgba(251,146,60,0.5)] transition-all duration-200"
           >
             <Send className="w-4 h-4" />
           </Button>
         ) : (
           <Button
             onClick={onCompose}
-            className="w-full h-12 rounded-xl text-sm font-semibold bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all duration-200 justify-center"
+            className="w-full h-12 rounded-xl text-sm font-semibold bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-[0_4px_14px_rgba(251,146,60,0.4)] hover:shadow-[0_6px_20px_rgba(251,146,60,0.5)] transition-all duration-200 justify-center"
           >
             <span>편지 쓰기</span>
             {isComposeOpen && (
