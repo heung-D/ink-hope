@@ -137,7 +137,7 @@ export function Sidebar({
               >
                 <Mail className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
                 <p className="text-xl font-bold text-foreground">{unreadCount}</p>
-                <p className="text-xs text-muted-foreground">안읽음</p>
+                <p className="text-xs text-muted-foreground">새로운편지</p>
               </button>
               <button 
                 onClick={onHandwrittenUpload}
@@ -145,7 +145,7 @@ export function Sidebar({
               >
                 <FileText className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
                 <span className="text-lg">✍️</span>
-                <p className="text-xs text-muted-foreground">손편지 답기</p>
+                <p className="text-xs text-muted-foreground">손편지 스캔</p>
               </button>
             </div>
           </div>
