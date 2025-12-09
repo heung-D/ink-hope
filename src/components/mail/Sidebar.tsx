@@ -116,7 +116,7 @@ export function Sidebar({
             <img 
               src={orangeRipe} 
               alt="프로필" 
-              className="w-9 h-9 rounded-full object-cover ring-2 ring-primary ring-offset-1"
+              className="w-11 h-11 rounded-full object-cover ring-2 ring-primary ring-offset-1"
             />
             {/* Social Login Provider Badge */}
             <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#FEE500] flex items-center justify-center shadow-sm border border-white">
@@ -129,7 +129,7 @@ export function Sidebar({
           {!isCollapsed && (
             <>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-foreground truncate">
+                <p className="text-base font-bold text-foreground truncate">
                   Bang Kyung
                 </p>
                 <p className="text-xs text-muted-foreground truncate">
