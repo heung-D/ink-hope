@@ -188,7 +188,7 @@ export function PaymentSummary({
         {/* 우편 방법 선택 */}
         <div>
           <h3 className="font-semibold text-foreground mb-4">우편 방법 선택</h3>
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             {mailTypeOptions.map((option) => (
               <button
                 key={option.id}
@@ -197,7 +197,7 @@ export function PaymentSummary({
                   "relative p-4 rounded-xl transition-all text-left",
                   mailType === option.id
                     ? "border-2 border-primary bg-primary/5"
-                    : "border-[0.5px] border-gray-200/40 dark:border-gray-700/30 hover:border-primary/30"
+                    : "border border-gray-300 dark:border-gray-600 hover:border-primary/50"
                 )}
               >
                 {/* 선택 체크 */}
