@@ -262,7 +262,7 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                         className={`
                           relative rounded-xl p-3.5 cursor-pointer transition-all
                           ${selectedRecipientId === recipient.id 
-                            ? "shadow-[0_2px_8px_rgba(0,0,0,0.08)] border-2 border-primary bg-orange-50/50" 
+                            ? "shadow-[0_2px_8px_rgba(0,0,0,0.08)] border-2 border-primary bg-amber-50" 
                             : "border border-gray-300 hover:shadow-[0_2px_6px_rgba(0,0,0,0.08)] hover:border-gray-400 bg-white"
                           }
                         `}
