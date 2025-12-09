@@ -188,7 +188,7 @@ export function PaymentSummary({
         {/* 우편 방법 선택 */}
         <div>
           <h3 className="font-semibold text-foreground mb-4">우편 방법 선택</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3">
             {mailTypeOptions.map((option) => (
               <button
                 key={option.id}
