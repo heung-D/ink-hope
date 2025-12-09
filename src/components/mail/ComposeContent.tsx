@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { AddRecipientModal } from "./AddRecipientModal";
+import { AddSenderModal } from "./AddSenderModal";
 import type { FamilyMember } from "@/types/mail";
 import { type FacilityType, type Region, type RelationType } from "@/data/facilities";
 
@@ -124,8 +126,16 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
   // 보내는 사람 선택 상태
   const [selectedSenderId, setSelectedSenderId] = useState<string | null>("1");
   
+  // 모달 상태
+  const [isAddRecipientModalOpen, setIsAddRecipientModalOpen] = useState(false);
+  const [isAddSenderModalOpen, setIsAddSenderModalOpen] = useState(false);
+  
+  // 동적 데이터 (나중에 실제 데이터로 교체)
+  const [recipients, setRecipients] = useState(sampleRecipients);
+  const [senders, setSenders] = useState(sampleSenders);
+  
   // 선택된 보내는 사람 정보
-  const selectedSender = sampleSenders.find(s => s.id === selectedSenderId);
+  const selectedSender = senders.find(s => s.id === selectedSenderId);
 
   // 단계 완료 여부 확인
   const isStep1Complete = () => {
@@ -224,7 +234,7 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                   </div>
                   
                   <div className="space-y-3">
-                    {sampleRecipients.map((recipient) => (
+                    {recipients.map((recipient) => (
                       <div
                         key={recipient.id}
                         onClick={() => setSelectedRecipientId(selectedRecipientId === recipient.id ? null : recipient.id)}
@@ -347,7 +357,10 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                     ))}
                     
                     {/* 새 수신자 추가 버튼 */}
-                    <button className="w-full p-4 border-2 border-dashed border-border rounded-xl text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors flex items-center justify-center gap-2">
+                    <button 
+                      onClick={() => setIsAddRecipientModalOpen(true)}
+                      className="w-full p-4 border-2 border-dashed border-border rounded-xl text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors flex items-center justify-center gap-2"
+                    >
                       <Plus className="w-5 h-5" />
                       <span>새 수신자 추가</span>
                     </button>
@@ -368,7 +381,7 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                   </div>
                   
                   <div className="space-y-3">
-                    {sampleSenders.map((sender) => (
+                    {senders.map((sender) => (
                       <div
                         key={sender.id}
                         onClick={() => setSelectedSenderId(sender.id)}
@@ -400,7 +413,11 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                     ))}
                     
                     {/* 새 주소 추가 버튼 */}
-                    <button className="w-full p-4 border-2 border-dashed border-border rounded-xl text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors flex items-center justify-center gap-2">
+                    {/* 새 주소 추가 버튼 */}
+                    <button 
+                      onClick={() => setIsAddSenderModalOpen(true)}
+                      className="w-full p-4 border-2 border-dashed border-border rounded-xl text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors flex items-center justify-center gap-2"
+                    >
                       <Plus className="w-5 h-5" />
                       <span>새 주소 추가</span>
                     </button>
@@ -480,6 +497,32 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
           <ChevronRight className="w-4 h-4 ml-1" />
         </Button>
       </div>
+
+      {/* 모달들 */}
+      <AddRecipientModal
+        open={isAddRecipientModalOpen}
+        onOpenChange={setIsAddRecipientModalOpen}
+        onAdd={(newRecipient) => {
+          const id = String(recipients.length + 1);
+          const colors = ["bg-primary", "bg-blue-500", "bg-blue-400", "bg-green-500", "bg-purple-500"];
+          setRecipients([...recipients, {
+            ...newRecipient,
+            id,
+            color: colors[recipients.length % colors.length],
+          }]);
+          setSelectedRecipientId(id);
+        }}
+      />
+
+      <AddSenderModal
+        open={isAddSenderModalOpen}
+        onOpenChange={setIsAddSenderModalOpen}
+        onAdd={(newSender) => {
+          const id = String(senders.length + 1);
+          setSenders([...senders, { ...newSender, id }]);
+          setSelectedSenderId(id);
+        }}
+      />
     </div>
   );
 }
