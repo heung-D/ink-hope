@@ -92,13 +92,11 @@ export function PhotoUpload({ photos, onPhotosChange, maxPhotos = 10 }: PhotoUpl
   return (
     <div className="space-y-4">
       {/* 헤더 */}
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/30 dark:to-amber-900/30 flex items-center justify-center">
-          <Image className="w-7 h-7 text-orange-500" />
-        </div>
+      <div className="flex items-center gap-2.5">
+        <Image className="w-5 h-5 text-primary" />
         <div>
-          <h2 className="text-xl font-semibold text-foreground">사진 출력 추가</h2>
-          <p className="text-muted-foreground text-sm">편지와 함께 사진을 동봉해보세요</p>
+          <h2 className="text-sm font-semibold text-foreground">사진 출력 추가</h2>
+          <p className="text-muted-foreground text-xs">편지와 함께 사진을 동봉해보세요</p>
         </div>
       </div>
 
