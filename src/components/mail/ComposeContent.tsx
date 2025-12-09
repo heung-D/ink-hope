@@ -300,7 +300,7 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                                 <span className="font-semibold text-foreground">교정시설 우편은 내부 검수 절차로 인해</span> 모든 방식의 실제 전달 속도는 비슷합니다. 안전성과 가격을 기준으로 선택해 주세요.
                               </p>
                             </div>
-                            <div className="space-y-3">
+                            <div className="space-y-2">
                               {mailTypeOptions.map((option, index) => (
                                 <button
                                   key={option.id}
@@ -309,58 +309,58 @@ export function ComposeContent({ familyMembers, onClose }: ComposeContentProps) 
                                     setSelectedMailType(option.id);
                                   }}
                                   className={`
-                                    w-full p-4 rounded-xl border-2 transition-all text-left
+                                    w-full p-3 rounded-lg border-2 transition-all text-left
                                     ${selectedMailType === option.id 
                                       ? "border-primary bg-primary/5" 
                                       : "border-border hover:border-primary/30 bg-card"
                                     }
-                                    ${index === 0 ? "ring-2 ring-orange-200 ring-offset-1" : ""}
+                                    ${index === 0 ? "ring-1 ring-orange-200 ring-offset-1" : ""}
                                   `}
                                 >
                                   <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                                    <div className="flex items-center gap-2">
+                                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                                         selectedMailType === option.id ? "border-primary bg-primary" : "border-muted-foreground"
                                       }`}>
                                         {selectedMailType === option.id && (
-                                          <Check className="w-3 h-3 text-primary-foreground" />
+                                          <Check className="w-2.5 h-2.5 text-primary-foreground" />
                                         )}
                                       </div>
                                       <div>
-                                        <div className="flex items-center gap-2">
-                                          <span className="font-semibold text-foreground">{option.label}</span>
+                                        <div className="flex items-center gap-1.5">
+                                          <span className="text-sm font-semibold text-foreground">{option.label}</span>
                                           {option.hasTracking && index !== 0 && (
-                                            <span className="text-xs text-primary">추적 가능 + 전달 확인</span>
+                                            <span className="text-[11px] text-primary">추적 가능</span>
                                           )}
                                           {!option.hasTracking && index === 2 && (
-                                            <span className="text-xs text-muted-foreground">기본 전송</span>
+                                            <span className="text-[11px] text-muted-foreground">기본 전송</span>
                                           )}
                                           {!option.hasTracking && index === 3 && (
-                                            <span className="text-xs text-muted-foreground">일반우편과 동일한 처리 시간</span>
+                                            <span className="text-[11px] text-muted-foreground">일반우편과 동일</span>
                                           )}
                                         </div>
-                                        <span className="text-sm text-muted-foreground">{option.deliveryTime}</span>
+                                        <span className="text-xs text-muted-foreground">{option.deliveryTime}</span>
                                       </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-1.5">
                                       {index === 0 && (
-                                        <span className="px-2 py-0.5 bg-orange-500 text-white text-xs font-semibold rounded">
+                                        <span className="px-1.5 py-0.5 bg-orange-500 text-white text-[10px] font-semibold rounded">
                                           추천
                                         </span>
                                       )}
                                       {index === 1 && (
-                                        <span className="px-2 py-0.5 bg-blue-500 text-white text-xs font-semibold rounded">
+                                        <span className="px-1.5 py-0.5 bg-blue-500 text-white text-[10px] font-semibold rounded">
                                           안심
                                         </span>
                                       )}
-                                      <p className="text-lg font-bold text-primary">{option.price.toLocaleString()}원</p>
+                                      <p className="text-sm font-bold text-primary">{option.price.toLocaleString()}원</p>
                                     </div>
                                   </div>
                                   
                                   {/* 가장 많이 선택하는 방식 노트 */}
                                   {index === 0 && (
-                                    <div className="mt-2 flex items-center gap-1 text-orange-600 text-xs font-medium">
-                                      <span className="w-3 h-3 bg-orange-500 rounded-sm flex items-center justify-center text-white text-[8px]">🔥</span>
+                                    <div className="mt-1.5 flex items-center gap-1 text-orange-600 text-[11px] font-medium">
+                                      <span className="w-2.5 h-2.5 bg-orange-500 rounded-sm flex items-center justify-center text-white text-[7px]">🔥</span>
                                       가장 많이 선택하는 방식
                                     </div>
                                   )}
