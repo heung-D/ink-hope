@@ -193,7 +193,10 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
               </p>
               
               <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-xl p-4 text-white">
-                <p className="text-3xl font-bold">{mockData.prisonerInfo.daysRemaining}</p>
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-orange-200" />
+                  <p className="text-4xl font-bold">{mockData.prisonerInfo.daysRemaining}</p>
+                </div>
                 <p className="text-orange-100 text-sm mt-1">일 후면, 다시 만날 수 있습니다</p>
               </div>
               
@@ -210,45 +213,41 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
             </div>
 
             {/* 성장 진행률 카드 (우) */}
-            <div className="bg-white rounded-2xl border border-border/60 shadow-sm p-5">
-              <div className="flex items-start gap-4">
-                {/* 나무 이미지 */}
-                <div className="shrink-0">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center p-2 ring-4 ring-primary/40">
-                    <motion.img 
-                      src={currentStage.icon} 
-                      alt={currentStage.name}
-                      className="w-12 h-12 object-contain"
-                      animate={{ scale: [1, 1.05, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    />
+            <div className="bg-white rounded-2xl border border-border/60 shadow-sm p-5 flex flex-col">
+              {/* 성장 정보 */}
+              <div className="flex-1">
+                {nextStage && (
+                  <div className="mb-3">
+                    <p className="text-base">
+                      다음 단계 <span className="font-bold text-foreground text-lg">{nextStage.name}</span>까지 
+                      <span className="text-primary font-bold text-lg ml-1">{nextStage.minLetters - mockData.totalLetters}통</span> 남음
+                    </p>
                   </div>
-                </div>
+                )}
                 
-                {/* 성장 정보 */}
-                <div className="flex-1">
-                  {nextStage && (
-                    <div className="mb-2">
-                      <span className="text-sm text-muted-foreground">
-                        다음 단계 <span className="font-semibold text-foreground">{nextStage.name}</span>까지 
-                        <span className="text-primary font-bold ml-1">{nextStage.minLetters - mockData.totalLetters}통</span> 남음
-                      </span>
-                    </div>
-                  )}
-                  
-                  <p className="text-sm text-muted-foreground mb-4">
-                    떨어져 있어도, 마음은 자라고 있어요 💛
-                  </p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  떨어져 있어도, 마음은 자라고 있어요 💛
+                </p>
 
-                  {/* 진행률 바 */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">성장 진행률</span>
-                      <span className="font-medium text-primary">{mockData.growthProgress}%</span>
-                    </div>
-                    <Progress value={mockData.growthProgress} className="h-3" />
+                {/* 진행률 바 */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">성장 진행률</span>
+                    <span className="font-medium text-primary">{mockData.growthProgress}%</span>
                   </div>
+                  <Progress value={mockData.growthProgress} className="h-3" />
                 </div>
+              </div>
+              
+              {/* 나무 이미지 - 하단 센터 정렬 */}
+              <div className="flex justify-center mt-4 pt-4 border-t border-border/40">
+                <motion.img 
+                  src={currentStage.icon} 
+                  alt={currentStage.name}
+                  className="w-16 h-16 object-contain"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
               </div>
             </div>
           </motion.div>
