@@ -284,61 +284,65 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
             </div>
 
             {/* 성장 진행률 카드 (우) */}
-            <div className="bg-white rounded-2xl border border-border/60 shadow-sm p-5 flex flex-col">
-              {/* 성장 정보 */}
-              <div className="flex-1">
-                {nextStage && (
-                  <div className="mb-3">
-                    <p className="text-base">
-                      다음 단계 <span className="font-bold text-foreground text-lg">{nextStage.name}</span>까지 
-                      <span className="text-primary font-bold text-lg ml-1">{nextStage.minLetters - mockData.totalLetters}통</span> 남음
-                    </p>
-                  </div>
-                )}
-                
-                <p className="text-sm text-muted-foreground mb-4">
-                  떨어져 있어도, 마음은 자라고 있어요 💛
-                </p>
-
-                {/* Lv 1-5 그라데이션 막대 그래프 */}
-                <div className="space-y-3">
-                  <div className="flex justify-between text-xs text-muted-foreground mb-2">
-                    <span>성장 레벨</span>
-                    <span className="font-medium text-primary">{currentStage.level}</span>
-                  </div>
-                  <div className="flex gap-1.5">
-                    {growthStages.map((stage, idx) => {
-                      const isActive = idx < mockData.currentGrowthLevel;
-                      const isCurrent = idx === mockData.currentGrowthLevel - 1;
-                      return (
-                        <div key={stage.id} className="flex-1 relative group">
-                          <div
-                            className={`h-3 rounded-full transition-all ${
-                              isActive 
-                                ? `bg-gradient-to-r ${stage.color}` 
-                                : "bg-gray-200"
-                            } ${isCurrent ? "ring-2 ring-primary ring-offset-1" : ""}`}
-                          />
-                          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2">
-                            <span className={`text-[10px] ${isActive ? "text-foreground font-medium" : "text-muted-foreground"}`}>
-                              {stage.level.replace("Lv.", "")}
-                            </span>
-                          </div>
-                          {/* 호버 시 스테이지 아이콘 표시 */}
-                          <div className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                            <motion.img 
-                              src={stage.icon} 
-                              alt={stage.name}
-                              className="w-8 h-8 object-contain"
-                            />
-                          </div>
+            <div className="bg-white rounded-2xl border border-border/60 shadow-sm p-5">
+              <p className="text-xs text-muted-foreground mb-1">성장 정보</p>
+              <h2 className="text-xl font-bold text-foreground mb-1">{currentStage.name}</h2>
+              <p className="text-sm text-muted-foreground mb-4">
+                {currentStage.level} · 총 {mockData.totalLetters}통 발송
+              </p>
+              
+              {/* Lv 1-5 그라데이션 막대 그래프 */}
+              <div className="bg-gray-100 rounded-xl p-4 mb-4">
+                <div className="flex justify-between text-xs text-muted-foreground mb-3">
+                  <span>성장 레벨</span>
+                  <span className="font-medium text-primary">{currentStage.level}</span>
+                </div>
+                <div className="flex gap-1.5">
+                  {growthStages.map((stage, idx) => {
+                    const isActive = idx < mockData.currentGrowthLevel;
+                    const isCurrent = idx === mockData.currentGrowthLevel - 1;
+                    return (
+                      <div key={stage.id} className="flex-1 relative group">
+                        <div
+                          className={`h-3 rounded-full transition-all ${
+                            isActive 
+                              ? `bg-gradient-to-r ${stage.color}` 
+                              : "bg-gray-200"
+                          } ${isCurrent ? "ring-2 ring-primary ring-offset-1" : ""}`}
+                        />
+                        <div className="absolute -bottom-5 left-1/2 -translate-x-1/2">
+                          <span className={`text-[10px] ${isActive ? "text-foreground font-medium" : "text-muted-foreground"}`}>
+                            {stage.level.replace("Lv.", "")}
+                          </span>
                         </div>
-                      );
-                    })}
-                  </div>
+                        {/* 호버 시 스테이지 아이콘 표시 */}
+                        <div className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                          <motion.img 
+                            src={stage.icon} 
+                            alt={stage.name}
+                            className="w-8 h-8 object-contain"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
               
+              <div className="flex gap-4 text-sm">
+                {nextStage && (
+                  <>
+                    <div>
+                      <span className="text-muted-foreground">다음 단계</span>
+                      <span className="font-semibold text-foreground ml-2">{nextStage.name}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">남은 편지</span>
+                      <span className="font-semibold text-primary ml-2">{nextStage.minLetters - mockData.totalLetters}통</span>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </motion.div>
 
