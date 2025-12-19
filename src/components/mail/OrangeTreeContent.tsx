@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { TreeDeciduous, Leaf, Apple, Calendar, MessageSquare, TrendingUp, Clock, ChevronRight, Plus } from "lucide-react";
+import { TreeDeciduous, Leaf, Apple, Calendar, MessageSquare, TrendingUp, Clock, ChevronRight, Plus, Home, Scale, Users, GraduationCap, Phone, Banknote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import orangeSeed from "@/assets/emoticons/orange-seed.png";
@@ -28,16 +28,33 @@ const mockData = {
   receivedLetters: 11,
   currentGrowthLevel: 3,
   growthProgress: 53, // 현재 레벨에서의 진행률
+  prisonerInfo: {
+    name: "홍길동",
+    facility: "서울구치소",
+    prisonerNumber: "2024-1234",
+    admissionDate: "2024-03-15",
+    expectedReleaseDate: "2025-06-15",
+    daysServed: 280,
+    daysRemaining: 178,
+  },
   fruits: [
-    { id: 1, type: "timeline", title: "출소 예정일", date: "2025-06-15", description: "D-178" },
-    { id: 2, type: "lawyer", title: "변호사 상담", date: "2025-01-10", description: "항소심 관련 상담 예정" },
-    { id: 3, type: "event", title: "가족 면회", date: "2025-01-05", description: "어머니, 아버지 면회" },
+    { id: 1, type: "release", title: "출소 예정일", date: "2025-06-15", description: "D-178 남음", icon: "🏠" },
+    { id: 2, type: "parole", title: "가석방 심사", date: "2025-02-20", description: "1차 가석방 심사 예정", icon: "⚖️" },
+    { id: 3, type: "lawyer", title: "변호사 접견", date: "2025-01-15", description: "항소심 진행 상담", icon: "👨‍⚖️" },
+    { id: 4, type: "visit", title: "가족 면회", date: "2025-01-08", description: "어머니, 여동생 면회 예정", icon: "👨‍👩‍👧" },
+    { id: 5, type: "program", title: "직업훈련 수료", date: "2025-03-01", description: "제빵 기능사 과정 수료 예정", icon: "🎓" },
   ],
   recentActivity: [
-    { id: 1, action: "편지 발송", target: "아버지에게", date: "2025-01-02" },
-    { id: 2, action: "편지 수신", target: "어머니로부터", date: "2024-12-28" },
-    { id: 3, action: "일정 등록", target: "변호사 상담", date: "2024-12-25" },
+    { id: 1, action: "편지 발송", target: "어머니에게", date: "2025-01-02", status: "발송완료" },
+    { id: 2, action: "편지 수신", target: "아버지로부터", date: "2024-12-28", status: "수신완료" },
+    { id: 3, action: "사진 동봉", target: "여동생에게", date: "2024-12-25", status: "검열완료" },
+    { id: 4, action: "영치금 입금", target: "어머니로부터", date: "2024-12-20", status: "입금확인" },
   ],
+  supportStats: {
+    totalVisits: 15,
+    totalCalls: 8,
+    totalDeposits: 12,
+  }
 };
 
 export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
@@ -59,10 +76,47 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
 
       <div className="flex-1 overflow-y-auto p-6">
         <div className="max-w-5xl mx-auto space-y-6">
+          {/* 재소자 정보 & 출소 카운트다운 */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-6 text-white shadow-lg"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-orange-100 text-sm mb-1">수신자 정보</p>
+                <h2 className="text-2xl font-bold mb-1">{mockData.prisonerInfo.name}</h2>
+                <p className="text-orange-100 text-sm">
+                  {mockData.prisonerInfo.facility} · {mockData.prisonerInfo.prisonerNumber}
+                </p>
+              </div>
+              <div className="text-right">
+                <div className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-4">
+                  <p className="text-orange-100 text-xs mb-1">출소까지</p>
+                  <p className="text-4xl font-bold">D-{mockData.prisonerInfo.daysRemaining}</p>
+                  <p className="text-orange-100 text-xs mt-1">{mockData.prisonerInfo.expectedReleaseDate}</p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-white/20">
+              <div className="flex gap-6 text-sm">
+                <div>
+                  <span className="text-orange-100">복역 기간</span>
+                  <span className="font-semibold ml-2">{mockData.prisonerInfo.daysServed}일</span>
+                </div>
+                <div>
+                  <span className="text-orange-100">입소일</span>
+                  <span className="font-semibold ml-2">{mockData.prisonerInfo.admissionDate}</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
           {/* 나무 성장 현황 카드 */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
             className="bg-white rounded-2xl border border-border/60 shadow-sm overflow-hidden"
           >
             <div className="p-6">
@@ -95,7 +149,7 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
                   </div>
                   
                   <p className="text-sm text-muted-foreground mb-4">
-                    편지를 주고받을수록 나무가 성장해요!
+                    편지를 주고받을수록 나무가 성장해요! 가족의 사랑으로 무럭무럭 자라나고 있어요.
                   </p>
 
                   {/* 진행률 바 */}
@@ -210,7 +264,7 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
             <div className="px-6 py-4 border-b border-border/40 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Apple className="w-5 h-5 text-orange-500" />
-                <h3 className="font-semibold text-foreground">열매 (타임라인 일정)</h3>
+                <h3 className="font-semibold text-foreground">열매 (주요 일정)</h3>
               </div>
               <Button variant="outline" size="sm">
                 <Plus className="w-4 h-4 mr-1" />
@@ -218,36 +272,87 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
               </Button>
             </div>
             <div className="divide-y divide-border/40">
-              {mockData.fruits.map((fruit, index) => (
-                <motion.div
-                  key={fruit.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
-                  className="p-4 hover:bg-muted/30 transition-colors cursor-pointer flex items-center gap-4"
-                >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                    fruit.type === "timeline" ? "bg-purple-100" :
-                    fruit.type === "lawyer" ? "bg-blue-100" : "bg-amber-100"
-                  }`}>
-                    {fruit.type === "timeline" ? <Clock className="w-5 h-5 text-purple-600" /> :
-                     fruit.type === "lawyer" ? <MessageSquare className="w-5 h-5 text-blue-600" /> :
-                     <Calendar className="w-5 h-5 text-amber-600" />}
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-foreground">{fruit.title}</p>
-                    <p className="text-sm text-muted-foreground">{fruit.description}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-foreground">{fruit.date}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {fruit.type === "timeline" ? "출소일정" : 
-                       fruit.type === "lawyer" ? "변호사" : "면회"}
-                    </p>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                </motion.div>
-              ))}
+              {mockData.fruits.map((fruit, index) => {
+                const getIconAndColor = () => {
+                  switch (fruit.type) {
+                    case "release": return { icon: <Home className="w-5 h-5 text-green-600" />, bg: "bg-green-100" };
+                    case "parole": return { icon: <Scale className="w-5 h-5 text-purple-600" />, bg: "bg-purple-100" };
+                    case "lawyer": return { icon: <MessageSquare className="w-5 h-5 text-blue-600" />, bg: "bg-blue-100" };
+                    case "visit": return { icon: <Users className="w-5 h-5 text-amber-600" />, bg: "bg-amber-100" };
+                    case "program": return { icon: <GraduationCap className="w-5 h-5 text-indigo-600" />, bg: "bg-indigo-100" };
+                    default: return { icon: <Calendar className="w-5 h-5 text-gray-600" />, bg: "bg-gray-100" };
+                  }
+                };
+                const { icon, bg } = getIconAndColor();
+                const getTypeLabel = () => {
+                  switch (fruit.type) {
+                    case "release": return "출소";
+                    case "parole": return "가석방";
+                    case "lawyer": return "법률상담";
+                    case "visit": return "면회";
+                    case "program": return "교정프로그램";
+                    default: return "일정";
+                  }
+                };
+
+                return (
+                  <motion.div
+                    key={fruit.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + index * 0.1 }}
+                    className="p-4 hover:bg-muted/30 transition-colors cursor-pointer flex items-center gap-4"
+                  >
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${bg}`}>
+                      {icon}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium text-foreground">{fruit.title}</p>
+                        {fruit.type === "release" && (
+                          <span className="bg-green-100 text-green-700 text-[10px] font-medium px-1.5 py-0.5 rounded">중요</span>
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground">{fruit.description}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-medium text-foreground">{fruit.date}</p>
+                      <p className="text-xs text-muted-foreground">{getTypeLabel()}</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+
+          {/* 가족 지원 현황 */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-white rounded-2xl border border-border/60 shadow-sm p-5"
+          >
+            <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Users className="w-5 h-5 text-primary" />
+              가족 지원 현황
+            </h3>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="text-center p-4 bg-blue-50 rounded-xl">
+                <Users className="w-6 h-6 text-blue-600 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-foreground">{mockData.supportStats.totalVisits}</p>
+                <p className="text-xs text-muted-foreground">면회 횟수</p>
+              </div>
+              <div className="text-center p-4 bg-green-50 rounded-xl">
+                <Phone className="w-6 h-6 text-green-600 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-foreground">{mockData.supportStats.totalCalls}</p>
+                <p className="text-xs text-muted-foreground">화상접견</p>
+              </div>
+              <div className="text-center p-4 bg-amber-50 rounded-xl">
+                <Banknote className="w-6 h-6 text-amber-600 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-foreground">{mockData.supportStats.totalDeposits}</p>
+                <p className="text-xs text-muted-foreground">영치금 입금</p>
+              </div>
             </div>
           </motion.div>
 
@@ -262,13 +367,14 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
               <h3 className="font-semibold text-foreground">최근 활동</h3>
             </div>
             <div className="divide-y divide-border/40">
-              {mockData.recentActivity.map((activity, index) => (
+              {mockData.recentActivity.map((activity) => (
                 <div key={activity.id} className="p-4 flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-primary" />
                   <div className="flex-1">
                     <span className="text-sm text-foreground">{activity.action}</span>
                     <span className="text-sm text-muted-foreground ml-1">{activity.target}</span>
                   </div>
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">{activity.status}</span>
                   <span className="text-xs text-muted-foreground">{activity.date}</span>
                 </div>
               ))}
