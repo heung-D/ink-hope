@@ -109,10 +109,49 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
 
       <div className="flex-1 overflow-y-auto p-6">
         <div className="max-w-5xl mx-auto space-y-6">
+          {/* 히어로 소개 배너 */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative overflow-hidden bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 rounded-3xl p-8 text-white shadow-xl"
+          >
+            {/* 배경 장식 */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+            
+            <div className="relative flex items-center gap-8">
+              <div className="shrink-0">
+                <motion.div 
+                  className="w-32 h-32 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center p-3 ring-4 ring-white/30"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <img src={orangeCharacter} alt="오렌지 캐릭터" className="w-24 h-24 object-contain" />
+                </motion.div>
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="bg-white/20 text-white text-xs font-medium px-3 py-1 rounded-full">🌳 함께 키우는 마음</span>
+                </div>
+                <h2 className="text-3xl font-bold mb-3">오렌지나무</h2>
+                <p className="text-white/90 leading-relaxed text-base">
+                  편지를 주고받을 때마다 나무가 자라나요.<br />
+                  <strong className="text-white">씨앗에서 오렌지나무까지</strong>, 함께한 시간이 열매가 됩니다.
+                </p>
+                <div className="flex gap-2 mt-4">
+                  <span className="bg-white/20 backdrop-blur-sm text-xs px-3 py-1.5 rounded-full font-medium">🌱 성장 기록</span>
+                  <span className="bg-white/20 backdrop-blur-sm text-xs px-3 py-1.5 rounded-full font-medium">📅 소중한 날들</span>
+                  <span className="bg-white/20 backdrop-blur-sm text-xs px-3 py-1.5 rounded-full font-medium">🎁 함께 선물하기</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
           {/* 재소자 정보 & 출소 카운트다운 */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
             className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-6 text-white shadow-lg"
           >
             <div className="flex items-center justify-between">
