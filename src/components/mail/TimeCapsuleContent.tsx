@@ -195,32 +195,21 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
             
-            <div className="relative flex items-center gap-8">
-              <div className="shrink-0">
-                <motion.div 
-                  className="w-32 h-32 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center p-3 ring-4 ring-white/30"
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <img src={timeCapsuleGif} alt="타임캡슐" className="w-24 h-24 object-contain" />
-                </motion.div>
+            <div className="relative">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="bg-white/20 text-white text-xs font-medium px-3 py-1 rounded-full">✨ 함께 모으는 마음</span>
               </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="bg-white/20 text-white text-xs font-medium px-3 py-1 rounded-full">✨ 함께 모으는 마음</span>
-                </div>
-                <h2 className="text-3xl font-bold mb-3">타임캡슐</h2>
-                <p className="text-white/90 leading-relaxed text-base">
-                  수감 중인 가족을 위해 여러 사람이 함께 편지를 모아<br />
-                  <strong className="text-white">출소일, 가석방일, 생일, 기념일</strong> 등 특별한 순간에 전달하는 서비스예요.
-                </p>
-                <div className="flex gap-2 mt-4">
-                  {capsuleTypes.slice(0, 4).map((type) => (
-                    <span key={type.id} className="bg-white/20 backdrop-blur-sm text-xs px-3 py-1.5 rounded-full font-medium">
-                      {type.icon} {type.label}
-                    </span>
-                  ))}
-                </div>
+              <h2 className="text-3xl font-bold mb-3">타임캡슐</h2>
+              <p className="text-white/90 leading-relaxed text-base">
+                수감 중인 가족을 위해 여러 사람이 함께 편지를 모아<br />
+                <strong className="text-white">출소일, 가석방일, 생일, 기념일</strong> 등 특별한 순간에 전달하는 서비스예요.
+              </p>
+              <div className="flex gap-2 mt-4">
+                {capsuleTypes.slice(0, 4).map((type) => (
+                  <span key={type.id} className="bg-white/20 backdrop-blur-sm text-xs px-3 py-1.5 rounded-full font-medium">
+                    {type.icon} {type.label}
+                  </span>
+                ))}
               </div>
             </div>
           </motion.div>
