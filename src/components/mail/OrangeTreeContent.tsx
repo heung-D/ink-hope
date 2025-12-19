@@ -449,9 +449,9 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 text-orange-500">
-                      <circle cx="12" cy="12" r="8" />
-                      <path d="M12 4c0-1.5 1-2.5 2-3" strokeLinecap="round" />
-                      <path d="M10 5.5c-1 0-2-.5-2.5-1.5" strokeLinecap="round" />
+                      <circle cx="12" cy="13" r="8" />
+                      <path d="M12 5V3" strokeWidth="2.5" strokeLinecap="round" />
+                      <path d="M10 5c-1.5 0-3-1-3.5-2.5" strokeLinecap="round" />
                     </svg>
                   </div>
                   <div>
