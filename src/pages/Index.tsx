@@ -6,11 +6,13 @@ import { ComposeContent } from "@/components/mail/ComposeContent";
 import { FloatingComposeButton } from "@/components/mail/FloatingComposeButton";
 import { AddressBookModal } from "@/components/mail/AddressBookModal";
 import { HandwrittenUploadContent } from "@/components/mail/HandwrittenUploadContent";
+import { OrangeTreeContent } from "@/components/mail/OrangeTreeContent";
+import { TimeCapsuleContent } from "@/components/mail/TimeCapsuleContent";
 import { familyMembers as initialFamilyMembers, mockMails } from "@/data/mockData";
 import type { Mail, FolderType, FamilyMember } from "@/types/mail";
 import { toast } from "sonner";
 
-type ViewMode = "compose" | "mail" | "handwritten";
+type ViewMode = "compose" | "mail" | "handwritten" | "orangetree" | "timecapsule";
 
 const Index = () => {
   const [activeFolder, setActiveFolder] = useState<FolderType | null>("inbox");
@@ -103,7 +105,14 @@ const Index = () => {
           onFolderChange={(folder) => {
             setActiveFolder(folder);
             setSelectedMemberId(null);
-            setViewMode("mail");
+            // 오렌지나무, 타임캡슐 폴더 선택 시 해당 화면으로 전환
+            if (folder === "orangetree") {
+              setViewMode("orangetree");
+            } else if (folder === "timecapsule") {
+              setViewMode("timecapsule");
+            } else {
+              setViewMode("mail");
+            }
           }}
           unreadCount={unreadCount}
           draftCount={draftCount}
@@ -131,6 +140,20 @@ const Index = () => {
             onComposeWithText={(text) => {
               // TODO: Pass OCR text to compose
               setViewMode("compose");
+            }}
+          />
+        ) : viewMode === "orangetree" ? (
+          <OrangeTreeContent
+            onClose={() => {
+              setActiveFolder("inbox");
+              setViewMode("mail");
+            }}
+          />
+        ) : viewMode === "timecapsule" ? (
+          <TimeCapsuleContent
+            onClose={() => {
+              setActiveFolder("inbox");
+              setViewMode("mail");
             }}
           />
         ) : (
