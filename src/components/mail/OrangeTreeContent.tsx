@@ -193,7 +193,12 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
             >
               <div className="relative">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center">
-                  <Mail className="w-5 h-5 text-orange-500" />
+                  <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="14" r="7" className="stroke-orange-500" />
+                    <path d="M12 7V4" className="stroke-green-600" />
+                    <path d="M12 4C14 4 15 3 15 2" className="stroke-green-600" />
+                    <ellipse cx="14" cy="5" rx="2" ry="1.5" className="stroke-green-500 fill-green-100" />
+                  </svg>
                 </div>
                 <motion.div
                   className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-orange-500 rounded-full"
