@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, Users, Mail, Plus, ChevronRight, Heart, Calendar, Share2, Lock, Unlock, Sparkles, X, Check, Send, Copy, PenLine, Gift, Coffee, MessageSquare, UserPlus, SendHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -150,6 +151,7 @@ const capsuleTypes = [
 ];
 
 export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
+  const navigate = useNavigate();
   const [selectedCapsule, setSelectedCapsule] = useState<typeof mockCapsules[0] | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -240,7 +242,7 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  onClick={() => setSelectedCapsule(capsule)}
+                  onClick={() => navigate(`/time-capsule/${capsule.id}`)}
                   className="bg-white rounded-2xl border border-border/60 shadow-sm p-5 cursor-pointer hover:shadow-md transition-all hover:border-purple-200"
                 >
                   {/* 헤더 */}
