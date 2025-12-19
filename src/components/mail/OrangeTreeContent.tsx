@@ -194,55 +194,35 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
             
-            <div className="relative flex items-center gap-8">
-              <div className="shrink-0 flex flex-col items-center">
-                <motion.div 
-                  className="w-32 h-32 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center p-3 ring-4 ring-white/30"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <img src={orangeCharacter} alt="오렌지 캐릭터" className="w-24 h-24 object-contain" />
-                </motion.div>
-                {/* 레벨 배지 */}
-                <div className="mt-3 flex items-center gap-1.5">
-                  <span className="bg-white text-primary font-bold text-sm px-3 py-1 rounded-full shadow-md">
-                    {currentStage.name}
-                  </span>
-                  <span className="bg-white/90 text-orange-600 text-xs font-bold px-2 py-1 rounded-full shadow-md">
-                    {currentStage.level}
-                  </span>
-                </div>
+            <div className="relative">
+              {/* 편지 발송 유도 메시지 */}
+              <div className="mb-4 p-3 bg-white/20 backdrop-blur-sm rounded-xl">
+                {mockData.sentThisWeek ? (
+                  <div className="flex items-center gap-2">
+                    <Heart className="w-5 h-5 text-red-200 fill-red-200" />
+                    <p className="text-white/95 text-sm">
+                      <strong>이번 주 편지를 보냈습니다!</strong> 당신의 편지가 {mockData.prisonerInfo.name}에게 큰 힘이 됩니다. 💛
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-5 h-5 text-yellow-200" />
+                    <p className="text-white/95 text-sm">
+                      <strong>이번 주 아직 편지를 보내지 않았어요.</strong> 바쁜 일상 속 편지 한 통이 안에 있는 {mockData.prisonerInfo.name}에게 큰 의지가 됩니다.
+                    </p>
+                  </div>
+                )}
               </div>
-              <div className="flex-1">
-                {/* 편지 발송 유도 메시지 */}
-                <div className="mb-4 p-3 bg-white/20 backdrop-blur-sm rounded-xl">
-                  {mockData.sentThisWeek ? (
-                    <div className="flex items-center gap-2">
-                      <Heart className="w-5 h-5 text-red-200 fill-red-200" />
-                      <p className="text-white/95 text-sm">
-                        <strong>이번 주 편지를 보냈습니다!</strong> 당신의 편지가 {mockData.prisonerInfo.name}에게 큰 힘이 됩니다. 💛
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-5 h-5 text-yellow-200" />
-                      <p className="text-white/95 text-sm">
-                        <strong>이번 주 아직 편지를 보내지 않았어요.</strong> 바쁜 일상 속 편지 한 통이 안에 있는 {mockData.prisonerInfo.name}에게 큰 의지가 됩니다.
-                      </p>
-                    </div>
-                  )}
-                </div>
-                
-                <h2 className="text-3xl font-bold mb-2">오렌지나무</h2>
-                <p className="text-white/90 leading-relaxed text-sm mb-3">
-                  안에 있는 사람들은 가족의 사랑과 정으로 버팁니다.<br />
-                  <strong className="text-white">일주일에 한 번 전하는 편지</strong>가 {mockData.prisonerInfo.name}이(가) 거듭나는 힘이 됩니다.
-                </p>
-                <div className="flex gap-2">
-                  <span className="bg-white/20 backdrop-blur-sm text-xs px-3 py-1.5 rounded-full font-medium">🌱 성장 기록</span>
-                  <span className="bg-white/20 backdrop-blur-sm text-xs px-3 py-1.5 rounded-full font-medium">📅 소중한 날들</span>
-                  <span className="bg-white/20 backdrop-blur-sm text-xs px-3 py-1.5 rounded-full font-medium">🎁 함께 선물하기</span>
-                </div>
+              
+              <h2 className="text-3xl font-bold mb-2">오렌지나무</h2>
+              <p className="text-white/90 leading-relaxed text-sm mb-3">
+                안에 있는 사람들은 가족의 사랑과 정으로 버팁니다.<br />
+                <strong className="text-white">일주일에 한 번 전하는 편지</strong>가 {mockData.prisonerInfo.name}이(가) 거듭나는 힘이 됩니다.
+              </p>
+              <div className="flex gap-2">
+                <span className="bg-white/20 backdrop-blur-sm text-xs px-3 py-1.5 rounded-full font-medium">🌱 성장 기록</span>
+                <span className="bg-white/20 backdrop-blur-sm text-xs px-3 py-1.5 rounded-full font-medium">📅 소중한 날들</span>
+                <span className="bg-white/20 backdrop-blur-sm text-xs px-3 py-1.5 rounded-full font-medium">🎁 함께 선물하기</span>
               </div>
             </div>
           </motion.div>
