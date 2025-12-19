@@ -97,9 +97,9 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
               </div>
               <div className="text-right">
                 <div className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-4">
-                  <p className="text-orange-100 text-xs mb-1">출소까지</p>
-                  <p className="text-4xl font-bold">D-{mockData.prisonerInfo.daysRemaining}</p>
-                  <p className="text-orange-100 text-xs mt-1">{mockData.prisonerInfo.expectedReleaseDate}</p>
+                  <p className="text-4xl font-bold">{mockData.prisonerInfo.daysRemaining}</p>
+                  <p className="text-orange-100 text-sm mt-1">일 후면, 다시 만날 수 있습니다</p>
+                  <p className="text-orange-100/80 text-xs mt-2">끝이 있다는 것, 그것이 희망입니다</p>
                 </div>
               </div>
             </div>
