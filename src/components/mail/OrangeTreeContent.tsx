@@ -339,16 +339,6 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
                 </div>
               </div>
               
-              {/* 나무 이미지 - 하단 센터 정렬 */}
-              <div className="flex justify-center mt-8 pt-4 border-t border-border/40">
-                <motion.img 
-                  src={currentStage.icon} 
-                  alt={currentStage.name}
-                  className="w-16 h-16 object-contain"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
-              </div>
             </div>
           </motion.div>
 
