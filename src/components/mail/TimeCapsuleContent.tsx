@@ -5,10 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import orangeCharacter from "@/assets/emoticons/orange-character.gif";
+import orangeSeed from "@/assets/emoticons/orange-seed.png";
+import orangeSprout from "@/assets/emoticons/orange-sprout.png";
+import orangeYoungTree from "@/assets/emoticons/orange-young-tree.png";
+import orangeFullTree from "@/assets/emoticons/orange-full-tree.png";
 import orangeRipe from "@/assets/emoticons/orange-ripe.png";
 import timeCapsuleGif from "@/assets/emoticons/time-capsule.gif";
 import { toast } from "sonner";
-
 interface TimeCapsuleContentProps {
   onClose: () => void;
 }
@@ -393,68 +397,132 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+              className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col"
             >
-              {/* 헤더 */}
-              <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-6 text-white relative">
+              {/* 수신자 정보 헤더 - 오렌지 그라데이션 */}
+              <div className="bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 p-6 text-white relative">
                 <button 
                   onClick={() => setSelectedCapsule(null)}
                   className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-xl bg-white/20 flex items-center justify-center">
-                    <img src={timeCapsuleGif} alt="" className="w-12 h-12 object-contain" />
+                
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-4">
+                    {/* 오렌지 캐릭터 아바타 */}
+                    <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center p-2">
+                      <img src={orangeCharacter} alt="오렌지 캐릭터" className="w-16 h-16 object-contain" />
+                    </div>
+                    <div>
+                      <p className="text-orange-100 text-sm">수신자 정보</p>
+                      <h2 className="text-2xl font-bold">{selectedCapsule.recipient.split(" (")[0]}</h2>
+                      <p className="text-white/80 text-sm">{selectedCapsule.recipientFacility} · 2024-1234</p>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className="text-xl font-bold">{selectedCapsule.title}</h2>
-                    <p className="text-purple-100 text-sm">To. {selectedCapsule.recipient}</p>
-                    <p className="text-purple-200 text-xs">{selectedCapsule.recipientFacility}</p>
+                  
+                  {/* D-Day 카운터 */}
+                  <div className="bg-white/20 rounded-xl px-4 py-3 text-center backdrop-blur-sm">
+                    <p className="text-xs text-orange-100">출소까지</p>
+                    <p className="text-3xl font-bold">D-{selectedCapsule.daysLeft}</p>
+                    <p className="text-xs text-orange-100">{selectedCapsule.targetDate}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 mt-4">
-                  <div className="bg-white/20 rounded-lg px-3 py-2">
-                    <p className="text-xs text-purple-100">전달 예정일</p>
-                    <p className="font-semibold">{selectedCapsule.targetDate}</p>
+                
+                {/* 하단 정보 */}
+                <div className="flex gap-6 mt-4 text-sm">
+                  <div>
+                    <span className="text-orange-200">복역 기간</span>{" "}
+                    <span className="font-semibold">280일</span>
                   </div>
-                  <div className="bg-white/20 rounded-lg px-3 py-2">
-                    <p className="text-xs text-purple-100">남은 일수</p>
-                    <p className="font-semibold">D-{selectedCapsule.daysLeft}</p>
-                  </div>
-                  <div className="bg-white/20 rounded-lg px-3 py-2">
-                    <p className="text-xs text-purple-100">편지 현황</p>
-                    <p className="font-semibold">{selectedCapsule.letterCount}/{selectedCapsule.targetLetters}통</p>
+                  <div>
+                    <span className="text-orange-200">입소일</span>{" "}
+                    <span className="font-semibold">2024-03-15</span>
                   </div>
                 </div>
               </div>
 
-              {/* 콘텐츠 */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                {/* 설명 */}
-                <div className="bg-purple-50 rounded-xl p-4">
-                  <p className="text-sm text-muted-foreground">{selectedCapsule.description}</p>
-                </div>
-
-                {/* 진행률 */}
-                <div>
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="font-medium text-foreground">편지 모음 진행률</span>
-                    <span className="text-purple-600 font-semibold">
-                      {Math.round((selectedCapsule.letterCount / selectedCapsule.targetLetters) * 100)}%
-                    </span>
+              {/* 콘텐츠 영역 */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-orange-50/30 to-white">
+                {/* 오렌지 나무 성장 카드 */}
+                <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-6">
+                  <div className="flex gap-6">
+                    {/* 현재 성장 단계 이미지 */}
+                    <div className="relative shrink-0">
+                      <div className="w-32 h-32 rounded-2xl bg-gradient-to-b from-orange-50 to-amber-50 border border-orange-100 flex items-center justify-center p-3">
+                        <img 
+                          src={orangeYoungTree} 
+                          alt="어린나무" 
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                        Lv.3
+                      </div>
+                    </div>
+                    
+                    {/* 성장 정보 */}
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-xl font-bold text-foreground">어린나무</h3>
+                        <span className="text-muted-foreground">→</span>
+                        <span className="text-sm text-muted-foreground">나무까지 7통 남음</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        편지를 주고받을수록 나무가 성장해요! 가족의 사랑으로 무럭무럭 자라나고 있어요.
+                      </p>
+                      
+                      {/* 성장 진행률 */}
+                      <div className="space-y-2 mb-4">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">성장 진행률</span>
+                          <span className="text-orange-600 font-semibold">53%</span>
+                        </div>
+                        <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-gradient-to-r from-orange-400 to-orange-500 rounded-full transition-all duration-500"
+                            style={{ width: '53%' }}
+                          />
+                        </div>
+                      </div>
+                      
+                      {/* 성장 단계 시각화 */}
+                      <div className="flex items-center gap-1">
+                        {[
+                          { img: orangeSeed, name: "씨앗", level: 1, completed: true },
+                          { img: orangeSprout, name: "새싹", level: 2, completed: true },
+                          { img: orangeYoungTree, name: "어린나무", level: 3, completed: true },
+                          { img: orangeFullTree, name: "나무", level: 4, completed: false },
+                          { img: orangeRipe, name: "열매", level: 5, completed: false },
+                        ].map((stage, index, arr) => (
+                          <div key={stage.level} className="flex items-center">
+                            <div 
+                              className={`w-10 h-10 rounded-full flex items-center justify-center p-1.5 border-2 transition-all ${
+                                stage.completed 
+                                  ? "border-orange-400 bg-orange-50" 
+                                  : "border-gray-200 bg-gray-50 opacity-50"
+                              }`}
+                            >
+                              <img src={stage.img} alt={stage.name} className="w-full h-full object-contain" />
+                            </div>
+                            {index < arr.length - 1 && (
+                              <div className={`w-6 h-0.5 ${stage.completed ? "bg-orange-300" : "bg-gray-200"}`} />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <Progress value={(selectedCapsule.letterCount / selectedCapsule.targetLetters) * 100} className="h-3" />
                 </div>
 
-                {/* 참여자 목록 */}
-                <div>
-                  <div className="flex items-center justify-between mb-3">
+                {/* 참여자 현황 */}
+                <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-5">
+                  <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold text-foreground flex items-center gap-2">
-                      <Users className="w-4 h-4 text-purple-600" />
-                      참여자 현황
+                      <Users className="w-4 h-4 text-orange-600" />
+                      참여자 현황 ({selectedCapsule.letterCount}/{selectedCapsule.targetLetters}명 참여)
                     </h3>
-                    <Button variant="outline" size="sm" onClick={() => {
+                    <Button variant="outline" size="sm" className="text-orange-600 border-orange-200 hover:bg-orange-50" onClick={() => {
                       navigator.clipboard.writeText("CAPSULE-" + selectedCapsule.id);
                       toast.success("초대 코드가 복사되었습니다!");
                     }}>
@@ -462,60 +530,52 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
                       초대 코드 복사
                     </Button>
                   </div>
-                  <div className="space-y-2">
+                  <div className="grid grid-cols-2 gap-3">
                     {selectedCapsule.contributors.map((contributor) => (
                       <div 
                         key={contributor.id}
-                        className={`flex items-center justify-between p-3 rounded-xl border ${
+                        className={`flex items-center gap-3 p-3 rounded-xl border ${
                           contributor.contributed 
                             ? "bg-green-50 border-green-200" 
                             : "bg-gray-50 border-gray-200"
                         }`}
                       >
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-                            contributor.contributed ? "bg-green-100" : "bg-gray-100"
-                          }`}>
-                            {contributor.avatar}
-                          </div>
-                          <div>
-                            <p className="font-medium text-foreground">{contributor.name}</p>
-                            <p className="text-xs text-muted-foreground">{contributor.relation}</p>
-                          </div>
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                          contributor.contributed ? "bg-green-100" : "bg-gray-100"
+                        }`}>
+                          {contributor.avatar}
                         </div>
-                        <div className="text-right">
-                          {contributor.contributed ? (
-                            <div className="flex items-center gap-1 text-green-600">
-                              <Check className="w-4 h-4" />
-                              <span className="text-sm font-medium">참여완료</span>
-                            </div>
-                          ) : (
-                            <span className="text-sm text-muted-foreground">대기중</span>
-                          )}
-                          {contributor.letterDate && (
-                            <p className="text-xs text-muted-foreground">{contributor.letterDate}</p>
-                          )}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-foreground text-sm truncate">{contributor.name}</p>
+                          <p className="text-xs text-muted-foreground">{contributor.relation}</p>
                         </div>
+                        {contributor.contributed ? (
+                          <div className="flex items-center gap-1 text-green-600">
+                            <Check className="w-4 h-4" />
+                          </div>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">대기</span>
+                        )}
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* 내 편지 작성 영역 */}
-                <div className="border-t border-border pt-6">
+                <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-5">
                   <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <PenLine className="w-4 h-4 text-purple-600" />
+                    <PenLine className="w-4 h-4 text-orange-600" />
                     내 편지 작성하기
                   </h3>
                   <Textarea 
                     placeholder="마음을 담아 편지를 작성해주세요..."
-                    className="min-h-[120px] resize-none"
+                    className="min-h-[100px] resize-none border-orange-100 focus:border-orange-300"
                   />
                   <div className="flex gap-2 mt-3">
-                    <Button variant="outline" className="flex-1">
+                    <Button variant="outline" className="flex-1 border-orange-200 text-orange-600 hover:bg-orange-50">
                       임시저장
                     </Button>
-                    <Button className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500">
+                    <Button className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600">
                       <Send className="w-4 h-4 mr-1" />
                       편지 제출하기
                     </Button>
@@ -524,16 +584,14 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
               </div>
 
               {/* 푸터 */}
-              <div className="border-t border-border p-4 bg-gray-50 flex justify-between items-center">
-                <Button variant="ghost" size="sm" onClick={() => setSelectedCapsule(null)}>
+              <div className="border-t border-orange-100 p-4 bg-orange-50/50 flex justify-between items-center">
+                <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => setSelectedCapsule(null)}>
                   닫기
                 </Button>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
-                    <Share2 className="w-4 h-4 mr-1" />
-                    공유하기
-                  </Button>
-                </div>
+                <Button size="sm" className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600">
+                  <Share2 className="w-4 h-4 mr-1" />
+                  가족에게 공유하기
+                </Button>
               </div>
             </motion.div>
           </motion.div>
