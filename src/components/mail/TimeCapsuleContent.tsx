@@ -15,50 +15,64 @@ const mockCapsules = [
   {
     id: 1,
     title: "아버지 출소 축하 편지 모음",
-    recipient: "아버지",
+    recipient: "아버지 (홍길동)",
+    recipientFacility: "서울구치소",
     targetDate: "2025-06-15",
     status: "collecting", // collecting, sealed, opened
     contributors: [
-      { id: 1, name: "어머니", avatar: "👩", contributed: true },
-      { id: 2, name: "나", avatar: "🧑", contributed: true },
-      { id: 3, name: "동생", avatar: "👧", contributed: false },
-      { id: 4, name: "할머니", avatar: "👵", contributed: true },
+      { id: 1, name: "어머니", relation: "배우자", avatar: "👩", contributed: true, letterDate: "2025-01-02" },
+      { id: 2, name: "나", relation: "자녀", avatar: "🧑", contributed: true, letterDate: "2025-01-05" },
+      { id: 3, name: "여동생", relation: "자녀", avatar: "👧", contributed: false, letterDate: null },
+      { id: 4, name: "할머니", relation: "부모", avatar: "👵", contributed: true, letterDate: "2024-12-28" },
+      { id: 5, name: "삼촌", relation: "형제", avatar: "👨", contributed: false, letterDate: null },
     ],
     letterCount: 3,
     targetLetters: 5,
     daysLeft: 178,
-    description: "아버지의 출소를 축하하며 가족 모두가 마음을 담아 편지를 모으고 있어요.",
+    description: "아버지의 출소를 축하하며 가족 모두가 마음을 담아 편지를 모으고 있어요. 출소 당일 전달됩니다.",
   },
   {
     id: 2,
-    title: "2025년 새해 다짐",
-    recipient: "미래의 나에게",
-    targetDate: "2026-01-01",
+    title: "엄마 면회 때 전할 응원 메시지",
+    recipient: "어머니 (김영희)",
+    recipientFacility: "청주여자교도소",
+    targetDate: "2025-01-20",
     status: "collecting",
     contributors: [
-      { id: 1, name: "나", avatar: "🧑", contributed: true },
+      { id: 1, name: "아버지", relation: "배우자", avatar: "👨", contributed: true, letterDate: "2025-01-10" },
+      { id: 2, name: "큰딸", relation: "자녀", avatar: "👩", contributed: true, letterDate: "2025-01-12" },
+      { id: 3, name: "작은딸", relation: "자녀", avatar: "👧", contributed: false, letterDate: null },
     ],
-    letterCount: 1,
-    targetLetters: 1,
-    daysLeft: 378,
-    description: "1년 후의 나에게 보내는 편지",
+    letterCount: 2,
+    targetLetters: 3,
+    daysLeft: 32,
+    description: "면회 때 전할 가족들의 응원 메시지를 모으고 있어요.",
   },
   {
     id: 3,
-    title: "어머니 생신 축하",
-    recipient: "어머니",
-    targetDate: "2024-12-25",
+    title: "오빠 가석방 축하",
+    recipient: "오빠 (박민수)",
+    recipientFacility: "의정부교도소",
+    targetDate: "2024-12-20",
     status: "opened",
     contributors: [
-      { id: 1, name: "아버지", avatar: "👨", contributed: true },
-      { id: 2, name: "나", avatar: "🧑", contributed: true },
-      { id: 3, name: "동생", avatar: "👧", contributed: true },
+      { id: 1, name: "부모님", relation: "부모", avatar: "👨‍👩‍👧", contributed: true, letterDate: "2024-12-01" },
+      { id: 2, name: "나", relation: "동생", avatar: "👧", contributed: true, letterDate: "2024-12-05" },
+      { id: 3, name: "여자친구", relation: "연인", avatar: "💑", contributed: true, letterDate: "2024-12-10" },
     ],
     letterCount: 3,
     targetLetters: 3,
     daysLeft: 0,
-    description: "어머니 생신을 축하하며 모은 편지들",
+    description: "오빠의 가석방을 축하하며 모은 편지들이에요. 사회에서 새 출발을 응원해요!",
   },
+];
+
+const capsuleTypes = [
+  { id: "release", label: "출소 축하", icon: "🏠", description: "출소를 축하하는 편지 모음" },
+  { id: "parole", label: "가석방 축하", icon: "⚖️", description: "가석방을 축하하는 편지 모음" },
+  { id: "birthday", label: "생일 축하", icon: "🎂", description: "수감 중 생일을 축하하는 편지" },
+  { id: "encouragement", label: "응원 메시지", icon: "💪", description: "힘내라는 응원의 메시지" },
+  { id: "anniversary", label: "기념일", icon: "💝", description: "특별한 기념일을 위한 편지" },
 ];
 
 export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
@@ -102,9 +116,16 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
               <div>
                 <h2 className="text-lg font-bold text-foreground mb-1">타임캡슐이란?</h2>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  여러 사람이 함께 편지를 모아 특별한 날에 한 사람에게 전달하는 서비스예요.<br />
-                  출소일, 생일, 기념일 등 특별한 순간에 모은 마음을 한꺼번에 전해보세요.
+                  수감 중인 가족을 위해 여러 사람이 함께 편지를 모아 특별한 날에 전달하는 서비스예요.<br />
+                  <strong>출소일, 가석방일, 생일, 기념일</strong> 등 특별한 순간에 모은 마음을 한꺼번에 전해보세요.
                 </p>
+                <div className="flex gap-2 mt-3">
+                  {capsuleTypes.slice(0, 4).map((type) => (
+                    <span key={type.id} className="bg-white/60 text-xs px-2 py-1 rounded-full">
+                      {type.icon} {type.label}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>
@@ -130,7 +151,7 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
                   className="bg-white rounded-2xl border border-border/60 shadow-sm p-5 cursor-pointer hover:shadow-md transition-all hover:border-purple-200"
                 >
                   {/* 헤더 */}
-                  <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
                         <img src={orangeRipe} alt="" className="w-8 h-8" />
@@ -138,6 +159,7 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
                       <div>
                         <h3 className="font-semibold text-foreground">{capsule.title}</h3>
                         <p className="text-xs text-muted-foreground">To. {capsule.recipient}</p>
+                        <p className="text-[10px] text-muted-foreground">{capsule.recipientFacility}</p>
                       </div>
                     </div>
                     <div className="bg-purple-100 text-purple-700 text-xs font-medium px-2.5 py-1 rounded-full">
@@ -280,7 +302,7 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
         </div>
       </div>
 
-      {/* 새 타임캡슐 만들기 모달 (간단한 placeholder) */}
+      {/* 새 타임캡슐 만들기 모달 */}
       <AnimatePresence>
         {showCreateModal && (
           <motion.div
@@ -295,25 +317,49 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl p-6 max-w-md w-full"
+              className="bg-white rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto"
             >
               <h3 className="text-lg font-semibold mb-4">새 타임캡슐 만들기</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-foreground block mb-1.5">타임캡슐 이름</label>
-                  <Input placeholder="예: 아버지 출소 축하 편지" />
+                  <label className="text-sm font-medium text-foreground block mb-1.5">타임캡슐 종류</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {capsuleTypes.map((type) => (
+                      <button
+                        key={type.id}
+                        className="p-3 border border-border rounded-xl text-left hover:border-purple-300 hover:bg-purple-50 transition-all"
+                      >
+                        <span className="text-xl mr-2">{type.icon}</span>
+                        <span className="text-sm font-medium">{type.label}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-foreground block mb-1.5">받는 사람</label>
-                  <Input placeholder="예: 아버지" />
+                  <label className="text-sm font-medium text-foreground block mb-1.5">타임캡슐 이름</label>
+                  <Input placeholder="예: 아버지 출소 축하 편지 모음" />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground block mb-1.5">받는 사람 (수감자)</label>
+                  <Input placeholder="예: 홍길동 (아버지)" />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground block mb-1.5">수감 시설</label>
+                  <Input placeholder="예: 서울구치소" />
                 </div>
                 <div>
                   <label className="text-sm font-medium text-foreground block mb-1.5">전달 예정일</label>
                   <Input type="date" />
+                  <p className="text-xs text-muted-foreground mt-1">출소일, 가석방일, 생일 등</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-foreground block mb-1.5">목표 편지 수</label>
                   <Input type="number" placeholder="5" defaultValue={5} />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground block mb-1.5">참여자 초대</label>
+                  <p className="text-xs text-muted-foreground mb-2">편지를 함께 모을 가족/지인의 이메일 또는 전화번호</p>
+                  <Input placeholder="예: mother@email.com, 010-1234-5678" />
                 </div>
               </div>
               <div className="flex gap-2 mt-6">
@@ -321,7 +367,7 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
                   취소
                 </Button>
                 <Button className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500">
-                  만들기
+                  타임캡슐 만들기
                 </Button>
               </div>
             </motion.div>
