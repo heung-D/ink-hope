@@ -86,15 +86,7 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
             className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-6 text-white shadow-lg"
           >
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                {/* 오렌지 캐릭터 프로필 이미지 */}
-                <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm p-1 flex items-center justify-center">
-                  <img 
-                    src={orangeCharacter} 
-                    alt="오렌지 캐릭터" 
-                    className="w-16 h-16 object-contain"
-                  />
-                </div>
+              <div>
                 <div>
                   <p className="text-orange-100 text-sm mb-1">수신자 정보</p>
                   <h2 className="text-2xl font-bold mb-1">{mockData.prisonerInfo.name}</h2>
