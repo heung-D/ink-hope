@@ -91,11 +91,11 @@ export function DealsContent({ onClose }: DealsContentProps) {
   const getTypeBadge = (type: Deal["type"]) => {
     switch (type) {
       case "time-limited":
-        return <Badge className="bg-red-500 text-white text-xs"><Clock className="w-3 h-3 mr-1" />기간 한정</Badge>;
+        return <Badge className="bg-orange-100 text-orange-600 text-xs border-0"><Clock className="w-3 h-3 mr-1" />기간 한정</Badge>;
       case "quantity-limited":
-        return <Badge className="bg-orange-500 text-white text-xs"><Zap className="w-3 h-3 mr-1" />수량 한정</Badge>;
+        return <Badge className="bg-orange-100 text-orange-600 text-xs border-0"><Zap className="w-3 h-3 mr-1" />수량 한정</Badge>;
       case "first-come":
-        return <Badge className="bg-purple-500 text-white text-xs"><Gift className="w-3 h-3 mr-1" />선착순</Badge>;
+        return <Badge className="bg-orange-100 text-orange-600 text-xs border-0"><Gift className="w-3 h-3 mr-1" />선착순</Badge>;
     }
   };
 
@@ -126,11 +126,11 @@ export function DealsContent({ onClose }: DealsContentProps) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-red-50 to-rose-50 rounded-2xl p-5 mb-6 border border-red-200/50"
+          className="bg-orange-50/50 rounded-2xl p-5 mb-6 border border-orange-200/30"
         >
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">🔥</span>
-            <Badge className="bg-red-500 text-white text-xs">HOT DEAL</Badge>
+            <Tag className="w-5 h-5 text-orange-500" />
+            <Badge className="bg-orange-100 text-orange-600 text-xs border-0">HOT DEAL</Badge>
           </div>
           <h2 className="text-lg font-bold text-foreground mb-1">
             놓치면 후회할 특가 할인!
@@ -179,10 +179,10 @@ export function DealsContent({ onClose }: DealsContentProps) {
               >
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-rose-100 flex items-center justify-center text-2xl flex-shrink-0">
-                        {deal.icon}
-                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-2xl flex-shrink-0">
+                          {deal.icon}
+                        </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1 flex-wrap">
                           {getTypeBadge(deal.type)}
@@ -203,7 +203,7 @@ export function DealsContent({ onClose }: DealsContentProps) {
                           <span className="text-sm text-muted-foreground line-through">
                             {formatPrice(deal.originalPrice)}
                           </span>
-                          <Badge className="bg-red-100 text-red-600 text-xs">
+                          <Badge className="bg-orange-100 text-orange-600 text-xs border-0">
                             {deal.discountRate}% OFF
                           </Badge>
                         </div>

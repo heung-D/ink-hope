@@ -30,12 +30,12 @@ interface FaqItem {
 }
 
 const categories: FaqCategory[] = [
-  { id: "letter", name: "편지 발송", icon: Mail, color: "from-blue-400 to-blue-500" },
-  { id: "delivery", name: "배송 안내", icon: Truck, color: "from-green-400 to-green-500" },
-  { id: "payment", name: "결제/환불", icon: CreditCard, color: "from-purple-400 to-purple-500" },
-  { id: "rewards", name: "경품/이벤트", icon: Gift, color: "from-amber-400 to-orange-500" },
-  { id: "account", name: "계정/보안", icon: Shield, color: "from-red-400 to-red-500" },
-  { id: "general", name: "일반 문의", icon: HelpCircle, color: "from-gray-400 to-gray-500" },
+  { id: "letter", name: "편지 발송", icon: Mail, color: "bg-gray-100" },
+  { id: "delivery", name: "배송 안내", icon: Truck, color: "bg-gray-100" },
+  { id: "payment", name: "결제/환불", icon: CreditCard, color: "bg-gray-100" },
+  { id: "rewards", name: "경품/이벤트", icon: Gift, color: "bg-gray-100" },
+  { id: "account", name: "계정/보안", icon: Shield, color: "bg-gray-100" },
+  { id: "general", name: "일반 문의", icon: HelpCircle, color: "bg-gray-100" },
 ];
 
 const faqItems: FaqItem[] = [
@@ -124,11 +124,11 @@ export function FaqContent({ onClose }: FaqContentProps) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-5 mb-6 border border-blue-200/50"
+          className="bg-orange-50/50 rounded-2xl p-5 mb-6 border border-orange-200/30"
         >
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">💡</span>
-            <Badge className="bg-blue-500 text-white text-xs">FAQ</Badge>
+            <HelpCircle className="w-5 h-5 text-orange-500" />
+            <Badge className="bg-orange-100 text-orange-600 text-xs border-0">FAQ</Badge>
           </div>
           <h2 className="text-lg font-bold text-foreground mb-1">
             무엇을 도와드릴까요?
@@ -164,8 +164,8 @@ export function FaqContent({ onClose }: FaqContentProps) {
                     : "border-border/60 bg-card hover:border-primary/30"
                 }`}
               >
-                <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center mx-auto mb-2`}>
-                  <Icon className="w-4 h-4 text-white" />
+                <div className={`w-8 h-8 rounded-lg ${category.color} flex items-center justify-center mx-auto mb-2`}>
+                  <Icon className="w-4 h-4 text-orange-500" />
                 </div>
                 <p className="text-xs font-medium text-foreground">{category.name}</p>
               </button>
