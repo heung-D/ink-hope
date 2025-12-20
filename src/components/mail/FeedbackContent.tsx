@@ -96,21 +96,17 @@ export function FeedbackContent({ onClose }: FeedbackContentProps) {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-background overflow-hidden">
+    <div className="flex-1 flex flex-col bg-gradient-to-br from-orange-50/50 to-amber-50/30 overflow-hidden">
       {/* Header */}
-      <div className="h-14 border-b border-border/60 flex items-center justify-between px-6">
+      <header className="h-14 border-b border-border/40 bg-white/80 backdrop-blur-sm flex items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center">
-            <MessageSquare className="w-4 h-4 text-white" />
-          </div>
+          <MessageSquare className="w-5 h-5 text-primary" />
           <h1 className="text-lg font-semibold text-foreground">고객의 소리</h1>
         </div>
-        {onClose && (
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="w-4 h-4" />
-          </Button>
-        )}
-      </div>
+        <Button variant="ghost" size="sm" onClick={onClose}>
+          편지함으로 돌아가기
+        </Button>
+      </header>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
@@ -118,11 +114,11 @@ export function FeedbackContent({ onClose }: FeedbackContentProps) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-5 mb-6 border border-green-200/50"
+          className="bg-orange-50/50 rounded-2xl p-5 mb-6 border border-orange-200/30"
         >
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">📬</span>
-            <Badge className="bg-green-500 text-white text-xs">문의하기</Badge>
+            <MessageSquare className="w-5 h-5 text-orange-500" />
+            <Badge className="bg-orange-100 text-orange-600 text-xs border-0">문의하기</Badge>
           </div>
           <h2 className="text-lg font-bold text-foreground mb-1">
             소중한 의견을 들려주세요

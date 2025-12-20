@@ -47,21 +47,17 @@ export function RewardsContent({ onClose }: RewardsContentProps) {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-background overflow-hidden">
+    <div className="flex-1 flex flex-col bg-gradient-to-br from-orange-50/50 to-amber-50/30 overflow-hidden">
       {/* Header */}
-      <div className="h-14 border-b border-border/60 flex items-center justify-between px-6">
+      <header className="h-14 border-b border-border/40 bg-white/80 backdrop-blur-sm flex items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
-            <Gift className="w-4 h-4 text-white" />
-          </div>
+          <Gift className="w-5 h-5 text-primary" />
           <h1 className="text-lg font-semibold text-foreground">내가 받은 경품</h1>
         </div>
-        {onClose && (
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="w-4 h-4" />
-          </Button>
-        )}
-      </div>
+        <Button variant="ghost" size="sm" onClick={onClose}>
+          편지함으로 돌아가기
+        </Button>
+      </header>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
@@ -69,11 +65,11 @@ export function RewardsContent({ onClose }: RewardsContentProps) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-5 mb-6 border border-amber-200/50"
+          className="bg-orange-50/50 rounded-2xl p-5 mb-6 border border-orange-200/30"
         >
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">🎉</span>
-            <Badge className="bg-orange-500 text-white text-xs">이벤트 당첨</Badge>
+            <Gift className="w-5 h-5 text-orange-500" />
+            <Badge className="bg-orange-100 text-orange-600 text-xs border-0">이벤트 당첨</Badge>
           </div>
           <h2 className="text-lg font-bold text-foreground mb-1">
             축하합니다! 이벤트에 당첨되셨습니다

@@ -102,21 +102,17 @@ export function FaqContent({ onClose }: FaqContentProps) {
   });
 
   return (
-    <div className="flex-1 flex flex-col bg-background overflow-hidden">
+    <div className="flex-1 flex flex-col bg-gradient-to-br from-orange-50/50 to-amber-50/30 overflow-hidden">
       {/* Header */}
-      <div className="h-14 border-b border-border/60 flex items-center justify-between px-6">
+      <header className="h-14 border-b border-border/40 bg-white/80 backdrop-blur-sm flex items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center">
-            <HelpCircle className="w-4 h-4 text-white" />
-          </div>
+          <HelpCircle className="w-5 h-5 text-primary" />
           <h1 className="text-lg font-semibold text-foreground">자주 묻는 질문</h1>
         </div>
-        {onClose && (
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="w-4 h-4" />
-          </Button>
-        )}
-      </div>
+        <Button variant="ghost" size="sm" onClick={onClose}>
+          편지함으로 돌아가기
+        </Button>
+      </header>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
