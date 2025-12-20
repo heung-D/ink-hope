@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TreeDeciduous, Leaf, Calendar, MessageSquare, TrendingUp, Clock, ChevronRight, Plus, Home, Scale, Users, GraduationCap, Gift, Check, Mail, Send, Image, FileText, Settings, ExternalLink, Heart, ChevronDown, MailPlus, MailOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SpecialDayWriteLetterModal } from "./SpecialDayWriteLetterModal";
+import { AddSpecialDayModal } from "./AddSpecialDayModal";
+import { SpecialDayDetailModal } from "./SpecialDayDetailModal";
 import { Progress } from "@/components/ui/progress";
 import {
   Select,
@@ -130,6 +133,22 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
   const [selectedRecipient, setSelectedRecipient] = useState(recipients[0]);
   const currentStage = growthStages[mockData.currentGrowthLevel - 1];
   const nextStage = growthStages[mockData.currentGrowthLevel];
+
+  // 모달 상태
+  const [showWriteLetterModal, setShowWriteLetterModal] = useState(false);
+  const [showAddDayModal, setShowAddDayModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<typeof mockData.fruits[0] | null>(null);
+
+  const handleDayClick = (day: typeof mockData.fruits[0]) => {
+    setSelectedDay(day);
+    setShowDetailModal(true);
+  };
+
+  const handleWriteLetterFromDetail = () => {
+    setShowDetailModal(false);
+    setShowWriteLetterModal(true);
+  };
 
   const toggleGift = (giftId: string) => {
     setSelectedGifts(prev => {
@@ -464,11 +483,11 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" className="bg-primary hover:bg-primary/90">
+                  <Button size="sm" className="bg-primary hover:bg-primary/90" onClick={() => setShowWriteLetterModal(true)}>
                     <Send className="w-4 h-4 mr-1" />
                     편지 쓰기
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => setShowAddDayModal(true)}>
                     <Plus className="w-4 h-4 mr-1" />
                     새 날짜 추가
                   </Button>
@@ -510,6 +529,7 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.5 + index * 0.1 }}
                     className="p-4 hover:bg-muted/30 transition-colors cursor-pointer flex items-center gap-4"
+                    onClick={() => handleDayClick(fruit)}
                   >
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${bg}`}>
                       {icon}
@@ -716,6 +736,23 @@ export function OrangeTreeContent({ onClose }: OrangeTreeContentProps) {
           </motion.div>
         </div>
       </div>
+
+      {/* 모달들 */}
+      <SpecialDayWriteLetterModal 
+        isOpen={showWriteLetterModal} 
+        onClose={() => setShowWriteLetterModal(false)}
+        specialDay={selectedDay ? { title: selectedDay.title, date: selectedDay.date, type: selectedDay.type } : undefined}
+      />
+      <AddSpecialDayModal 
+        isOpen={showAddDayModal} 
+        onClose={() => setShowAddDayModal(false)} 
+      />
+      <SpecialDayDetailModal 
+        isOpen={showDetailModal} 
+        onClose={() => setShowDetailModal(false)}
+        specialDay={selectedDay}
+        onWriteLetter={handleWriteLetterFromDetail}
+      />
     </div>
   );
 }
