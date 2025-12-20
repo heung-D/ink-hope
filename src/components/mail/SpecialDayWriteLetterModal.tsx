@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { X, Send, Calendar, User, PenLine, Sparkles } from "lucide-react";
+import { X, Send, User, PenLine, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -19,7 +19,6 @@ interface SpecialDayWriteLetterModalProps {
 export function SpecialDayWriteLetterModal({ isOpen, onClose, specialDay }: SpecialDayWriteLetterModalProps) {
   const [recipient, setRecipient] = useState("");
   const [message, setMessage] = useState("");
-  const [scheduledDate, setScheduledDate] = useState(specialDay?.date || "");
 
   if (!isOpen) return null;
 
@@ -32,7 +31,7 @@ export function SpecialDayWriteLetterModal({ isOpen, onClose, specialDay }: Spec
       toast.error("편지 내용을 입력해주세요.");
       return;
     }
-    toast.success("편지가 예약되었습니다!");
+    toast.success("편지가 발송되었습니다!");
     onClose();
   };
 
@@ -55,7 +54,7 @@ export function SpecialDayWriteLetterModal({ isOpen, onClose, specialDay }: Spec
               <div>
                 <h2 className="text-lg font-bold text-white">편지 쓰기</h2>
                 {specialDay && (
-                  <p className="text-sm text-white/80">{specialDay.title}에 보낼 편지</p>
+                  <p className="text-sm text-white/80">{specialDay.title}을 앞두고 마음을 전해요</p>
                 )}
               </div>
             </div>
@@ -79,23 +78,6 @@ export function SpecialDayWriteLetterModal({ isOpen, onClose, specialDay }: Spec
               onChange={(e) => setRecipient(e.target.value)}
               className="h-12 text-base border-orange-200 focus:border-orange-400 focus:ring-orange-400"
             />
-          </div>
-
-          {/* 예약 발송일 */}
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <Calendar className="w-4 h-4 text-orange-500" />
-              예약 발송일
-            </label>
-            <Input
-              type="date"
-              value={scheduledDate}
-              onChange={(e) => setScheduledDate(e.target.value)}
-              className="h-12 text-base border-orange-200 focus:border-orange-400 focus:ring-orange-400"
-            />
-            <p className="text-xs text-muted-foreground">
-              해당 날짜에 맞춰 편지가 자동으로 발송됩니다.
-            </p>
           </div>
 
           {/* 편지 내용 */}
@@ -138,7 +120,7 @@ export function SpecialDayWriteLetterModal({ isOpen, onClose, specialDay }: Spec
             className="bg-gradient-to-r from-orange-400 to-amber-400 hover:from-orange-500 hover:to-amber-500 text-white"
           >
             <Send className="w-4 h-4 mr-2" />
-            편지 예약하기
+            편지 보내기
           </Button>
         </div>
       </motion.div>
