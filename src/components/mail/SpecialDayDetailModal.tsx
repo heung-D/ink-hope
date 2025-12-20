@@ -144,8 +144,8 @@ export function SpecialDayDetailModal({ isOpen, onClose, specialDay, onWriteLett
             <div className="flex items-center gap-3">
               <Bell className="w-5 h-5 text-orange-500" />
               <div>
-                <p className="text-sm font-medium text-foreground">편지 발송 알림</p>
-                <p className="text-xs text-muted-foreground">7일 전, 3일 전, 당일 알림이 설정되어 있어요</p>
+                <p className="text-sm font-medium text-foreground">편지 발송 미리 알림</p>
+                <p className="text-xs text-muted-foreground">7일 전, 3일 전, 당일에 알림을 보내드려요</p>
               </div>
             </div>
           </div>
@@ -164,9 +164,9 @@ export function SpecialDayDetailModal({ isOpen, onClose, specialDay, onWriteLett
                   <PenLine className="w-5 h-5 text-orange-600" />
                 </div>
                 <div className="text-left">
-                  <p className="text-sm font-semibold text-orange-700">이 날에 맞춰 편지 쓰기</p>
+                  <p className="text-sm font-semibold text-orange-700">지금 편지 쓰기</p>
                   <p className="text-xs text-orange-600/70">
-                    {specialDay.date}에 도착하도록 예약
+                    {specialDay.title}을 앞두고 마음을 전해요
                   </p>
                 </div>
               </div>
