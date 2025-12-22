@@ -113,9 +113,9 @@ export const orangeTrees: OrangeTree[] = [
     personId: "1",
     personName: "이재원",
     relation: "아들",
-    sentLetters: 15,
-    receivedLetters: 17,
-    totalLetters: 32, // Lv.4 흰 꽃나무
+    sentLetters: 3,
+    receivedLetters: 4,
+    totalLetters: 7, // Lv.2 새싹
     createdAt: "2024-03-15",
     isArchived: false,
     facility: "서울남부교도소",
