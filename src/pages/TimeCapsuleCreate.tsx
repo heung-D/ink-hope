@@ -78,7 +78,7 @@ export default function TimeCapsuleCreate() {
       <div className="min-h-screen bg-muted/30">
         {/* Header */}
         <header className="bg-background border-b border-border/60 sticky top-0 z-50">
-          <div className="max-w-2xl mx-auto px-6 h-14 flex items-center justify-between">
+          <div className="max-w-lg mx-auto px-6 h-14 flex items-center justify-between">
             <button 
               onClick={() => navigate(-1)}
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -91,7 +91,7 @@ export default function TimeCapsuleCreate() {
           </div>
         </header>
 
-        <main className="max-w-2xl mx-auto px-6 py-8">
+        <main className="max-w-lg mx-auto px-6 py-8">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* 1. 캡슐 종류 선택 */}
             <section>
@@ -197,7 +197,7 @@ export default function TimeCapsuleCreate() {
                   <SelectValue placeholder="제한 없음" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">제한 없음</SelectItem>
+                  <SelectItem value="none">제한 없음</SelectItem>
                   <SelectItem value="3">3통</SelectItem>
                   <SelectItem value="5">5통</SelectItem>
                   <SelectItem value="10">10통</SelectItem>

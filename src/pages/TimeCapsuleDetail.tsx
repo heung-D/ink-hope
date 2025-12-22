@@ -115,7 +115,7 @@ export default function TimeCapsuleDetail() {
       <div className="min-h-screen bg-muted/30">
         {/* Header */}
         <header className="bg-background border-b border-border/60 sticky top-0 z-50">
-          <div className="max-w-2xl mx-auto px-6 h-14 flex items-center justify-between">
+          <div className="max-w-lg mx-auto px-6 h-14 flex items-center justify-between">
             <button 
               onClick={() => navigate("/")}
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -129,7 +129,7 @@ export default function TimeCapsuleDetail() {
           </div>
         </header>
 
-        <main className="max-w-2xl mx-auto px-6 py-6 space-y-6">
+        <main className="max-w-lg mx-auto px-6 py-6 space-y-6">
           {/* 수신자 정보 카드 */}
           <motion.section
             initial={{ opacity: 0, y: 20 }}
@@ -299,7 +299,7 @@ export default function TimeCapsuleDetail() {
         {/* 하단 고정 버튼 - 편지 미작성 시 */}
         {!capsule.myLetter && (
           <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border/60 p-4">
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-lg mx-auto">
               <Button 
                 onClick={() => navigate(`/time-capsule/${id}/write`)}
                 className="w-full py-6 bg-primary hover:bg-primary/90 text-lg font-semibold rounded-2xl shadow-lg"
