@@ -1,3 +1,4 @@
+// 소중한 사람 (수신자)
 export interface FamilyMember {
   id: string;
   name: string;
@@ -7,6 +8,53 @@ export interface FamilyMember {
   prisonerNumber?: string;
   avatar: string;
   color: string;
+}
+
+// 오렌지나무 (관계 = 나무)
+export interface OrangeTree {
+  id: string;
+  personId: string; // FamilyMember id
+  personName: string;
+  relation: string;
+  sentLetters: number; // 보낸 편지 수
+  receivedLetters: number; // 받은 편지 수
+  totalLetters: number; // sentLetters + receivedLetters
+  createdAt: string;
+  isArchived: boolean; // 완성된 나무 (출소 후)
+  facility: string;
+  prisonerNumber: string;
+  expectedReleaseDate?: string;
+  daysRemaining?: number;
+}
+
+// 성장 단계
+export interface GrowthStage {
+  level: number;
+  name: string;
+  minLetters: number;
+  icon: string;
+  message: string;
+}
+
+// 소중한 날들 (열매)
+export interface SpecialDay {
+  id: string;
+  treeId: string; // OrangeTree id
+  type: "release" | "parole" | "birthday" | "anniversary" | "visit" | "trial" | "education" | "other";
+  title: string;
+  date: string;
+  description?: string;
+  isGolden?: boolean; // 타임캡슐 연동 시 골든 오렌지
+}
+
+// 최근 활동
+export interface RecentActivity {
+  id: string;
+  type: "sent" | "received";
+  personName: string;
+  date: string;
+  status: string;
+  mailTypes: string[];
 }
 
 export interface Mail {
