@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import TimeCapsuleMain from "./pages/TimeCapsuleMain";
 import TimeCapsuleDetail from "./pages/TimeCapsuleDetail";
 import TimeCapsuleCreate from "./pages/TimeCapsuleCreate";
 import TimeCapsuleWrite from "./pages/TimeCapsuleWrite";
@@ -75,6 +76,14 @@ const App = () => (
                   <PublicRoute>
                     <Auth />
                   </PublicRoute>
+                }
+              />
+              <Route
+                path="/time-capsule"
+                element={
+                  <ProtectedRoute>
+                    <TimeCapsuleMain />
+                  </ProtectedRoute>
                 }
               />
               <Route

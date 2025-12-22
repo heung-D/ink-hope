@@ -65,7 +65,7 @@ export default function TimeCapsuleCreate() {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     toast.success("타임캡슐이 생성되었습니다!");
-    navigate("/");
+    navigate("/time-capsule");
     setIsSubmitting(false);
   };
 
@@ -80,7 +80,7 @@ export default function TimeCapsuleCreate() {
         <header className="bg-background border-b border-border/60 sticky top-0 z-50">
           <div className="max-w-lg mx-auto px-6 h-14 flex items-center justify-between">
             <button 
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/time-capsule")}
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
