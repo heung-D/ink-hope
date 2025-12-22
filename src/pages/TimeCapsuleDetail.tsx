@@ -91,7 +91,7 @@ export default function TimeCapsuleDetail() {
       <div className="min-h-screen bg-muted/30 flex items-center justify-center">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">타임캡슐을 찾을 수 없습니다</p>
-          <Button onClick={() => navigate("/")}>돌아가기</Button>
+          <Button onClick={() => navigate("/time-capsule")}>돌아가기</Button>
         </div>
       </div>
     );
@@ -117,7 +117,7 @@ export default function TimeCapsuleDetail() {
         <header className="bg-background border-b border-border/60 sticky top-0 z-50">
           <div className="max-w-lg mx-auto px-6 h-14 flex items-center justify-between">
             <button 
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/time-capsule")}
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
