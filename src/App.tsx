@@ -78,14 +78,6 @@ const App = () => (
                 }
               />
               <Route
-                path="/time-capsule/:id"
-                element={
-                  <ProtectedRoute>
-                    <TimeCapsuleDetail />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
                 path="/time-capsule/create"
                 element={
                   <ProtectedRoute>
@@ -98,6 +90,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <TimeCapsuleWrite />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/time-capsule/:id"
+                element={
+                  <ProtectedRoute>
+                    <TimeCapsuleDetail />
                   </ProtectedRoute>
                 }
               />
