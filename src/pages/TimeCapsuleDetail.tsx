@@ -155,37 +155,57 @@ export default function TimeCapsuleDetail() {
         </header>
 
         <main className="max-w-lg mx-auto px-6 py-6 space-y-6">
+          {/* 완성된 나무 (전달 완료 시) - 맨 위 */}
+          {capsule.status === "delivered" && (
+            <motion.section
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-gradient-to-b from-green-50 to-emerald-50 rounded-2xl pt-4 pb-0 border border-green-200/60 shadow-sm overflow-hidden"
+            >
+              <div className="text-center">
+                <h3 className="font-semibold text-foreground mb-1">완성된 오렌지나무</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  {capsule.letterCount}통의 편지가 모여 아름다운 나무가 되었어요
+                </p>
+                <img 
+                  src={completedTreeImage} 
+                  alt="완성된 오렌지나무" 
+                  className="w-64 h-64 mx-auto object-contain -mb-2"
+                />
+              </div>
+            </motion.section>
+          )}
+
           {/* 수신자 정보 카드 */}
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`rounded-3xl p-6 shadow-lg ${
+            transition={{ delay: capsule.status === "delivered" ? 0.1 : 0 }}
+            className={`rounded-2xl px-5 py-4 shadow-lg ${
               capsule.status === "delivered" 
                 ? "bg-gradient-to-br from-green-500 to-emerald-500 text-white" 
                 : "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground"
             }`}
           >
-            <div className="flex items-start justify-between">
+            <div className="flex items-center justify-between">
               <div>
-                <p className="opacity-70 text-sm mb-1">To.</p>
-                <h2 className="text-xl font-bold mb-1">{capsule.recipient}</h2>
-                <p className="opacity-70 text-sm">{capsule.facility}</p>
+                <p className="opacity-70 text-xs">To.</p>
+                <h2 className="text-lg font-bold">{capsule.recipient}</h2>
+                <p className="opacity-70 text-xs">{capsule.facility}</p>
               </div>
               <div className="text-right">
                 {capsule.status === "delivered" ? (
-                  <div className="bg-white/20 backdrop-blur rounded-xl px-4 py-3">
-                    <p className="opacity-70 text-xs mb-0.5">전달 완료</p>
-                    <p className="text-xl font-bold flex items-center gap-1">
-                      <Check className="w-5 h-5" />
-                      완료
+                  <div className="bg-white/20 backdrop-blur rounded-lg px-3 py-2">
+                    <p className="text-sm font-bold flex items-center gap-1">
+                      <Check className="w-4 h-4" />
+                      전달완료
                     </p>
-                    <p className="opacity-70 text-xs mt-0.5">{capsule.deliveredDate}</p>
+                    <p className="opacity-70 text-xs">{capsule.deliveredDate}</p>
                   </div>
                 ) : (
-                  <div className="bg-white/20 backdrop-blur rounded-xl px-4 py-3">
-                    <p className="opacity-70 text-xs mb-0.5">전달까지</p>
-                    <p className="text-2xl font-bold">D-{capsule.daysLeft}</p>
-                    <p className="opacity-70 text-xs mt-0.5">{capsule.targetDate}</p>
+                  <div className="bg-white/20 backdrop-blur rounded-lg px-3 py-2">
+                    <p className="text-lg font-bold">D-{capsule.daysLeft}</p>
+                    <p className="opacity-70 text-xs">{capsule.targetDate}</p>
                   </div>
                 )}
               </div>
@@ -278,27 +298,6 @@ export default function TimeCapsuleDetail() {
             </div>
           </motion.section>
 
-          {/* 완성된 나무 (전달 완료 시) */}
-          {capsule.status === "delivered" && (
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-gradient-to-b from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200/60 shadow-sm"
-            >
-              <div className="text-center">
-                <h3 className="font-semibold text-foreground mb-2">완성된 오렌지나무</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {capsule.letterCount}통의 편지가 모여 아름다운 나무가 되었어요
-                </p>
-                <img 
-                  src={completedTreeImage} 
-                  alt="완성된 오렌지나무" 
-                  className="w-48 h-48 mx-auto object-contain"
-                />
-              </div>
-            </motion.section>
-          )}
 
           {/* 내 편지 */}
           <motion.section
