@@ -9,6 +9,8 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import TimeCapsuleDetail from "./pages/TimeCapsuleDetail";
+import TimeCapsuleCreate from "./pages/TimeCapsuleCreate";
+import TimeCapsuleWrite from "./pages/TimeCapsuleWrite";
 
 const queryClient = new QueryClient();
 
