@@ -1,5 +1,78 @@
-import type { FamilyMember, Mail, MailOption } from "@/types/mail";
+import type { FamilyMember, Mail, MailOption, OrangeTree, SpecialDay, RecentActivity, GrowthStage } from "@/types/mail";
+import orangeSeed from "@/assets/emoticons/orange-seed-icon.png";
+import orangeSprout from "@/assets/emoticons/orange-sprout-icon.png";
+import orangeYoungTree from "@/assets/emoticons/orange-young-tree-icon.png";
+import orangeFullTree from "@/assets/emoticons/orange-full-tree-icon.png";
+import orangeRipe from "@/assets/emoticons/orange-ripe-icon.png";
 
+// 성장 단계 정의 (명세서 기준)
+export const growthStages: GrowthStage[] = [
+  { 
+    level: 1, 
+    name: "씨앗", 
+    minLetters: 0, 
+    icon: orangeSeed,
+    message: "마음을 심었어요. 첫 편지를 보내볼까요?"
+  },
+  { 
+    level: 2, 
+    name: "새싹", 
+    minLetters: 5, 
+    icon: orangeSprout,
+    message: "작은 싹이 돋았어요. 꾸준히 마음을 나눠보세요."
+  },
+  { 
+    level: 3, 
+    name: "푸른 가지", 
+    minLetters: 15, 
+    icon: orangeYoungTree,
+    message: "잎이 무성해지고 있어요. 조금만 더 마음을 나누면 꽃이 필 거예요."
+  },
+  { 
+    level: 4, 
+    name: "흰 꽃나무", 
+    minLetters: 30, 
+    icon: orangeFullTree,
+    message: "드디어 꽃이 피었어요. 하얀 꽃잎처럼 마음이 전해지고 있어요."
+  },
+  { 
+    level: 5, 
+    name: "오렌지나무", 
+    minLetters: 50, 
+    icon: orangeRipe,
+    message: "마침내 열매를 맺었어요. 함께 키운 이 나무처럼, 희망도 익어가고 있어요."
+  },
+];
+
+// 성장 단계 계산 함수
+export const getGrowthStage = (totalLetters: number): GrowthStage => {
+  for (let i = growthStages.length - 1; i >= 0; i--) {
+    if (totalLetters >= growthStages[i].minLetters) {
+      return growthStages[i];
+    }
+  }
+  return growthStages[0];
+};
+
+// 다음 단계까지 남은 편지 수 계산
+export const getLettersToNextStage = (totalLetters: number): { nextStage: GrowthStage | null; lettersRemaining: number } => {
+  const currentStageIndex = growthStages.findIndex((stage, index) => {
+    const nextStage = growthStages[index + 1];
+    return !nextStage || totalLetters < nextStage.minLetters;
+  });
+  
+  if (currentStageIndex === growthStages.length - 1) {
+    return { nextStage: null, lettersRemaining: 0 };
+  }
+  
+  const nextStage = growthStages[currentStageIndex + 1];
+  return {
+    nextStage,
+    lettersRemaining: nextStage.minLetters - totalLetters
+  };
+};
+
+// 소중한 사람들 (수신자)
 export const familyMembers: FamilyMember[] = [
   {
     id: "1",
@@ -31,6 +104,72 @@ export const familyMembers: FamilyMember[] = [
     avatar: "임",
     color: "bg-blue-100 text-blue-500",
   },
+];
+
+// 오렌지나무 (관계 = 나무)
+export const orangeTrees: OrangeTree[] = [
+  {
+    id: "tree-1",
+    personId: "1",
+    personName: "이재원",
+    relation: "아들",
+    sentLetters: 15,
+    receivedLetters: 17,
+    totalLetters: 32, // Lv.4 흰 꽃나무
+    createdAt: "2024-03-15",
+    isArchived: false,
+    facility: "서울남부교도소",
+    prisonerNumber: "2024-1234",
+    expectedReleaseDate: "2025-06-15",
+    daysRemaining: 178,
+  },
+  {
+    id: "tree-2",
+    personId: "2",
+    personName: "서은우",
+    relation: "남편",
+    sentLetters: 8,
+    receivedLetters: 4,
+    totalLetters: 12, // Lv.2 새싹
+    createdAt: "2024-06-01",
+    isArchived: false,
+    facility: "수원구치소",
+    prisonerNumber: "2024-5678",
+    expectedReleaseDate: "2026-01-20",
+    daysRemaining: 395,
+  },
+  {
+    id: "tree-3",
+    personId: "3",
+    personName: "임성훈",
+    relation: "동생",
+    sentLetters: 3,
+    receivedLetters: 1,
+    totalLetters: 4, // Lv.1 씨앗
+    createdAt: "2024-09-01",
+    isArchived: false,
+    facility: "대전교도소",
+    prisonerNumber: "2024-9012",
+    expectedReleaseDate: "2025-12-01",
+    daysRemaining: 345,
+  },
+];
+
+// 소중한 날들 (열매)
+export const specialDays: SpecialDay[] = [
+  { id: "sd-1", treeId: "tree-1", type: "visit", title: "가족 면회", date: "2025-01-08", description: "어머니, 여동생 면회 예정" },
+  { id: "sd-2", treeId: "tree-1", type: "trial", title: "재판일", date: "2025-02-15", description: "항소심 재판" },
+  { id: "sd-3", treeId: "tree-1", type: "birthday", title: "생일", date: "2025-03-20", description: "재원이의 생일" },
+  { id: "sd-4", treeId: "tree-1", type: "release", title: "출소 예정일", date: "2025-06-15", description: "드디어 집으로" },
+  { id: "sd-5", treeId: "tree-1", type: "anniversary", title: "결혼기념일", date: "2025-04-10", description: "10주년 결혼기념일" },
+  { id: "sd-6", treeId: "tree-2", type: "birthday", title: "생일", date: "2025-05-12", description: "은우의 생일" },
+  { id: "sd-7", treeId: "tree-2", type: "release", title: "출소 예정일", date: "2026-01-20", description: "출소 예정" },
+];
+
+// 최근 활동
+export const recentActivities: RecentActivity[] = [
+  { id: "act-1", type: "sent", personName: "이재원", date: "2025-01-02", status: "전달완료", mailTypes: ["편지", "사진"] },
+  { id: "act-2", type: "received", personName: "이재원", date: "2024-12-28", status: "수신완료", mailTypes: ["편지"] },
 ];
 
 export const mockMails: Mail[] = [
