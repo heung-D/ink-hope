@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Sidebar } from "@/components/mail/Sidebar";
+import { MobileSidebar } from "@/components/mail/MobileSidebar";
+import { MobileHeader } from "@/components/layout/MobileHeader";
 import { MailContent } from "@/components/mail/MailContent";
 import { ComposeContent } from "@/components/mail/ComposeContent";
 import { FloatingComposeButton } from "@/components/mail/FloatingComposeButton";
@@ -17,10 +19,12 @@ import { DealsContent } from "@/components/mail/DealsContent";
 import { familyMembers as initialFamilyMembers, mockMails } from "@/data/mockData";
 import type { Mail, FolderType, FamilyMember } from "@/types/mail";
 import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type ViewMode = "compose" | "mail" | "handwritten" | "orangetree" | "timecapsule" | "gallery" | "schedule" | "rewards" | "faq" | "feedback" | "deals";
 
 const Index = () => {
+  const isMobile = useIsMobile();
   const [activeFolder, setActiveFolder] = useState<FolderType | null>("inbox");
   const [selectedMail, setSelectedMail] = useState<Mail | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("compose");
@@ -99,6 +103,40 @@ const Index = () => {
   lastSentDate.setDate(lastSentDate.getDate() - 3);
   const daysSinceLastLetter = 3;
 
+  // 폴더 변경 핸들러
+  const handleFolderChange = (folder: FolderType) => {
+    setActiveFolder(folder);
+    setSelectedMemberId(null);
+    if (folder === "orangetree") {
+      setViewMode("orangetree");
+    } else if (folder === "timecapsule") {
+      setViewMode("timecapsule");
+    } else if (folder === "gallery") {
+      setViewMode("gallery");
+    } else if (folder === "schedule") {
+      setViewMode("schedule");
+    } else if (folder === "rewards") {
+      setViewMode("rewards");
+    } else if (folder === "faq") {
+      setViewMode("faq");
+    } else if (folder === "feedback") {
+      setViewMode("feedback");
+    } else if (folder === "deals") {
+      setViewMode("deals");
+    } else {
+      setViewMode("mail");
+    }
+  };
+
+  // 멤버 선택 핸들러
+  const handleSelectMember = (memberId: string | null) => {
+    setSelectedMemberId(memberId);
+    if (memberId) {
+      setViewMode("mail");
+      setActiveFolder("inbox");
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -109,54 +147,43 @@ const Index = () => {
         />
       </Helmet>
 
-      <div className="flex h-screen overflow-hidden bg-background">
-        {/* Sidebar */}
-        <Sidebar
+      {/* Mobile Header */}
+      <MobileHeader onCompose={() => setViewMode("compose")}>
+        <MobileSidebar
           familyMembers={familyMembers}
           activeFolder={activeFolder}
-          onFolderChange={(folder) => {
-            setActiveFolder(folder);
-            setSelectedMemberId(null);
-            // 오렌지나무, 타임캡슐, 갤러리, 스케줄, 경품, FAQ, 고객의소리, 특가 폴더 선택 시 해당 화면으로 전환
-            if (folder === "orangetree") {
-              setViewMode("orangetree");
-            } else if (folder === "timecapsule") {
-              setViewMode("timecapsule");
-            } else if (folder === "gallery") {
-              setViewMode("gallery");
-            } else if (folder === "schedule") {
-              setViewMode("schedule");
-            } else if (folder === "rewards") {
-              setViewMode("rewards");
-            } else if (folder === "faq") {
-              setViewMode("faq");
-            } else if (folder === "feedback") {
-              setViewMode("feedback");
-            } else if (folder === "deals") {
-              setViewMode("deals");
-            } else {
-              setViewMode("mail");
-            }
-          }}
+          onFolderChange={handleFolderChange}
           unreadCount={unreadCount}
           draftCount={draftCount}
           archiveCount={archiveCount}
           trashCount={trashCount}
-          onCompose={() => setViewMode("compose")}
-          isComposeOpen={viewMode === "compose"}
-          isCollapsed={isSidebarCollapsed}
-          onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           selectedMemberId={selectedMemberId}
-          onSelectMember={(memberId) => {
-            setSelectedMemberId(memberId);
-            if (memberId) {
-              setViewMode("mail");
-              setActiveFolder("inbox");
-            }
-          }}
-          onUpdateFamilyMembers={setFamilyMembers}
+          onSelectMember={handleSelectMember}
           onHandwrittenUpload={() => setViewMode("handwritten")}
         />
+      </MobileHeader>
+
+      <div className="flex h-screen overflow-hidden bg-background md:pt-0 pt-14">
+        {/* Desktop Sidebar - hidden on mobile */}
+        <div className="hidden md:block">
+          <Sidebar
+            familyMembers={familyMembers}
+            activeFolder={activeFolder}
+            onFolderChange={handleFolderChange}
+            unreadCount={unreadCount}
+            draftCount={draftCount}
+            archiveCount={archiveCount}
+            trashCount={trashCount}
+            onCompose={() => setViewMode("compose")}
+            isComposeOpen={viewMode === "compose"}
+            isCollapsed={isSidebarCollapsed}
+            onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            selectedMemberId={selectedMemberId}
+            onSelectMember={handleSelectMember}
+            onUpdateFamilyMembers={setFamilyMembers}
+            onHandwrittenUpload={() => setViewMode("handwritten")}
+          />
+        </div>
 
         {/* Main Content - 뷰 모드에 따라 다른 화면 표시 */}
         {viewMode === "compose" ? (
@@ -259,8 +286,8 @@ const Index = () => {
           />
         )}
 
-        {/* Floating Compose Button */}
-        {viewMode === "mail" && (
+        {/* Floating Compose Button - only on desktop mail view */}
+        {viewMode === "mail" && !isMobile && (
           <FloatingComposeButton 
             onCompose={() => setViewMode("compose")}
             daysSinceLastLetter={daysSinceLastLetter}
