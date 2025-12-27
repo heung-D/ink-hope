@@ -299,20 +299,6 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
                 );
               })}
 
-              {/* 새 타임캡슐 만들기 카드 */}
-              <motion.div
-                whileHover={{ y: -2 }}
-                onClick={() => navigate("/time-capsule/create")}
-                className="bg-muted/50 hover:bg-primary/5 rounded-2xl p-5 border-2 border-dashed border-muted-foreground/30 hover:border-primary/40 transition-colors cursor-pointer"
-              >
-                <div className="flex flex-col items-center justify-center py-4">
-                  <div className="w-12 h-12 bg-background rounded-xl flex items-center justify-center shadow-sm mb-3">
-                    <Plus className="w-6 h-6 text-primary" />
-                  </div>
-                  <p className="font-medium text-foreground">새 타임캡슐 만들기</p>
-                  <p className="text-sm text-muted-foreground mt-1">특별한 날을 위해 편지를 모아보세요</p>
-                </div>
-              </motion.div>
             </div>
           </section>
 
