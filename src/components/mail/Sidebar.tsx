@@ -352,11 +352,6 @@ export function Sidebar({
           </>
         )}
 
-        {/* Divider */}
-        {!isCollapsed && (
-          <div className="my-3 mx-2 border-t border-border/60" />
-        )}
-
         {/* 새 편지함 추가 (분리된 버튼) */}
         {!isCollapsed && (
           <button 
