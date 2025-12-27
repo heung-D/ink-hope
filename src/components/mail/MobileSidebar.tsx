@@ -3,6 +3,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { FamilyMember, FolderType } from "@/types/mail";
 import { useAuth } from "@/hooks/useAuth";
+import { AddRecipientModal } from "./AddRecipientModal";
 import orangeCharacter from "@/assets/emoticons/orange-character.gif";
 
 interface MobileSidebarProps {
@@ -56,6 +57,7 @@ export function MobileSidebar({
 }: MobileSidebarProps) {
   const [isTreeExpanded, setIsTreeExpanded] = useState(true);
   const [isFolderExpanded, setIsFolderExpanded] = useState(true);
+  const [isAddRecipientOpen, setIsAddRecipientOpen] = useState(false);
   const { signOut } = useAuth();
 
   return (
@@ -207,6 +209,15 @@ export function MobileSidebar({
           </ul>
         )}
 
+        {/* 새 편지함 추가 버튼 */}
+        <button 
+          onClick={() => setIsAddRecipientOpen(true)}
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 text-foreground hover:bg-muted/60 mt-1"
+        >
+          <Plus className="w-4 h-4 flex-shrink-0" />
+          <span className="flex-1 text-left">새 편지함 추가</span>
+        </button>
+
         {/* Divider */}
         <div className="my-3 mx-2 border-t border-border/60" />
 
@@ -287,6 +298,12 @@ export function MobileSidebar({
           <span>로그아웃</span>
         </button>
       </div>
+
+      {/* Add Recipient Modal */}
+      <AddRecipientModal
+        open={isAddRecipientOpen}
+        onOpenChange={setIsAddRecipientOpen}
+      />
     </div>
   );
 }

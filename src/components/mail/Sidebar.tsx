@@ -6,6 +6,7 @@ import type { FamilyMember, FolderType } from "@/types/mail";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { AddressBookModal } from "./AddressBookModal";
+import { AddRecipientModal } from "./AddRecipientModal";
 import { DeadlineTimer } from "./DeadlineTimer";
 import orangeRipe from "@/assets/emoticons/orange-ripe.png";
 import orangeSprout from "@/assets/emoticons/orange-sprout.png";
@@ -80,6 +81,7 @@ export function Sidebar({
   const [isTreeExpanded, setIsTreeExpanded] = useState(true);
   const [isFolderExpanded, setIsFolderExpanded] = useState(true);
   const [isAddressBookOpen, setIsAddressBookOpen] = useState(false);
+  const [isAddRecipientOpen, setIsAddRecipientOpen] = useState(false);
   return (
     <motion.aside
       initial={false}
@@ -357,7 +359,10 @@ export function Sidebar({
 
         {/* 새 편지함 추가 (분리된 버튼) */}
         {!isCollapsed && (
-          <button className="w-full flex items-center gap-2.5 px-3.5 py-3 rounded-lg text-sm transition-all duration-150 text-foreground hover:bg-muted/60">
+          <button 
+            onClick={() => setIsAddRecipientOpen(true)}
+            className="w-full flex items-center gap-2.5 px-3.5 py-3 rounded-lg text-sm transition-all duration-150 text-foreground hover:bg-muted/60"
+          >
             <Plus className="w-4 h-4 flex-shrink-0" />
             <span className="flex-1 text-left">새 편지함 추가</span>
           </button>
@@ -517,6 +522,11 @@ export function Sidebar({
         onClose={() => setIsAddressBookOpen(false)}
         familyMembers={familyMembers}
         onUpdateMembers={onUpdateFamilyMembers}
+      />
+      {/* Add Recipient Modal */}
+      <AddRecipientModal
+        open={isAddRecipientOpen}
+        onOpenChange={setIsAddRecipientOpen}
       />
     </motion.aside>
   );
