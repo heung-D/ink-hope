@@ -81,7 +81,7 @@ export function useFamilyMembers() {
   }, [user]);
 
   const createFamilyMember = useCallback(
-    (input: CreateFamilyMemberInput) => {
+    (input: CreateFamilyMemberInput, options?: { onSuccess?: () => void }) => {
       if (!user) {
         toast.error("로그인이 필요합니다");
         return;
@@ -121,6 +121,7 @@ export function useFamilyMembers() {
       setFamilyMembers((prev) => [newMember, ...prev]);
       setIsCreating(false);
       toast.success("소중한 사람이 추가되었습니다. 오렌지나무도 함께 생겼어요!");
+      options?.onSuccess?.();
     },
     [user]
   );
