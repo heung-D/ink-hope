@@ -12,6 +12,8 @@ import TimeCapsuleMain from "./pages/TimeCapsuleMain";
 import TimeCapsuleDetail from "./pages/TimeCapsuleDetail";
 import TimeCapsuleCreate from "./pages/TimeCapsuleCreate";
 import TimeCapsuleWrite from "./pages/TimeCapsuleWrite";
+import AboutTimeCapsule from "./pages/AboutTimeCapsule";
+import AboutOrangeTree from "./pages/AboutOrangeTree";
 
 const queryClient = new QueryClient();
 
@@ -107,6 +109,22 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <TimeCapsuleDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/about/time-capsule"
+                element={
+                  <ProtectedRoute>
+                    <AboutTimeCapsule />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/about/orange-tree"
+                element={
+                  <ProtectedRoute>
+                    <AboutOrangeTree />
                   </ProtectedRoute>
                 }
               />

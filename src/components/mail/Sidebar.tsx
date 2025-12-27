@@ -1,4 +1,5 @@
-import { Mail, Send, FileText, Settings, PenLine, ChevronDown, ChevronRight, Star, Trash2, Menu, X, Plus, Folder, FolderOpen, Bell, Inbox, AlertCircle, TreeDeciduous, Clock, Image, CalendarDays, Tag, HelpCircle, MessageSquare, Gift } from "lucide-react";
+import { Mail, Send, FileText, Settings, PenLine, ChevronDown, ChevronRight, Star, Trash2, Menu, X, Plus, Folder, FolderOpen, Bell, Inbox, AlertCircle, TreeDeciduous, Clock, Image, CalendarDays, Tag, HelpCircle, MessageSquare, Gift, Info } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -40,10 +41,10 @@ const foldersTop = [
 
 // 스팸함 ~ 타임캡슐
 const foldersBottom = [
-  { id: "spam" as FolderType, label: "스팸함", icon: AlertCircle },
-  { id: "trash" as FolderType, label: "휴지통", icon: Trash2 },
-  { id: "orangetree" as FolderType, label: "오렌지 나무", icon: TreeDeciduous },
-  { id: "timecapsule" as FolderType, label: "타임캡슐", icon: Clock },
+  { id: "spam" as FolderType, label: "스팸함", icon: AlertCircle, aboutPath: null },
+  { id: "trash" as FolderType, label: "휴지통", icon: Trash2, aboutPath: null },
+  { id: "orangetree" as FolderType, label: "오렌지 나무", icon: TreeDeciduous, aboutPath: "/about/orange-tree" },
+  { id: "timecapsule" as FolderType, label: "타임캡슐", icon: Clock, aboutPath: "/about/time-capsule" },
 ];
 
 // 고객 지원 메뉴
@@ -80,6 +81,7 @@ export function Sidebar({
   const [isFolderExpanded, setIsFolderExpanded] = useState(true);
   const [isAddressBookOpen, setIsAddressBookOpen] = useState(false);
   const [isAddRecipientOpen, setIsAddRecipientOpen] = useState(false);
+  const navigate = useNavigate();
   return (
     <motion.aside
       initial={false}
@@ -376,42 +378,57 @@ export function Sidebar({
 
               return (
                 <li key={folder.id}>
-                  <button
-                    onClick={() => onFolderChange(folder.id)}
-                    title={isCollapsed ? folder.label : undefined}
-                    className={cn(
-                      "w-full flex items-center gap-2.5 px-2.5 py-3 rounded-lg text-sm transition-all duration-150",
-                      isCollapsed && "justify-center px-0",
-                      !isCollapsed && "ml-1",
-                      isActive
-                        ? "bg-primary/10 text-primary font-medium"
-                        : "text-foreground hover:bg-muted/60"
+                  <div className="relative flex items-center">
+                    <button
+                      onClick={() => onFolderChange(folder.id)}
+                      title={isCollapsed ? folder.label : undefined}
+                      className={cn(
+                        "flex-1 flex items-center gap-2.5 px-2.5 py-3 rounded-lg text-sm transition-all duration-150",
+                        isCollapsed && "justify-center px-0",
+                        !isCollapsed && "ml-1",
+                        isActive
+                          ? "bg-primary/10 text-primary font-medium"
+                          : "text-foreground hover:bg-muted/60"
+                      )}
+                    >
+                      <Icon className={cn("w-4 h-4 flex-shrink-0", isActive && "text-primary")} />
+                      {!isCollapsed && (
+                        <>
+                          <span className="flex-1 text-left">{folder.label}</span>
+                          {count > 0 && (
+                            <span
+                              className={cn(
+                                "min-w-5 h-5 text-[10px] font-semibold rounded-full tabular-nums flex items-center justify-center",
+                                isActive
+                                  ? "bg-primary text-primary-foreground"
+                                  : "bg-muted text-muted-foreground"
+                              )}
+                            >
+                              {count}
+                            </span>
+                          )}
+                        </>
+                      )}
+                      {isCollapsed && count > 0 && (
+                        <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-primary text-primary-foreground text-[9px] rounded-full flex items-center justify-center">
+                          {count}
+                        </span>
+                      )}
+                    </button>
+                    {/* 도움말 아이콘 - 소개 페이지가 있는 메뉴만 */}
+                    {!isCollapsed && folder.aboutPath && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(folder.aboutPath!);
+                        }}
+                        className="p-1.5 mr-1 rounded-md text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
+                        title={`${folder.label} 알아보기`}
+                      >
+                        <Info className="w-3.5 h-3.5" />
+                      </button>
                     )}
-                  >
-                    <Icon className={cn("w-4 h-4 flex-shrink-0", isActive && "text-primary")} />
-                    {!isCollapsed && (
-                      <>
-                        <span className="flex-1 text-left">{folder.label}</span>
-                        {count > 0 && (
-                          <span
-                            className={cn(
-                              "min-w-5 h-5 text-[10px] font-semibold rounded-full tabular-nums flex items-center justify-center",
-                              isActive
-                                ? "bg-primary text-primary-foreground"
-                                : "bg-muted text-muted-foreground"
-                            )}
-                          >
-                            {count}
-                          </span>
-                        )}
-                      </>
-                    )}
-                    {isCollapsed && count > 0 && (
-                      <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-primary text-primary-foreground text-[9px] rounded-full flex items-center justify-center">
-                        {count}
-                      </span>
-                    )}
-                  </button>
+                  </div>
                 </li>
               );
             })}
