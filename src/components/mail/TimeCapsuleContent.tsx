@@ -2,16 +2,59 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Clock, Plus, ChevronRight, Heart, ChevronDown, HelpCircle,
-  Home, Sparkles, Cake, Calendar, Users, Gift
+  Clock, Plus, ChevronRight, ChevronDown, HelpCircle,
+  Home, Sparkles, Users, Gift
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-
-
 
 interface TimeCapsuleContentProps {
   onClose: () => void;
+}
+
+// 유리병 + 오렌지 구슬 컴포넌트
+function GlassJarProgress({ current, total }: { current: number; total: number }) {
+  const marbles = Array.from({ length: total }, (_, i) => i < current);
+  
+  return (
+    <div className="relative w-12 h-14 flex-shrink-0">
+      {/* 유리병 몸체 */}
+      <div className="absolute inset-x-1 top-2 bottom-0 bg-gradient-to-b from-white/40 to-white/20 rounded-b-xl border-2 border-orange-200/60 overflow-hidden">
+        {/* 유리 반사 효과 */}
+        <div className="absolute left-0.5 top-0 bottom-0 w-1 bg-gradient-to-b from-white/60 to-transparent rounded-full" />
+        
+        {/* 오렌지 구슬들 */}
+        <div className="absolute bottom-0.5 left-0 right-0 flex flex-wrap-reverse justify-center gap-0.5 p-0.5">
+          {marbles.map((filled, idx) => (
+            <motion.div
+              key={idx}
+              initial={filled ? { scale: 0, y: -20 } : { scale: 0.8 }}
+              animate={filled ? { scale: 1, y: 0 } : { scale: 0.8 }}
+              transition={{ 
+                type: "spring", 
+                stiffness: 300, 
+                damping: 15,
+                delay: idx * 0.1 
+              }}
+              className={`w-3 h-3 rounded-full ${
+                filled 
+                  ? "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 shadow-sm" 
+                  : "bg-orange-100/50 border border-dashed border-orange-200"
+              }`}
+            >
+              {filled && (
+                <div className="absolute top-0.5 left-0.5 w-1 h-1 bg-white/60 rounded-full" />
+              )}
+            </motion.div>
+          ))}
+        </div>
+      </div>
+      
+      {/* 유리병 뚜껑 */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-3 bg-gradient-to-b from-amber-600 to-amber-700 rounded-t-md border-2 border-amber-500">
+        <div className="absolute top-0.5 left-0.5 right-0.5 h-0.5 bg-amber-400/50 rounded" />
+      </div>
+    </div>
+  );
 }
 
 // 목업 데이터
@@ -39,9 +82,6 @@ const mockMyCapsules = [
     targetLetters: 3,
     status: "collecting",
     contributors: ["😊", "😄", "😀"],
-    icon: Heart,
-    iconBg: "bg-pink-100",
-    iconColor: "text-pink-500",
   },
   {
     id: 3,
@@ -50,10 +90,8 @@ const mockMyCapsules = [
     facility: "의정부교도소",
     deliveredDate: "2024-12-20",
     letterCount: 3,
+    targetLetters: 3,
     status: "delivered",
-    icon: Sparkles,
-    iconBg: "bg-gray-100",
-    iconColor: "text-gray-400",
   },
 ];
 
@@ -190,9 +228,7 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
                   className="bg-background rounded-2xl p-5 border-2 border-primary/30 shadow-sm cursor-pointer hover:shadow-md transition-all"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Home className="w-6 h-6 text-primary" />
-                    </div>
+                    <GlassJarProgress current={invitation.letterCount} total={invitation.targetLetters} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         {invitation.isNew && (
@@ -204,7 +240,6 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
                       <p className="text-sm text-muted-foreground mb-3">{invitation.invitedBy}가 초대함</p>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Progress value={(invitation.letterCount / invitation.targetLetters) * 100} className="h-1.5 w-24" />
                           <span className="text-xs text-muted-foreground">{invitation.letterCount}/{invitation.targetLetters}통</span>
                           {!invitation.myLetterWritten && (
                             <span className="text-xs text-primary font-medium">(내 편지 미작성)</span>
@@ -247,57 +282,52 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
             </div>
 
             <div className="space-y-3">
-              {filteredCapsules.map((capsule) => {
-                const IconComponent = capsule.icon;
-                return (
-                  <motion.div
-                    key={capsule.id}
-                    whileHover={{ y: -2 }}
-                    onClick={() => navigate(`/time-capsule/${capsule.id}`)}
-                    className={`bg-background rounded-2xl p-5 border border-border/60 shadow-sm cursor-pointer hover:shadow-md transition-all ${
-                      capsule.status === "delivered" ? "opacity-80" : ""
-                    }`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className={`w-10 h-10 ${capsule.iconBg} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                        <IconComponent className={`w-5 h-5 ${capsule.iconColor}`} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1">
-                          <h3 className="font-medium text-foreground">{capsule.title}</h3>
-                          {capsule.status === "collecting" ? (
-                            <span className="text-sm font-bold text-primary">D-{capsule.daysLeft}</span>
-                          ) : (
-                            <span className="px-2 py-0.5 bg-green-100 text-green-600 text-xs font-medium rounded">전달완료</span>
-                          )}
-                        </div>
-                        <p className="text-sm text-muted-foreground mb-2">
-                          {capsule.status === "collecting" 
-                            ? `To. ${capsule.recipient} · ${capsule.facility}`
-                            : `${capsule.deliveredDate} 전달 · ${capsule.letterCount}통의 편지`
-                          }
-                        </p>
-                        {capsule.status === "collecting" && (
-                          <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-2">
-                              <Progress value={(capsule.letterCount / capsule.targetLetters!) * 100} className="h-1.5 w-20" />
-                              <span className="text-xs text-muted-foreground">{capsule.letterCount}/{capsule.targetLetters}통</span>
-                            </div>
-                            <div className="flex -space-x-2">
-                              {capsule.contributors?.map((emoji, idx) => (
-                                <div key={idx} className="w-6 h-6 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center text-xs">
-                                  {emoji}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
+              {filteredCapsules.map((capsule) => (
+                <motion.div
+                  key={capsule.id}
+                  whileHover={{ y: -2 }}
+                  onClick={() => navigate(`/time-capsule/${capsule.id}`)}
+                  className={`bg-background rounded-2xl p-5 border border-border/60 shadow-sm cursor-pointer hover:shadow-md transition-all ${
+                    capsule.status === "delivered" ? "opacity-80" : ""
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <GlassJarProgress 
+                      current={capsule.letterCount} 
+                      total={capsule.targetLetters || capsule.letterCount} 
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="font-medium text-foreground">{capsule.title}</h3>
+                        {capsule.status === "collecting" ? (
+                          <span className="text-sm font-bold text-primary">D-{capsule.daysLeft}</span>
+                        ) : (
+                          <span className="px-2 py-0.5 bg-green-100 text-green-600 text-xs font-medium rounded">전달완료</span>
                         )}
                       </div>
-                      <ChevronRight className="w-5 h-5 text-muted-foreground/50 flex-shrink-0" />
+                      <p className="text-sm text-muted-foreground mb-2">
+                        {capsule.status === "collecting" 
+                          ? `To. ${capsule.recipient} · ${capsule.facility}`
+                          : `${capsule.deliveredDate} 전달 · ${capsule.letterCount}통의 편지`
+                        }
+                      </p>
+                      {capsule.status === "collecting" && (
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs text-muted-foreground">{capsule.letterCount}/{capsule.targetLetters}통</span>
+                          <div className="flex -space-x-2">
+                            {capsule.contributors?.map((emoji, idx) => (
+                              <div key={idx} className="w-6 h-6 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center text-xs">
+                                {emoji}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </motion.div>
-                );
-              })}
+                    <ChevronRight className="w-5 h-5 text-muted-foreground/50 flex-shrink-0" />
+                  </div>
+                </motion.div>
+              ))}
 
             </div>
           </section>
