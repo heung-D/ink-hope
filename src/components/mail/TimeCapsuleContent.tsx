@@ -1,43 +1,71 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Gift, Users, Calendar, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface TimeCapsuleContentProps {
   onClose: () => void;
 }
 
-// 온보딩 예시 카드 데이터
-const onboardingExamples = [
+// 온보딩 스텝 데이터
+const onboardingSteps = [
   {
     id: 1,
-    title: "기념일 선물 준비",
-    tags: ["기념일", "To.사랑하는 사람"],
-    participants: 3,
-    gifts: 1,
-    daysLeft: 7,
+    title: "누구를 위한 타임캡슐인가요?",
+    subtitle: "마음을 전할 대상을 선택해주세요",
+    icon: Heart,
+    options: [
+      { id: "family", label: "가족", description: "부모님, 형제자매" },
+      { id: "friend", label: "친구", description: "소중한 벗에게" },
+      { id: "lover", label: "연인", description: "사랑하는 사람" },
+      { id: "myself", label: "나 자신", description: "미래의 나에게" },
+    ],
+    defaultSelected: "family",
   },
   {
     id: 2,
-    title: "아버지 출소기념 선물 준비하기",
-    tags: ["출소 축하", "To.홍길동님을 위해"],
-    participants: 5,
-    gifts: 2,
-    daysLeft: 3,
+    title: "어떤 특별한 날인가요?",
+    subtitle: "타임캡슐을 전달할 기념일을 선택해주세요",
+    icon: Calendar,
+    options: [
+      { id: "birthday", label: "생일", description: "태어난 날 축하" },
+      { id: "anniversary", label: "기념일", description: "특별한 날" },
+      { id: "release", label: "출소일", description: "새 시작을 축하" },
+      { id: "graduation", label: "졸업/입학", description: "새로운 시작" },
+    ],
+    defaultSelected: "release",
   },
   {
     id: 3,
-    title: "생일 축하 타임캡슐",
-    tags: ["생일 축하", "To.친구에게"],
-    participants: 8,
-    gifts: 3,
-    daysLeft: 14,
+    title: "함께 참여할 사람들은?",
+    subtitle: "타임캡슐에 함께할 인원을 선택해주세요",
+    icon: Users,
+    options: [
+      { id: "solo", label: "나만", description: "혼자서 준비해요" },
+      { id: "few", label: "2~5명", description: "소규모 모임" },
+      { id: "many", label: "6~10명", description: "가족/친구 모임" },
+      { id: "crowd", label: "10명 이상", description: "많은 사람들과" },
+    ],
+    defaultSelected: "few",
+  },
+  {
+    id: 4,
+    title: "함께 선물도 준비할까요?",
+    subtitle: "타임캡슐과 함께 전달할 선물을 선택해주세요",
+    icon: Gift,
+    options: [
+      { id: "none", label: "쪽지만", description: "마음만 전해요" },
+      { id: "small", label: "소소한 선물", description: "작은 정성" },
+      { id: "big", label: "특별한 선물", description: "큰 깜짝 선물" },
+      { id: "money", label: "용돈 모으기", description: "함께 모아요" },
+    ],
+    defaultSelected: "small",
   },
 ];
 
 // 오렌지 구슬 컴포넌트
 function OrangeMarble({ size = "large" }: { size?: "large" | "small" }) {
-  const sizeClasses = size === "large" ? "w-32 h-32" : "w-20 h-20";
+  const sizeClasses = size === "large" ? "w-24 h-24" : "w-16 h-16";
   
   return (
     <div className={`${sizeClasses} relative`}>
@@ -46,99 +74,121 @@ function OrangeMarble({ size = "large" }: { size?: "large" | "small" }) {
       {/* 메인 구슬 */}
       <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-300 via-orange-400 to-orange-500 shadow-lg">
         {/* 하이라이트 */}
-        <div className="absolute top-2 left-3 w-6 h-6 rounded-full bg-white/50 blur-sm" />
-        <div className="absolute top-4 left-5 w-3 h-3 rounded-full bg-white/70" />
+        <div className="absolute top-2 left-3 w-5 h-5 rounded-full bg-white/50 blur-sm" />
+        <div className="absolute top-3 left-4 w-2 h-2 rounded-full bg-white/70" />
       </div>
     </div>
   );
 }
 
-// 캐러셀 카드 컴포넌트
-function CarouselCard({ 
-  example, 
-  isCenter 
+// 옵션 카드 컴포넌트
+function OptionCard({ 
+  option, 
+  isSelected,
+  onSelect 
 }: { 
-  example: typeof onboardingExamples[0]; 
-  isCenter: boolean;
+  option: { id: string; label: string; description: string };
+  isSelected: boolean;
+  onSelect: () => void;
 }) {
   return (
-    <motion.div
-      className={`relative bg-white rounded-2xl shadow-lg transition-all duration-300 ${
-        isCenter 
-          ? "w-72 h-96 z-20 opacity-100" 
-          : "w-56 h-80 z-10 opacity-60 scale-90"
+    <motion.button
+      onClick={onSelect}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      className={`w-full p-4 rounded-xl border-2 text-left transition-all duration-200 ${
+        isSelected 
+          ? "border-primary bg-orange-50 shadow-md shadow-primary/10" 
+          : "border-border bg-white hover:border-primary/50 hover:bg-orange-50/50"
       }`}
-      style={{
-        boxShadow: isCenter 
-          ? "0 20px 40px rgba(251, 146, 60, 0.15)" 
-          : "0 10px 20px rgba(0, 0, 0, 0.08)"
-      }}
     >
-      <div className="p-6 h-full flex flex-col">
-        {/* 상단 정보 */}
-        <div className="text-xs text-muted-foreground space-y-1 mb-4">
-          <p>참여자수 {example.participants}명</p>
-          <p>함께선물 {example.gifts}개</p>
-          <p>전달까지 D-{example.daysLeft}</p>
-        </div>
-        
-        {/* 오렌지 구슬 */}
-        <div className="flex-1 flex items-center justify-center">
-          <OrangeMarble size={isCenter ? "large" : "small"} />
-        </div>
-        
-        {/* 제목 */}
-        <h3 className={`font-medium text-center mb-3 ${
-          isCenter ? "text-base" : "text-sm"
+      <div className="flex items-center gap-3">
+        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+          isSelected ? "border-primary bg-primary" : "border-muted-foreground/30"
         }`}>
-          {example.title}
-        </h3>
-        
-        {/* 태그들 */}
-        <div className="flex flex-wrap gap-2 justify-center">
-          {example.tags.map((tag, idx) => (
-            <span 
-              key={idx}
-              className="px-3 py-1 text-xs rounded-full bg-orange-50 text-orange-500 border border-orange-200"
-            >
-              {tag}
-            </span>
-          ))}
+          {isSelected && (
+            <motion.div 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="w-2 h-2 rounded-full bg-white"
+            />
+          )}
+        </div>
+        <div>
+          <p className={`font-medium ${isSelected ? "text-primary" : "text-foreground"}`}>
+            {option.label}
+          </p>
+          <p className="text-xs text-muted-foreground">{option.description}</p>
         </div>
       </div>
-    </motion.div>
+    </motion.button>
+  );
+}
+
+// 진행률 인디케이터
+function ProgressIndicator({ currentStep, totalSteps }: { currentStep: number; totalSteps: number }) {
+  return (
+    <div className="flex gap-2 justify-center">
+      {Array.from({ length: totalSteps }).map((_, idx) => (
+        <div
+          key={idx}
+          className={`h-1.5 rounded-full transition-all duration-300 ${
+            idx < currentStep 
+              ? "w-8 bg-primary" 
+              : idx === currentStep 
+                ? "w-8 bg-primary/50" 
+                : "w-3 bg-muted"
+          }`}
+        />
+      ))}
+    </div>
   );
 }
 
 export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
-  const [currentIndex, setCurrentIndex] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const [selections, setSelections] = useState<Record<number, string>>(() => {
+    // 각 스텝의 기본 선택값 설정
+    const initial: Record<number, string> = {};
+    onboardingSteps.forEach((step, idx) => {
+      initial[idx] = step.defaultSelected;
+    });
+    return initial;
+  });
 
-  // 0.6초 후 버튼 활성화
+  const currentStepData = onboardingSteps[currentStep];
+  const isLastStep = currentStep === onboardingSteps.length - 1;
+
+  // 스텝 변경 시마다 0.6초 후 버튼 활성화
   useEffect(() => {
+    setIsButtonEnabled(false);
     const timer = setTimeout(() => {
       setIsButtonEnabled(true);
     }, 600);
     return () => clearTimeout(timer);
-  }, []);
+  }, [currentStep]);
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? onboardingExamples.length - 1 : prev - 1));
+  const handleOptionSelect = (optionId: string) => {
+    setSelections(prev => ({ ...prev, [currentStep]: optionId }));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev === onboardingExamples.length - 1 ? 0 : prev + 1));
+    if (isLastStep) {
+      // 온보딩 완료 - 타임캡슐 생성 페이지로 이동하거나 다음 단계 처리
+      console.log("Onboarding complete:", selections);
+    } else {
+      setCurrentStep(prev => prev + 1);
+    }
   };
 
-  const getVisibleCards = () => {
-    const prev = currentIndex === 0 ? onboardingExamples.length - 1 : currentIndex - 1;
-    const next = currentIndex === onboardingExamples.length - 1 ? 0 : currentIndex + 1;
-    return [
-      { ...onboardingExamples[prev], position: "left" },
-      { ...onboardingExamples[currentIndex], position: "center" },
-      { ...onboardingExamples[next], position: "right" },
-    ];
+  const handlePrev = () => {
+    if (currentStep > 0) {
+      setCurrentStep(prev => prev - 1);
+    }
   };
+
+  const StepIcon = currentStepData.icon;
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-auto bg-gradient-to-b from-orange-50/30 to-white">
@@ -159,7 +209,7 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
         </svg>
         
         {/* 흩어진 오렌지 도트들 */}
-        {[...Array(12)].map((_, i) => (
+        {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-2 h-2 rounded-full bg-gradient-to-br from-orange-300 to-orange-400"
@@ -181,102 +231,114 @@ export function TimeCapsuleContent({ onClose }: TimeCapsuleContentProps) {
       </div>
 
       {/* 메인 컨텐츠 */}
-      <div className="relative z-10 flex-1 flex flex-col items-center px-4 py-8">
-        {/* 드롭다운 (예시) */}
-        <div className="mb-6">
-          <div className="px-6 py-2 border border-border rounded-full bg-white text-sm flex items-center gap-2">
-            이재원
-            <ChevronRight className="w-4 h-4 rotate-90 text-muted-foreground" />
-          </div>
+      <div className="relative z-10 flex-1 flex flex-col items-center px-4 py-6">
+        {/* 진행률 표시 */}
+        <div className="w-full max-w-md mb-6">
+          <ProgressIndicator currentStep={currentStep} totalSteps={onboardingSteps.length} />
         </div>
 
-        {/* 타이틀 */}
+        {/* 스텝 번호 */}
         <motion.div 
-          className="text-center mb-8"
-          initial={{ opacity: 0, y: 20 }}
+          key={`step-${currentStep}`}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          className="text-xs text-muted-foreground mb-4"
         >
-          <p className="text-primary font-medium tracking-[0.3em] text-sm mb-3">
-            T i m e  C a p s u l e
-          </p>
-          <p className="text-muted-foreground mb-2">
-            한 사람을 위해, 여러 사람들이 모여
-          </p>
-          <h1 className="text-xl font-bold text-foreground">
-            특별한 날에 타임캡슐을 전달해요.
-          </h1>
+          Step {currentStep + 1} / {onboardingSteps.length}
         </motion.div>
 
-        {/* 캐러셀 */}
-        <div className="relative flex items-center justify-center w-full max-w-3xl mb-8">
-          {/* 이전 버튼 */}
-          <button
-            onClick={handlePrev}
-            className="absolute left-0 z-30 w-12 h-12 rounded-full border border-border bg-white/80 backdrop-blur flex items-center justify-center hover:bg-white transition-colors"
-          >
-            <ChevronLeft className="w-5 h-5 text-muted-foreground" />
-          </button>
-
-          {/* 카드들 */}
-          <div className="flex items-center justify-center gap-4">
-            <AnimatePresence mode="popLayout">
-              {getVisibleCards().map((card, idx) => (
-                <motion.div
-                  key={`${card.id}-${card.position}`}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <CarouselCard 
-                    example={card} 
-                    isCenter={card.position === "center"} 
-                  />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-
-          {/* 다음 버튼 */}
-          <button
-            onClick={handleNext}
-            className="absolute right-0 z-30 w-12 h-12 rounded-full border border-primary bg-white/80 backdrop-blur flex items-center justify-center hover:bg-orange-50 transition-colors"
-          >
-            <ChevronRight className="w-5 h-5 text-primary" />
-          </button>
-        </div>
-
-        {/* 하단 CTA */}
-        <motion.div 
-          className="text-center mt-auto"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+        {/* 오렌지 구슬과 아이콘 */}
+        <motion.div
+          key={`marble-${currentStep}`}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="relative mb-6"
         >
-          <p className="text-muted-foreground mb-1">
-            출소까지 얼마 안남았네요! 
-            <span className="text-primary underline cursor-pointer ml-1">
-              그때까지 깜짝 선물을 준비하기
-            </span>
-          </p>
-          <p className="text-muted-foreground mb-6">
-            딱 좋은 시기네요 :) 시작해볼까요?
-          </p>
+          <OrangeMarble size="large" />
+          <div className="absolute -bottom-1 -right-1 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center">
+            <StepIcon className="w-5 h-5 text-primary" />
+          </div>
+        </motion.div>
 
-          {/* 다음 버튼 - 0.6초 후 활성화 */}
+        {/* 타이틀 */}
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={`title-${currentStep}`}
+            className="text-center mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <h1 className="text-xl font-bold text-foreground mb-2">
+              {currentStepData.title}
+            </h1>
+            <p className="text-muted-foreground text-sm">
+              {currentStepData.subtitle}
+            </p>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* 옵션들 */}
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={`options-${currentStep}`}
+            className="w-full max-w-md space-y-3 mb-8"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {currentStepData.options.map((option, idx) => (
+              <motion.div
+                key={option.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.05 }}
+              >
+                <OptionCard
+                  option={option}
+                  isSelected={selections[currentStep] === option.id}
+                  onSelect={() => handleOptionSelect(option.id)}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* 네비게이션 버튼 */}
+        <div className="w-full max-w-md mt-auto flex gap-3">
+          {/* 이전 버튼 */}
+          {currentStep > 0 && (
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={handlePrev}
+              className="flex-1 h-14 rounded-xl border-border"
+            >
+              <ChevronLeft className="w-5 h-5 mr-1" />
+              이전
+            </Button>
+          )}
+
+          {/* 다음/완료 버튼 */}
           <Button
             size="lg"
-            disabled={!isButtonEnabled}
-            className={`w-full max-w-md h-14 text-lg font-medium rounded-xl transition-all duration-300 ${
-              isButtonEnabled 
+            disabled={!isButtonEnabled || !selections[currentStep]}
+            onClick={handleNext}
+            className={`flex-1 h-14 text-lg font-medium rounded-xl transition-all duration-300 ${
+              currentStep === 0 ? "w-full" : ""
+            } ${
+              isButtonEnabled && selections[currentStep]
                 ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25" 
                 : "bg-muted text-muted-foreground cursor-not-allowed"
             }`}
           >
-            쪽지 작성
+            {isLastStep ? "시작하기" : "다음"}
+            {!isLastStep && <ChevronRight className="w-5 h-5 ml-1" />}
           </Button>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
