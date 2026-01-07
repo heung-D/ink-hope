@@ -1,114 +1,329 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
-  ChevronLeft, Settings, Copy, Check, Users, Plus, 
-  ChevronRight, X, MessageSquare, Link2
+  ChevronLeft, Settings, Copy, Check, Send, Heart,
+  Coffee, ShoppingBag, Book, Gift
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle 
-} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { AppLayout } from "@/components/layout/AppLayout";
-import completedTreeImage from "@/assets/emoticons/completed-tree.png";
 
 // 목업 데이터
 const mockCapsuleData: Record<string, {
   id: number;
   title: string;
   recipient: string;
+  recipientName: string;
+  eventType: string;
   facility: string;
   targetDate: string;
+  targetTime: string;
   daysLeft: number;
-  letterCount: number;
-  targetLetters: number;
-  inviteCode: string;
-  myLetter: string | null;
-  status?: "collecting" | "delivered";
-  deliveredDate?: string;
-  contributors: Array<{
+  noteCount: number;
+  activities: Array<{
+    id: number;
+    type: "note" | "gift" | "milestone";
+    message: string;
+    sender?: string;
+    relation?: string;
+    timestamp: string;
+    hasGift?: boolean;
+  }>;
+  participants: Array<{
     id: number;
     name: string;
-    relation: string;
     avatar: string;
-    contributed: boolean;
-    letterDate: string | null;
-    isMe: boolean;
+    isHost: boolean;
   }>;
 }> = {
   "1": {
     id: 1,
-    title: "아버지 출소 축하 편지 모음",
-    recipient: "홍길동 (아버지)",
-    facility: "서울구치소",
-    targetDate: "2025-06-15",
-    daysLeft: 178,
-    letterCount: 3,
-    targetLetters: 5,
-    inviteCode: "ABC123XY",
-    myLetter: "아버지, 출소하시는 날만 손꼽아 기다리고 있어요. 그동안 정말 힘드셨죠? 저희도 아버지 없이 지내는 시간이 너무 길게 느껴졌어요. 이제 곧 다시 만날 수 있다는 생각에 벌써부터 마음이 설레요. 건강하게 나오셔서 함께 맛있는 것도 먹고, 그동안 못 했던 이야기들 많이 나누고 싶어요...",
-    status: "collecting",
-    contributors: [
-      { id: 1, name: "어머니", relation: "배우자", avatar: "😊", contributed: true, letterDate: "2025-01-02", isMe: false },
-      { id: 2, name: "나", relation: "자녀", avatar: "😄", contributed: true, letterDate: "2025-01-05", isMe: true },
-      { id: 3, name: "큰딸", relation: "자녀", avatar: "😀", contributed: true, letterDate: "2025-01-10", isMe: false },
-      { id: 4, name: "여동생", relation: "자녀", avatar: "😐", contributed: false, letterDate: null, isMe: false },
-      { id: 5, name: "삼촌", relation: "형제", avatar: "😐", contributed: false, letterDate: null, isMe: false },
+    title: "서은우 출소 축하",
+    recipient: "서은우",
+    recipientName: "서은우",
+    eventType: "출소 축하",
+    facility: "서울교도소",
+    targetDate: "2026.2.12",
+    targetTime: "10:00",
+    daysLeft: 213,
+    noteCount: 20,
+    activities: [
+      { id: 1, type: "milestone", message: "이번주 총 10개의 쪽지가 모였어요", timestamp: "2026.2.12 10:00" },
+      { id: 2, type: "gift", message: "김홍오(엄마) 님께서 커피쿠폰 5장 선물 +", sender: "김홍오", relation: "엄마", timestamp: "2026.2.12 10:00", hasGift: true },
+      { id: 3, type: "milestone", message: "이번주 총 20개의 쪽지가 모였어요!", timestamp: "2026.2.19 10:00" },
+      { id: 4, type: "gift", message: "김한나(자녀) 님께서 커피쿠폰 5장 선물 +", sender: "김한나", relation: "자녀", timestamp: "2026.2.19 10:00", hasGift: true },
+    ],
+    participants: [
+      { id: 1, name: "김홍오", avatar: "👩", isHost: true },
+      { id: 2, name: "박지수", avatar: "👨", isHost: false },
+      { id: 3, name: "김한나", avatar: "👧", isHost: false },
+      { id: 4, name: "이준호", avatar: "👦", isHost: false },
+      { id: 5, name: "정수민", avatar: "👩‍🦰", isHost: false },
+      { id: 6, name: "최민지", avatar: "👱‍♀️", isHost: false },
+      { id: 7, name: "윤서준", avatar: "🧑", isHost: false },
     ],
   },
   "2": {
     id: 2,
-    title: "엄마 면회 때 전할 응원 메시지",
-    recipient: "김영희 (어머니)",
+    title: "어머니 면회",
+    recipient: "김영희",
+    recipientName: "김영희",
+    eventType: "면회 응원",
     facility: "청주여자교도소",
-    targetDate: "2025-01-20",
+    targetDate: "2026.1.20",
+    targetTime: "14:00",
     daysLeft: 32,
-    letterCount: 2,
-    targetLetters: 3,
-    inviteCode: "XYZ789AB",
-    myLetter: null,
-    status: "collecting",
-    contributors: [
-      { id: 1, name: "아버지", relation: "배우자", avatar: "👨", contributed: true, letterDate: "2025-01-10", isMe: false },
-      { id: 2, name: "큰딸", relation: "자녀", avatar: "👩", contributed: true, letterDate: "2025-01-12", isMe: false },
-      { id: 3, name: "나", relation: "자녀", avatar: "🧑", contributed: false, letterDate: null, isMe: true },
+    noteCount: 8,
+    activities: [
+      { id: 1, type: "milestone", message: "이번주 총 5개의 쪽지가 모였어요", timestamp: "2026.1.15 10:00" },
+      { id: 2, type: "note", message: "따뜻한 응원 메시지를 보냈어요", sender: "아들", relation: "자녀", timestamp: "2026.1.16 14:00" },
+    ],
+    participants: [
+      { id: 1, name: "아버지", avatar: "👨", isHost: true },
+      { id: 2, name: "큰딸", avatar: "👩", isHost: false },
+      { id: 3, name: "막내", avatar: "🧑", isHost: false },
     ],
   },
   "3": {
     id: 3,
     title: "오빠 가석방 축하",
-    recipient: "박민수 (오빠)",
+    recipient: "박민수",
+    recipientName: "박민수",
+    eventType: "가석방 축하",
     facility: "의정부교도소",
-    targetDate: "2025-12-20",
+    targetDate: "2025.12.20",
+    targetTime: "09:00",
     daysLeft: 0,
-    letterCount: 3,
-    targetLetters: 3,
-    inviteCode: "DEL123AB",
-    myLetter: "오빠, 드디어 나오는 날이네! 정말 기다렸어. 그동안 힘들었지? 이제 다 끝났어. 우리 가족 모두 오빠 기다리고 있어. 나오면 맛있는 것 먹으러 가자!",
-    status: "delivered",
-    deliveredDate: "2025-12-20",
-    contributors: [
-      { id: 1, name: "나", relation: "동생", avatar: "😊", contributed: true, letterDate: "2025-12-15", isMe: true },
-      { id: 2, name: "어머니", relation: "부모", avatar: "👩", contributed: true, letterDate: "2025-12-16", isMe: false },
-      { id: 3, name: "아버지", relation: "부모", avatar: "👨", contributed: true, letterDate: "2025-12-18", isMe: false },
+    noteCount: 15,
+    activities: [
+      { id: 1, type: "milestone", message: "타임캡슐이 성공적으로 전달되었어요! 🎉", timestamp: "2025.12.20 09:00" },
+    ],
+    participants: [
+      { id: 1, name: "동생", avatar: "😊", isHost: true },
+      { id: 2, name: "어머니", avatar: "👩", isHost: false },
+      { id: 3, name: "아버지", avatar: "👨", isHost: false },
     ],
   },
 };
 
+// 캡슐 그래픽 컴포넌트 - 쪽지가 차오르는 애니메이션
+function CapsuleGraphic({ 
+  noteCount, 
+  participants 
+}: { 
+  noteCount: number; 
+  participants: Array<{ id: number; name: string; avatar: string; isHost: boolean }>;
+}) {
+  // 쪽지 수에 따라 구슬 개수 결정 (최대 12개)
+  const marbleCount = Math.min(Math.ceil(noteCount / 2), 12);
+  
+  // 구슬 위치 (캡슐 안쪽)
+  const marblePositions = [
+    { x: 50, y: 75 },
+    { x: 35, y: 70 },
+    { x: 65, y: 70 },
+    { x: 42, y: 60 },
+    { x: 58, y: 60 },
+    { x: 50, y: 55 },
+    { x: 30, y: 55 },
+    { x: 70, y: 55 },
+    { x: 38, y: 45 },
+    { x: 62, y: 45 },
+    { x: 50, y: 40 },
+    { x: 45, y: 35 },
+  ];
+
+  // 참여자 위치 (캡슐 주변)
+  const participantPositions = [
+    { x: 85, y: 25 },
+    { x: 95, y: 45 },
+    { x: 90, y: 70 },
+    { x: 5, y: 50 },
+    { x: 35, y: 90 },
+    { x: 65, y: 90 },
+    { x: 15, y: 30 },
+  ];
+
+  return (
+    <div className="relative w-full aspect-square max-w-[280px] mx-auto">
+      {/* 배경 원 */}
+      <div className="absolute inset-4 rounded-full bg-gradient-to-b from-primary/5 to-primary/15" />
+      <div className="absolute inset-8 rounded-full bg-gradient-to-b from-primary/10 to-primary/20" />
+      <div className="absolute inset-12 rounded-full bg-gradient-to-b from-primary/15 to-primary/25" />
+      
+      {/* SVG 캡슐과 구슬 */}
+      <svg viewBox="0 0 100 100" className="w-full h-full relative z-10">
+        {/* 캡슐 외곽선 */}
+        <ellipse 
+          cx="50" 
+          cy="55" 
+          rx="30" 
+          ry="35" 
+          fill="none" 
+          stroke="hsl(var(--primary))" 
+          strokeWidth="0.5" 
+          strokeDasharray="2 2"
+          opacity="0.3"
+        />
+        
+        {/* 구슬들 */}
+        {marblePositions.slice(0, marbleCount).map((pos, index) => (
+          <motion.g
+            key={index}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: index * 0.1, duration: 0.3 }}
+          >
+            {/* 구슬 그림자 */}
+            <ellipse
+              cx={pos.x + 1}
+              cy={pos.y + 1}
+              rx="5"
+              ry="4.5"
+              fill="rgba(0,0,0,0.1)"
+            />
+            {/* 구슬 본체 */}
+            <ellipse
+              cx={pos.x}
+              cy={pos.y}
+              rx="5"
+              ry="4.5"
+              fill="hsl(var(--primary))"
+              opacity={0.9 - index * 0.05}
+            />
+            {/* 구슬 하이라이트 */}
+            <ellipse
+              cx={pos.x - 1.5}
+              cy={pos.y - 1.5}
+              rx="2"
+              ry="1.5"
+              fill="white"
+              opacity="0.4"
+            />
+          </motion.g>
+        ))}
+      </svg>
+
+      {/* 참여자 아바타들 */}
+      {participants.slice(0, 7).map((participant, index) => {
+        const pos = participantPositions[index];
+        if (!pos) return null;
+        
+        return (
+          <motion.div
+            key={participant.id}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.5 + index * 0.1 }}
+            className="absolute"
+            style={{ 
+              left: `${pos.x}%`, 
+              top: `${pos.y}%`,
+              transform: 'translate(-50%, -50%)'
+            }}
+          >
+            <div className="relative">
+              <div className="w-8 h-8 rounded-full bg-background border-2 border-primary/20 flex items-center justify-center text-sm shadow-md">
+                {participant.avatar}
+              </div>
+              {participant.isHost && (
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-1.5 py-0.5 bg-primary text-primary-foreground text-[8px] rounded font-medium">
+                  방장
+                </span>
+              )}
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
+// 활동 메시지 컴포넌트
+function ActivityMessage({ 
+  activity, 
+  isLast 
+}: { 
+  activity: {
+    id: number;
+    type: "note" | "gift" | "milestone";
+    message: string;
+    sender?: string;
+    relation?: string;
+    timestamp: string;
+    hasGift?: boolean;
+  };
+  isLast: boolean;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="space-y-1"
+    >
+      <div className={`
+        px-4 py-3 rounded-2xl text-sm
+        ${activity.type === "milestone" 
+          ? "bg-muted text-foreground" 
+          : "bg-muted text-foreground"
+        }
+      `}>
+        {activity.message}
+        {activity.hasGift && (
+          <Heart className="inline-block w-4 h-4 ml-1 text-orange-400 fill-orange-400" />
+        )}
+      </div>
+      {isLast && (
+        <p className="text-xs text-muted-foreground text-right pr-2">
+          {activity.timestamp}
+        </p>
+      )}
+    </motion.div>
+  );
+}
+
+// 선물 옵션 카드 컴포넌트
+function GiftOptionCard({
+  title,
+  buttonText,
+  description,
+  bgColor,
+  icon: Icon
+}: {
+  title: string;
+  buttonText: string;
+  description: string;
+  bgColor: string;
+  icon: React.ElementType;
+}) {
+  return (
+    <motion.div
+      whileHover={{ y: -2 }}
+      className="bg-background rounded-2xl border border-border/60 p-4 shadow-sm"
+    >
+      <p className="text-primary font-semibold text-sm leading-snug mb-3 min-h-[40px]">
+        {title}
+      </p>
+      <div className={`${bgColor} rounded-xl p-4 flex items-center justify-center mb-3`}>
+        <Button variant="ghost" className="text-muted-foreground text-sm hover:bg-white/50">
+          {buttonText}
+        </Button>
+      </div>
+      <p className="text-xs text-muted-foreground leading-relaxed">
+        {description}
+      </p>
+    </motion.div>
+  );
+}
+
 export default function TimeCapsuleDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [noteText, setNoteText] = useState("");
   const [copied, setCopied] = useState(false);
-  const [inviteInput, setInviteInput] = useState("");
-  const [inviteRelation, setInviteRelation] = useState("");
 
   const capsule = mockCapsuleData[id || "1"];
 
@@ -123,14 +338,39 @@ export default function TimeCapsuleDetail() {
     );
   }
 
-  const progressPercent = Math.round((capsule.letterCount / capsule.targetLetters) * 100);
-
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(capsule.inviteCode);
-    setCopied(true);
-    toast.success("초대 코드가 복사되었습니다!");
-    setTimeout(() => setCopied(false), 2000);
+  const handleSendNote = () => {
+    if (!noteText.trim()) {
+      toast.error("쪽지 내용을 입력해주세요");
+      return;
+    }
+    toast.success("쪽지가 발송되었어요!");
+    setNoteText("");
   };
+
+  const handleSendCapsule = () => {
+    toast.success("타임캡슐이 발송되었어요!");
+  };
+
+  // 활동 그룹핑 (날짜별)
+  const groupedActivities: { timestamp: string; items: typeof capsule.activities }[] = [];
+  let currentGroup: typeof capsule.activities = [];
+  let currentTimestamp = "";
+
+  capsule.activities.forEach((activity, index) => {
+    if (activity.timestamp !== currentTimestamp) {
+      if (currentGroup.length > 0) {
+        groupedActivities.push({ timestamp: currentTimestamp, items: [...currentGroup] });
+      }
+      currentTimestamp = activity.timestamp;
+      currentGroup = [activity];
+    } else {
+      currentGroup.push(activity);
+    }
+    
+    if (index === capsule.activities.length - 1) {
+      groupedActivities.push({ timestamp: currentTimestamp, items: [...currentGroup] });
+    }
+  });
 
   return (
     <AppLayout>
@@ -141,340 +381,151 @@ export default function TimeCapsuleDetail() {
       <div className="h-full overflow-auto bg-muted/30">
         {/* Header */}
         <header className="bg-background border-b border-border/60 sticky top-0 z-50">
-          <div className="max-w-lg mx-auto px-6 h-14 flex items-center justify-between">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
             <button 
               onClick={() => navigate("/time-capsule")}
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <span className="font-semibold text-foreground truncate max-w-[200px]">{capsule.title}</span>
-            <button className="p-2 text-muted-foreground hover:text-foreground transition-colors">
-              <Settings className="w-5 h-5" />
-            </button>
+            
+            {/* 수신자 정보 */}
+            <div className="flex items-center gap-3">
+              <span className="font-bold text-foreground">To. {capsule.recipientName}</span>
+              <span className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
+                {capsule.eventType}
+              </span>
+              <span className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
+                출소까지 D-{capsule.daysLeft}
+              </span>
+            </div>
+
+            <div className="text-right text-xs text-muted-foreground">
+              <span>출소일: {capsule.targetDate} {capsule.targetTime}</span>
+              <span className="ml-2">장소: {capsule.facility}</span>
+            </div>
           </div>
         </header>
 
-        <main className="max-w-lg mx-auto px-6 py-6 space-y-6">
-          {/* 완성된 나무 (전달 완료 시) - 맨 위 */}
-          {capsule.status === "delivered" && (
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-b from-green-50 to-emerald-50 rounded-2xl pt-4 pb-0 border border-green-200/60 shadow-sm overflow-hidden"
-            >
-              <div className="text-center">
-                <h3 className="font-semibold text-foreground mb-1">완성된 오렌지나무</h3>
-                <p className="text-sm text-muted-foreground mb-2">
-                  {capsule.letterCount}통의 편지가 모여 아름다운 나무가 되었어요
-                </p>
-                <img 
-                  src={completedTreeImage} 
-                  alt="완성된 오렌지나무" 
-                  className="w-64 h-64 mx-auto object-contain -mb-2"
-                />
-              </div>
-            </motion.section>
-          )}
-
-          {/* 수신자 정보 카드 */}
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          {/* 메인 캡슐 카드 */}
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: capsule.status === "delivered" ? 0.1 : 0 }}
-            className={`rounded-2xl px-5 py-4 shadow-lg ${
-              capsule.status === "delivered" 
-                ? "bg-gradient-to-br from-green-500 to-emerald-500 text-white" 
-                : "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground"
-            }`}
+            className="bg-background rounded-3xl border border-border/60 shadow-sm overflow-hidden"
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="opacity-70 text-xs">To.</p>
-                <h2 className="text-lg font-bold">{capsule.recipient}</h2>
-                <p className="opacity-70 text-xs">{capsule.facility}</p>
-              </div>
-              <div className="text-right">
-                {capsule.status === "delivered" ? (
-                  <div className="bg-white/20 backdrop-blur rounded-lg px-3 py-2">
-                    <p className="text-sm font-bold flex items-center gap-1">
-                      <Check className="w-4 h-4" />
-                      전달완료
-                    </p>
-                    <p className="opacity-70 text-xs">{capsule.deliveredDate}</p>
+            <div className="p-6">
+              <h2 className="font-bold text-lg text-foreground mb-4">
+                {capsule.targetDate} 전달되는 타임캡슐
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* 왼쪽: 캡슐 그래픽 */}
+                <div className="flex items-center justify-center">
+                  <CapsuleGraphic 
+                    noteCount={capsule.noteCount} 
+                    participants={capsule.participants} 
+                  />
+                </div>
+
+                {/* 오른쪽: 채팅 피드 */}
+                <div className="space-y-4">
+                  {/* 방장 아바타 */}
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg">
+                        {capsule.participants.find(p => p.isHost)?.avatar || "👤"}
+                      </div>
+                      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-1.5 py-0.5 bg-primary text-primary-foreground text-[8px] rounded font-medium whitespace-nowrap">
+                        방장
+                      </span>
+                    </div>
                   </div>
-                ) : (
-                  <div className="bg-white/20 backdrop-blur rounded-lg px-3 py-2">
-                    <p className="text-lg font-bold">D-{capsule.daysLeft}</p>
-                    <p className="opacity-70 text-xs">{capsule.targetDate}</p>
+
+                  {/* 활동 피드 */}
+                  <div className="space-y-2 max-h-[250px] overflow-y-auto pr-2">
+                    {groupedActivities.map((group, groupIndex) => (
+                      <div key={groupIndex} className="space-y-2">
+                        {group.items.map((activity, index) => (
+                          <ActivityMessage 
+                            key={activity.id} 
+                            activity={activity}
+                            isLast={index === group.items.length - 1}
+                          />
+                        ))}
+                      </div>
+                    ))}
                   </div>
-                )}
+                </div>
               </div>
+            </div>
+
+            {/* 타임캡슐 발송 버튼 */}
+            <div className="px-6 pb-6">
+              <Button 
+                onClick={handleSendCapsule}
+                className="w-full py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-2xl text-base"
+              >
+                타임캡슐 발송하기
+              </Button>
             </div>
           </motion.section>
 
-          {/* 편지 모음 현황 */}
+          {/* 쪽지 보내기 */}
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-background rounded-2xl p-5 border border-border/60 shadow-sm"
+            className="bg-background rounded-3xl border border-border/60 shadow-sm p-6"
           >
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-foreground">편지 모음 현황</h3>
-              <span className={`text-lg font-bold ${capsule.status === "delivered" ? "text-green-500" : "text-primary"}`}>
-                {capsule.letterCount}/{capsule.targetLetters}통
-              </span>
+            <h3 className="font-bold text-foreground mb-4">쪽지보내기</h3>
+            <div className="flex items-center gap-3">
+              <Input
+                value={noteText}
+                onChange={(e) => setNoteText(e.target.value)}
+                placeholder="한 문장으로도 충분해요."
+                className="flex-1 h-12 rounded-xl border-border/60 bg-muted/30"
+              />
+              <Button 
+                onClick={handleSendNote}
+                className="h-12 px-6 bg-primary hover:bg-primary/90 rounded-xl font-medium"
+              >
+                쪽지 보내기
+              </Button>
             </div>
-            <Progress 
-              value={progressPercent} 
-              className={`h-3 mb-2 ${capsule.status === "delivered" ? "[&>div]:bg-green-500" : ""}`} 
-            />
-            <p className="text-sm text-muted-foreground">
-              {capsule.status === "delivered" 
-                ? `${capsule.deliveredDate}에 ${capsule.letterCount}통의 편지가 전달되었어요 🎉`
-                : capsule.letterCount < capsule.targetLetters 
-                  ? `목표까지 ${capsule.targetLetters - capsule.letterCount}통 남았어요. 조금만 더 모아볼까요?`
-                  : "목표를 달성했어요! 🎉"
-              }
-            </p>
           </motion.section>
 
-          {/* 참여자 목록 */}
+          {/* 선물 옵션들 */}
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-background rounded-2xl border border-border/60 shadow-sm overflow-hidden"
+            className="grid grid-cols-1 md:grid-cols-3 gap-4"
           >
-            <div className="flex items-center justify-between p-5 border-b border-border/60">
-              <h3 className="font-semibold text-foreground">참여자</h3>
-              {capsule.status !== "delivered" && (
-                <button 
-                  onClick={() => setShowInviteModal(true)}
-                  className="flex items-center gap-1 text-sm text-primary hover:text-primary/80 font-medium"
-                >
-                  <Plus className="w-4 h-4" />
-                  초대하기
-                </button>
-              )}
-            </div>
-
-            <div className="divide-y divide-border/40">
-              {capsule.contributors.map((contributor) => (
-                <div 
-                  key={contributor.id}
-                  className={`flex items-center gap-4 p-4 transition-colors ${contributor.isMe ? "bg-primary/5" : "hover:bg-muted/50"}`}
-                >
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-                    contributor.contributed ? "bg-primary/10" : "bg-muted"
-                  }`}>
-                    {contributor.avatar}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="font-medium text-foreground">{contributor.name}</p>
-                      {contributor.isMe && (
-                        <span className="px-1.5 py-0.5 bg-primary text-primary-foreground text-xs rounded">본인</span>
-                      )}
-                      <span className="text-xs text-muted-foreground">{contributor.relation}</span>
-                    </div>
-                    {contributor.letterDate && (
-                      <p className="text-xs text-muted-foreground">{contributor.letterDate} 작성</p>
-                    )}
-                  </div>
-                  {contributor.contributed ? (
-                    <span className="flex items-center gap-1 px-2.5 py-1 bg-green-100 text-green-600 text-xs font-medium rounded-full">
-                      <Check className="w-3.5 h-3.5" />
-                      작성완료
-                    </span>
-                  ) : (
-                    <button className="flex items-center gap-1 px-3 py-1.5 text-primary hover:bg-primary/5 text-xs font-medium rounded-full transition-colors">
-                      리마인더 보내기
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          </motion.section>
-
-
-          {/* 내 편지 */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-background rounded-2xl p-5 border border-border/60 shadow-sm"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-foreground">내 편지</h3>
-              {capsule.status !== "delivered" && (
-                <button 
-                  onClick={() => navigate(`/time-capsule/${id}/write`)}
-                  className="text-sm text-primary hover:text-primary/80 font-medium"
-                >
-                  {capsule.myLetter ? "수정하기" : "작성하기"}
-                </button>
-              )}
-            </div>
-            {capsule.myLetter ? (
-              <div className="relative bg-primary/5 rounded-xl p-4 max-h-32 overflow-hidden">
-                <p className="text-foreground text-sm leading-relaxed">
-                  {capsule.myLetter}
-                </p>
-                <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-primary/5 to-transparent" />
-              </div>
-            ) : (
-              <div className="bg-muted/50 rounded-xl p-6 text-center">
-                <p className="text-muted-foreground text-sm mb-3">
-                  {capsule.status === "delivered" ? "편지를 작성하지 않았어요" : "아직 편지를 작성하지 않았어요"}
-                </p>
-                {capsule.status !== "delivered" && (
-                  <Button 
-                    onClick={() => navigate(`/time-capsule/${id}/write`)}
-                    className="bg-primary hover:bg-primary/90"
-                  >
-                    편지 쓰기
-                  </Button>
-                )}
-              </div>
-            )}
-          </motion.section>
-
-          {/* 초대 코드 */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="bg-background rounded-2xl p-5 border border-border/60 shadow-sm"
-          >
-            <h3 className="font-semibold text-foreground mb-4">초대 코드</h3>
-            <div className="flex items-center gap-3">
-              <div className="flex-1 bg-muted rounded-xl px-4 py-3 font-mono text-foreground text-center tracking-wider">
-                {capsule.inviteCode}
-              </div>
-              <Button 
-                variant="outline" 
-                onClick={handleCopyCode}
-                className={`px-4 py-3 ${copied ? "border-green-500 text-green-500" : ""}`}
-              >
-                {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-                <span className="ml-2">{copied ? "완료!" : "복사"}</span>
-              </Button>
-              <Button className="px-4 py-3 bg-yellow-400 hover:bg-yellow-500 text-yellow-900">
-                <MessageSquare className="w-5 h-5" />
-                <span className="ml-2">공유</span>
-              </Button>
-            </div>
-            <p className="text-xs text-muted-foreground mt-3 text-center">
-              이 코드를 공유하면 누구나 캡슐에 참여할 수 있어요
-            </p>
+            <GiftOptionCard
+              title="마음과 함께, 작은 선물을 더할 수 있어요"
+              buttonText="스타벅스 쿠폰 전달하기"
+              description="커피 한 잔을 선물처럼 쪽지와 함께 전할 수 있어요. 이 작은 선물은 출소 이후 새로운 일상을 시작하는 데 실질적인 도움이 됩니다."
+              bgColor="bg-amber-50"
+              icon={Coffee}
+            />
+            <GiftOptionCard
+              title="출소일에 바로 입을 옷을 준비할 수 있어요"
+              buttonText="출소룩 구매링크"
+              description="출소 당일, 밖으로 나오는 순간을 위해 편안한 옷을 함께 준비할 수 있어요. 새로운 시작을 맞이하는 데 가장 먼저 필요한 준비입니다."
+              bgColor="bg-amber-50"
+              icon={ShoppingBag}
+            />
+            <GiftOptionCard
+              title="새로운 일상을 시작하는 데 도움이 되는 책"
+              buttonText="도서구매링크"
+              description="출소 이후의 시간을 준비하며 차분히 마음을 정리할 수 있도록 책 한 권을 선물할 수 있어요."
+              bgColor="bg-amber-50"
+              icon={Book}
+            />
           </motion.section>
         </main>
-
-        {/* 하단 고정 버튼 - 편지 미작성 시 (완료된 캡슐이 아닐 때만) */}
-        {!capsule.myLetter && capsule.status !== "delivered" && (
-          <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border/60 p-4">
-            <div className="max-w-lg mx-auto">
-              <Button 
-                onClick={() => navigate(`/time-capsule/${id}/write`)}
-                className="w-full py-6 bg-primary hover:bg-primary/90 text-lg font-semibold rounded-2xl shadow-lg"
-              >
-                내 편지 쓰기
-              </Button>
-            </div>
-          </div>
-        )}
       </div>
-
-      {/* 초대 모달 */}
-      <Dialog open={showInviteModal} onOpenChange={setShowInviteModal}>
-        <DialogContent className="max-w-md rounded-3xl">
-          <DialogHeader>
-            <DialogTitle>참여자 초대하기</DialogTitle>
-          </DialogHeader>
-          
-          <div className="space-y-3 mb-6">
-            <button className="w-full flex items-center gap-4 p-4 bg-yellow-50 hover:bg-yellow-100 rounded-2xl transition-colors">
-              <div className="w-12 h-12 bg-yellow-400 rounded-xl flex items-center justify-center">
-                <MessageSquare className="w-6 h-6 text-yellow-900" />
-              </div>
-              <div className="text-left">
-                <p className="font-semibold text-foreground">카카오톡으로 초대</p>
-                <p className="text-sm text-muted-foreground">가장 빠르게 초대할 수 있어요</p>
-              </div>
-            </button>
-
-            <button 
-              onClick={handleCopyCode}
-              className="w-full flex items-center gap-4 p-4 bg-muted hover:bg-muted/80 rounded-2xl transition-colors"
-            >
-              <div className="w-12 h-12 bg-muted-foreground/20 rounded-xl flex items-center justify-center">
-                <Copy className="w-6 h-6 text-muted-foreground" />
-              </div>
-              <div className="text-left">
-                <p className="font-semibold text-foreground">초대 코드 복사</p>
-                <p className="text-sm text-muted-foreground">{capsule.inviteCode}</p>
-              </div>
-            </button>
-
-            <button className="w-full flex items-center gap-4 p-4 bg-muted hover:bg-muted/80 rounded-2xl transition-colors">
-              <div className="w-12 h-12 bg-muted-foreground/20 rounded-xl flex items-center justify-center">
-                <Link2 className="w-6 h-6 text-muted-foreground" />
-              </div>
-              <div className="text-left">
-                <p className="font-semibold text-foreground">링크 복사</p>
-                <p className="text-sm text-muted-foreground">초대 링크를 직접 공유해요</p>
-              </div>
-            </button>
-          </div>
-
-          <div className="border-t border-border pt-6">
-            <p className="text-sm font-medium text-foreground mb-3">직접 초대하기</p>
-            
-            {/* 관계 선택 */}
-            <div className="mb-4">
-              <p className="text-xs text-muted-foreground mb-2">참여자와의 관계</p>
-              <div className="flex flex-wrap gap-2">
-                {["배우자", "자녀", "부모", "형제/자매", "친구", "지인", "기타"].map((relation) => (
-                  <button
-                    key={relation}
-                    type="button"
-                    onClick={() => setInviteRelation(relation)}
-                    className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                      inviteRelation === relation
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground hover:bg-muted/80"
-                    }`}
-                  >
-                    {relation}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex gap-2">
-              <Input 
-                type="text" 
-                placeholder="전화번호 또는 이메일"
-                value={inviteInput}
-                onChange={(e) => setInviteInput(e.target.value)}
-                className="flex-1"
-              />
-              <Button 
-                className="px-5 bg-primary hover:bg-primary/90"
-                disabled={!inviteRelation}
-              >
-                초대
-              </Button>
-            </div>
-            {!inviteRelation && inviteInput && (
-              <p className="text-xs text-destructive mt-2">관계를 먼저 선택해주세요</p>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
     </AppLayout>
   );
 }
